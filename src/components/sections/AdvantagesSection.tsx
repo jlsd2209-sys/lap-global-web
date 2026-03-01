@@ -3,7 +3,7 @@ import { Flag, Brain, Globe, GraduationCap, Video, Award } from 'lucide-react';
 const advantages = [{
   icon: Flag,
   title: 'Doble Jurisdicción',
-  description: 'Matrícula profesional activa en Venezuela y Argentina (Universidad de Buenos Aires). Capacidad legal para ejercer plenamente en ambos países.',
+  description: 'Matrícula profesional activa en Venezuela y Argentina. Capacidad legal para ejercer plenamente en ambos países.',
   badge: {
     icon: Award,
     text: 'Certificado UBA'
@@ -12,7 +12,7 @@ const advantages = [{
 }, {
   icon: Brain,
   title: 'Especialización en IA',
-  description: 'Postgrado en Inteligencia Artificial Generativa, Prompting y Derecho (Universidad de Buenos Aires). Combinación de expertise legal y tecnológico.',
+  description: 'Postgrado en Inteligencia Artificial Generativa, Prompting y Derecho (Universidad de Buenos Aires). Combinación de expertise legal y tecnológica.',
   badge: {
     icon: GraduationCap,
     text: 'Postgrado UBA 2024'
