@@ -44,7 +44,7 @@ export const Footer = () => {
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-bright flex items-center justify-center">
                 <span className="text-navy-dark font-bold text-lg">L</span>
               </div>
-              <span>LAP Global & IA</span>
+              <span>Unidad de Asuntos Transnacionales & IA</span>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
               Innovación legal con inteligencia artificial para Sudamérica. 
