@@ -106,7 +106,7 @@ export const Footer = () => {
         {/* Copyright */}
         <div className="text-center pt-8 border-t border-gold/10">
           <p className="text-cream-light/60 text-sm">
-            © 2026 LAP Global & IA. Todos los derechos reservados.
+            © 2026 Unidad de Asuntos Transnacionales & IA. Todos los derechos reservados.
           </p>
         </div>
       </div>
