@@ -21,7 +21,7 @@ const advantages = [{
 }, {
   icon: Globe,
   title: 'Alcance Regional',
-  description: 'Atención a clientes en Argentina y Venezuela. Cobertura transfronteriza real.',
+  description: 'Atención a clientes en Argentina y Venezuela, de manera presencial y virtual. Cobertura transfronteriza real.',
   badge: {
     icon: Video,
     text: 'Capacidad PJN'
@@ -40,7 +40,7 @@ export const AdvantagesSection = () => {
       }} viewport={{
         once: true
       }} className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">¿Por Qué la Unidad de Aasuntos Transnaciopnales & IA?</h2>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">¿Por Qué la Unidad de Asuntos Transnacionales & IA?</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
