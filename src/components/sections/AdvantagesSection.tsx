@@ -12,7 +12,7 @@ const advantages = [{
 }, {
   icon: Brain,
   title: 'Especialización en IA',
-  description: 'Postgrado en Inteligencia Artificial Generativa, Prompting y Derecho (Universidad de Buenos Aires). Única combinación de expertise legal y tecnológico.',
+  description: 'Postgrado en Inteligencia Artificial Generativa, Prompting y Derecho (Universidad de Buenos Aires). Combinación de expertise legal y tecnológico.',
   badge: {
     icon: GraduationCap,
     text: 'Postgrado UBA 2024'
@@ -21,7 +21,7 @@ const advantages = [{
 }, {
   icon: Globe,
   title: 'Alcance Regional',
-  description: 'Desde Buenos Aires, atendiendo clientes en Argentina, Venezuela y toda Latinoamérica. Audiencias virtuales PJN. Cobertura transfronteriza real.',
+  description: 'Atención a clientes en Argentina y Venezuela. Cobertura transfronteriza real.',
   badge: {
     icon: Video,
     text: 'Capacidad PJN'
@@ -40,7 +40,7 @@ export const AdvantagesSection = () => {
       }} viewport={{
         once: true
       }} className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">¿Por Qué la Unidad de IA & Asuntos Transnacionales?</h2>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">¿Por Qué la Unidad de Aasuntos Transnaciopnales & IA?</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
