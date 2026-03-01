@@ -16,7 +16,7 @@ const GAP = 'gap-6';
 const row1 = [
 { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', desc: 'Vigilancia continua de indicadores de riesgo.', locked: false },
 { icon: Scale, title: 'Análisis Penal (Arg-Ven)', desc: 'Evaluación jurisdiccional transnacional.', locked: false },
-{ icon: FileSearch, title: 'Auditoría Documental', desc: 'Análisis exhaustivo de documentación legal y compliance.', locked: false }];
+{ icon: FileSearch, title: 'Auditoría Documental', desc: 'Análisis exhaustivo de documentación legal.', locked: false }];
 
 const row2 = [
 { icon: Landmark, title: 'Memoria Documental', desc: 'Repositorio de precedentes y jurisprudencia.', locked: true },
