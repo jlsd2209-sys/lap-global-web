@@ -59,7 +59,7 @@ export const Header = () => {
           <div className="relative w-12 h-12 flex items-center justify-center">
             <img alt="LAP Global & IA Logo" className="w-12 h-12 object-contain drop-shadow-lg" src={logoShield} />
           </div>
-          <span>LAP Global Unidad de IA & Asuntos Transnacionales</span>
+          <span>Unidad de Asuntos Transnacionales & IA</span>
         </a>
 
         {/* Desktop Navigation */}
