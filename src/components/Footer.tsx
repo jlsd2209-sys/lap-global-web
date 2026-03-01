@@ -16,8 +16,8 @@ const navLinks = [
 const contactInfo = [
 { icon: Mail, text: 'contacto@lapglobal.ai', href: 'mailto:contacto@lapglobal.ai' },
 { icon: Phone, text: '+54 9 11 1234-5678', href: 'tel:+5491112345678' },
-{ icon: MapPin, text: 'Puerto Madero, Buenos Aires, Argentina', href: null }];
-
+{ icon: MapPin, text: 'Buenos Aires, Argentina', href: null }];
+{ icon: MapPin, text: 'Caracas, Venezuela', href: null }];
 
 export const Footer = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
