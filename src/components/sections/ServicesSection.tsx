@@ -26,17 +26,21 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="group flex flex-col justify-between text-center p-6 bg-slate-800/40 backdrop-blur-md rounded-2xl border border-[#c5a059]/30 transition-all duration-400 hover:-translate-y-2 hover:border-[#c5a059]/80 hover:shadow-xl hover:shadow-[#c5a059]/20"
+    // Aquí está inyectado tu efecto hover original (bordes, elevación y sombra cyan)
+    className="group relative flex flex-col justify-between text-center p-6 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:-translate-y-2 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden"
   >
-    <div>
-      {/* Icono Premium */}
-      <div className="text-[#c5a059] mb-5 flex justify-center">
-        <item.icon className="w-12 h-12" strokeWidth={1.5} />
+    {/* Efecto de iluminación interna al pasar el ratón (Hover effect background) */}
+    <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
+    
+    <div className="relative z-10">
+      {/* Icono Premium con el círculo decorativo de la otra sección */}
+      <div className="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center bg-gradient-to-br from-[#c5a059]/20 to-cyan/10 rounded-full border border-[#c5a059]/50">
+        <item.icon className="w-10 h-10 text-[#c5a059] relative z-10" strokeWidth={1.5} />
       </div>
 
       {/* Título */}
       <div className="flex items-center justify-center gap-2 mb-3">
-        <span className="text-lg font-serif font-bold text-gray-100">
+        <span className="text-lg font-serif font-bold text-white">
           {item.title}
         </span>
         {item.locked && <Lock className="w-4 h-4 text-[#c5a059]/60 flex-shrink-0" />}
@@ -47,18 +51,20 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
     </div>
 
     {/* Botón de Conexión a ChatLegal (Usando tus clases oficiales) */}
-    {item.locked ? (
-      <div className="mt-auto py-3 px-4 rounded-full text-sm font-semibold bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700">
-        Módulo Restringido
-      </div>
-    ) : (
-      <a 
-        href="/asistente" 
-        className="button-pulse mt-auto inline-flex justify-center items-center py-3 px-4 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-semibold rounded-full transition-all hover:shadow-xl hover:shadow-gold/40 text-sm"
-      >
-        Consultar
-      </a>
-    )}
+    <div className="relative z-10 mt-auto">
+      {item.locked ? (
+        <div className="py-3 px-4 rounded-full text-sm font-semibold bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700">
+          Módulo Restringido
+        </div>
+      ) : (
+        <a 
+          href="/asistente" 
+          className="button-pulse w-full inline-flex justify-center items-center py-3 px-4 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-semibold rounded-full transition-all hover:shadow-xl hover:shadow-gold/40 text-sm"
+        >
+          Consultar
+        </a>
+      )}
+    </div>
   </motion.div>
 );
 
@@ -66,7 +72,7 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── FONDO CON NUEVA IMAGEN MAPA AZUL Y CAPA PROFUNDA ── */}
+      {/* ── FONDO CON IMAGEN Y CAPA PROFUNDA ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Tu imagen de fondo */}
         <img 
@@ -89,7 +95,7 @@ export const ServicesSection = () => {
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-gray-100 mb-10 tracking-wide`}
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
           style={{ fontVariant: 'small-caps' }}>
           Centro de Inteligencia Transnacional
         </motion.h2>
@@ -106,7 +112,7 @@ export const ServicesSection = () => {
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-gray-100 mb-10 tracking-wide`}
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
           style={{ fontVariant: 'small-caps' }}>
           Módulos de Alianza Estratégica
         </motion.h2>
