@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper, Lock } from 'lucide-react';
+import { Particles } from '../Particles';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
 const SECTION_PADDING = 'py-20';
@@ -45,24 +46,18 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
       <p className="text-gray-300 text-sm mb-6 leading-relaxed">{item.desc}</p>
     </div>
 
-    {/* Botón de Conexión a ChatLegal con EFECTO DE LUZ */}
+    {/* Botón de Conexión a ChatLegal (Usando tus clases oficiales) */}
     {item.locked ? (
-      <div className="mt-auto py-3 px-4 rounded-xl text-sm font-semibold bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700">
+      <div className="mt-auto py-3 px-4 rounded-full text-sm font-semibold bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700">
         Módulo Restringido
       </div>
     ) : (
-      <div className="relative mt-auto group/btn">
-        {/* Capa de resplandor animado (Aura Creciente Dorada) */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-[#c5a059] via-yellow-400 to-[#c5a059] rounded-xl blur-md opacity-40 group-hover/btn:opacity-100 animate-pulse transition-all duration-500"></div>
-        
-        {/* Botón Real */}
-        <a 
-          href="/asistente" 
-          className="relative flex justify-center items-center py-3 px-4 rounded-xl text-sm font-semibold bg-[#c5a059] text-black hover:bg-[#b38f4a] active:scale-95 transition-all duration-300"
-        >
-          Consultar
-        </a>
-      </div>
+      <a 
+        href="/asistente" 
+        className="button-pulse mt-auto inline-flex justify-center items-center py-3 px-4 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-semibold rounded-full transition-all hover:shadow-xl hover:shadow-gold/40 text-sm"
+      >
+        Consultar
+      </a>
     )}
   </motion.div>
 );
@@ -71,44 +66,20 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── FONDO Y DESTELLOS DE LUCES ── */}
+      {/* ── FONDO CON NUEVA IMAGEN MAPA AZUL Y CAPA PROFUNDA ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* Imagen de fondo */}
+        {/* Tu imagen de fondo */}
         <img 
           src="/fondo-servicios.jpg" 
           alt="Fondo Servicios LAP" 
           className="w-full h-full object-cover" 
         />
-        {/* Capa oscura */}
+        {/* Capa de pintura azul noche profundo */}
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
-        
-        {/* Destellos de Luces (Partículas Animadas) */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute bg-[#c5a059] rounded-full"
-              style={{
-                width: Math.random() * 3 + 1 + 'px',
-                height: Math.random() * 3 + 1 + 'px',
-                top: Math.random() * 100 + '%',
-                left: Math.random() * 100 + '%',
-              }}
-              animate={{
-                y: [0, -100, -200],
-                opacity: [0, 0.8, 0],
-                scale: [0.5, 1.5, 0.5]
-              }}
-              transition={{
-                duration: Math.random() * 5 + 5,
-                repeat: Infinity,
-                ease: "linear",
-                delay: Math.random() * 5,
-              }}
-            />
-          ))}
-        </div>
       </div>
+
+      {/* ── PARTÍCULAS OFICIALES DE TU PÁGINA ── */}
+      <Particles count={30} />
 
       {/* ── CONTENIDO DE LA SECCIÓN ── */}
       <div className="relative z-10 container mx-auto px-4 md:px-8">
