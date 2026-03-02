@@ -25,7 +25,7 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="group flex flex-col justify-between text-center p-6 bg-[#0a0f1c]/80 backdrop-blur-sm rounded-2xl border border-[#c5a059]/20 transition-all duration-400 hover:-translate-y-2 hover:border-[#c5a059]/60 hover:shadow-2xl hover:shadow-[#c5a059]/10"
+    className="group flex flex-col justify-between text-center p-6 bg-slate-800/40 backdrop-blur-md rounded-2xl border border-[#c5a059]/30 transition-all duration-400 hover:-translate-y-2 hover:border-[#c5a059]/80 hover:shadow-xl hover:shadow-[#c5a059]/20"
   >
     <div>
       {/* Icono Premium */}
@@ -42,7 +42,7 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
       </div>
 
       {/* Descripción */}
-      <p className="text-gray-400 text-sm mb-6 leading-relaxed">{item.desc}</p>
+      <p className="text-gray-300 text-sm mb-6 leading-relaxed">{item.desc}</p>
     </div>
 
     {/* Botón de Conexión a ChatLegal */}
@@ -50,7 +50,7 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
       href={item.locked ? "#" : "/asistente"} 
       className={`mt-auto py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
         item.locked 
-        ? 'bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700' 
+        ? 'bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700' 
         : 'bg-[#c5a059] text-black hover:bg-yellow-600 active:scale-95 shadow-lg shadow-[#c5a059]/20'
       }`}
     >
@@ -61,18 +61,18 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
 
 export const ServicesSection = () => {
   return (
-    <section id="servicios" className={`${SECTION_PADDING} relative bg-[#030712]`}>
+    <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── FONDO CON IMAGEN Y CAPA OSCURA (OVERLAY) ── */}
-      <div className="absolute inset-0 z-0">
-        {/* Tu imagen (Asegúrate de que la extensión sea .jpg o cámbiala aquí si es .png) */}
+      {/* ── FONDO CON IMAGEN Y CAPA AZUL MARINO (OVERLAY) ── */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        {/* Tu imagen de fondo */}
         <img 
           src="/fondo-servicios.jpg" 
           alt="Fondo Servicios LAP" 
           className="w-full h-full object-cover" 
         />
-        {/* La capa de pintura oscura al 90% */}
-        <div className="absolute inset-0 bg-[#030712]/90 backdrop-blur-[2px]"></div>
+        {/* Capa de pintura azul marino profundo para integrar con el resto de la página */}
+        <div className="absolute inset-0 bg-slate-900/85 backdrop-blur-[2px]"></div>
       </div>
 
       {/* ── CONTENIDO DE LA SECCIÓN ── */}
