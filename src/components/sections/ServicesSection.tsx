@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ShieldAlert, Scale, FileSearch, Library, FileBarChart, Newspaper, Lock } from 'lucide-react';
+import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper, Lock } from 'lucide-react';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
 const SECTION_PADDING = 'py-20';
@@ -8,13 +8,13 @@ const TITLE_SIZE = 'text-2xl md:text-3xl';
 /* ───────────────────────────── */
 
 const row1 = [
-  { icon: ShieldAlert, title: 'Monitor de Riesgo (Arg-Ven)', desc: 'Vigilancia continua de indicadores de riesgo preventivo.', locked: false },
+  { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', desc: 'Vigilancia continua de indicadores de riesgo preventivo.', locked: false },
   { icon: Scale, title: 'Análisis Penal (Arg-Ven)', desc: 'Evaluación jurisdiccional transnacional asistida por IA.', locked: false },
   { icon: FileSearch, title: 'Auditoría Documental', desc: 'Análisis exhaustivo e inteligente de documentación legal.', locked: false }
 ];
 
 const row2 = [
-  { icon: Library, title: 'Memoria Documental', desc: 'Repositorio de precedentes y jurisprudencia corporativa.', locked: true },
+  { icon: Landmark, title: 'Memoria Documental', desc: 'Repositorio de precedentes y jurisprudencia corporativa.', locked: true },
   { icon: FileBarChart, title: 'Informes Automáticos', desc: 'Reportes y dictámenes generados en tiempo real.', locked: true },
   { icon: Newspaper, title: 'Boletín Jurídico', desc: 'Actualizaciones normativas periódicas y alertas.', locked: true }
 ];
@@ -51,10 +51,10 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
       className={`mt-auto py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
         item.locked 
         ? 'bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700' 
-        : 'bg-[#c5a059] text-black hover:bg-yellow-600 active:scale-95 shadow-lg shadow-[#c5a059]/20'
+        : 'bg-[#c5a059] text-black hover:bg-[#b38f4a] active:scale-95 shadow-lg shadow-[#c5a059]/20'
       }`}
     >
-      {item.locked ? 'Módulo Restringido' : 'Solicitar Consulta IA'}
+      {item.locked ? 'Módulo Restringido' : 'Consultar'}
     </a>
   </motion.div>
 );
@@ -63,7 +63,7 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── FONDO CON IMAGEN Y CAPA AZUL MARINO (OVERLAY) ── */}
+      {/* ── FONDO CON NUEVA IMAGEN MAPA AZUL Y CAPA PROFUNDA ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         {/* Tu imagen de fondo */}
         <img 
@@ -71,8 +71,8 @@ export const ServicesSection = () => {
           alt="Fondo Servicios LAP" 
           className="w-full h-full object-cover" 
         />
-        {/* Capa de pintura azul marino profundo para integrar con el resto de la página */}
-        <div className="absolute inset-0 bg-slate-900/85 backdrop-blur-[2px]"></div>
+        {/* Capa de pintura azul noche profundo para resaltar luces y textos */}
+        <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
       {/* ── CONTENIDO DE LA SECCIÓN ── */}
