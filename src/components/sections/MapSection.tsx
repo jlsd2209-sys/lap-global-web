@@ -3,7 +3,12 @@ import { Globe, Scale, Network, Shield, FileText } from 'lucide-react';
 import { Particles } from '../Particles';
 import neuralMap from '@/assets/neural-map.png';
 import bgCircles from '@/assets/bg-circles.png';
-
+export const MapSection = () => {
+  const services = [
+  { icon: Globe, label: 'Monitor de Riesgo', sublabel: '(Arg-Ven)' },
+  { icon: Scale, label: 'Análisis Penal', sublabel: '(Arg-Ven)' },
+  { icon: FileText, label: 'Auditoría Documental', sublabel: '' }];
+ 
   return (
     <section className="relative py-24 overflow-hidden pb-[20px] pt-[40px]">
       {/* Background image */}
