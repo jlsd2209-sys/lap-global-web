@@ -26,16 +26,15 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    // Aquí está inyectado tu efecto hover original (bordes, elevación y sombra cyan)
     className="group relative flex flex-col justify-between text-center p-6 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:-translate-y-2 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden"
   >
-    {/* Efecto de iluminación interna al pasar el ratón (Hover effect background) */}
+    {/* Efecto de iluminación interna al pasar el ratón */}
     <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
     
     <div className="relative z-10">
-      {/* Icono Premium con el círculo decorativo de la otra sección */}
-      <div className="relative w-20 h-20 mx-auto mb-6 flex items-center justify-center bg-gradient-to-br from-[#c5a059]/20 to-cyan/10 rounded-full border border-[#c5a059]/50">
-        <item.icon className="w-10 h-10 text-[#c5a059] relative z-10" strokeWidth={1.5} />
+      {/* Icono Premium (SIN CÍRCULO, limpios y elegantes) */}
+      <div className="text-[#c5a059] mb-6 flex justify-center">
+        <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
       </div>
 
       {/* Título */}
@@ -50,7 +49,7 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
       <p className="text-gray-300 text-sm mb-6 leading-relaxed">{item.desc}</p>
     </div>
 
-    {/* Botón de Conexión a ChatLegal (Usando tus clases oficiales) */}
+    {/* Botón (Limpio, solo con tu clase oficial button-pulse) */}
     <div className="relative z-10 mt-auto">
       {item.locked ? (
         <div className="py-3 px-4 rounded-full text-sm font-semibold bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700">
@@ -74,10 +73,10 @@ export const ServicesSection = () => {
       
       {/* ── FONDO CON IMAGEN Y CAPA PROFUNDA ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* Tu imagen de fondo */}
+        {/* Imagen con la extensión corregida exactamente como está en GitHub */}
         <img 
-          src="/fondo-servicios.jpg" 
-          alt="Fondo Servicios LAP" 
+          src="/fondo-servicios.jpg.png" 
+          alt="" 
           className="w-full h-full object-cover" 
         />
         {/* Capa de pintura azul noche profundo */}
