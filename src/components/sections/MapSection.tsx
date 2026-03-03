@@ -10,7 +10,7 @@ export const MapSection = () => {
   
   const ajusteFondo = {
     ancho: '100%',      // Puedes poner '110%' para hacerlo más grande
-    alto: '100%',       // Puedes poner '110%' para que cubra más arriba/abajo
+    alto: '90%',       // Puedes poner '110%' para que cubra más arriba/abajo
   };
 
   const ajusteMapa = {
