@@ -16,10 +16,10 @@ export const MapSection = () => {
   };
 
   const ajusteMapa = {
-    desdeArriba: '10%',
-    desdeDerecha: '2%',    
+    desdeArriba: '9%',
+    desdeDerecha: '1%',    
     tamaño: '900px',       
-    opacidad: '0.6',       
+    opacidad: '0.7',       
   };
 
   const ajusteTexto = {
