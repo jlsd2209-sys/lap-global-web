@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Network, Shield } from 'lucide-react';
-import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
   // ============================================================
@@ -53,7 +52,7 @@ export const MapSection = () => {
         }}
       />
 
-      {/* 2. MAPA NEURAL */}
+      {/* 2. MAPA NEURAL (Nueva imagen desde carpeta public) */}
       <motion.div
         className="absolute z-20 pointer-events-none"
         style={{ 
@@ -63,8 +62,8 @@ export const MapSection = () => {
         }}
       >
         <img
-          src={neuralMap}
-          alt="Mapa Neural"
+          src="/Mapa con escudo.png"
+          alt="Mapa con escudo"
           style={{ width: ajusteMapa.tamaño }}
           className="h-auto drop-shadow-2xl"
         />
