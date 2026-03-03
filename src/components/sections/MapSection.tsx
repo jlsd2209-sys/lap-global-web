@@ -11,7 +11,7 @@ export const MapSection = () => {
       <div 
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url("/do Mapa PNG.png")',
+          backgroundImage: 'url("/Fondo Mapa PNG.png")',
           backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
