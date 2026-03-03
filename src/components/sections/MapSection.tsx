@@ -17,8 +17,8 @@ export const MapSection = () => {
 
   const ajusteMapa = {
     desdeArriba: '8%',
-    desdeDerecha: '0.5%',    
-    tamaño: '900px',       
+    desdeDerecha: '0.1%',    
+    tamaño: '950px',       
     opacidad: '0.65',       
   };
 
