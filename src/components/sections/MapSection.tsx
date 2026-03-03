@@ -12,8 +12,8 @@ export const MapSection = () => {
   };
 
   const ajusteTitulo = {
-    desdeArriba: '20%',   // <--- MUEVE EL TÍTULO ARRIBA/ABAJO
-    desdeIzquierda: '10%', // <--- MUEVE EL TÍTULO IZQUIERDA/DERECHA
+    desdeArriba: '25%',   // <--- MUEVE EL TÍTULO ARRIBA/ABAJO
+    desdeIzquierda: '15%', // <--- MUEVE EL TÍTULO IZQUIERDA/DERECHA
   };
 
   const ajusteMapa = {
@@ -24,7 +24,7 @@ export const MapSection = () => {
 
   const ajusteTexto = {
     desdeArriba: '73%',
-    desdeIzquierda: '10%',
+    desdeIzquierda: '15%',
     anchoMax: '450px',
   };
 
@@ -78,7 +78,7 @@ export const MapSection = () => {
       >
         <span className="text-gold font-semibold tracking-widest uppercase text-sm block">La Visión</span>
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold leading-tight text-white">
-          Seguridad Jurídica <br />
+          Seguridad Jurídica en la Era de la <br />
           <span className="text-gold">Inteligencia Artificial</span>
         </h2>
       </div>
