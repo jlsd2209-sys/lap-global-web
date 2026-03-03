@@ -4,7 +4,7 @@ import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
   // ============================================================
-  // PANEL DE CONTROL: AJUSTA TODO AQUÍ (En Píxeles)
+  // PANEL DE CONTROL: RECUPERADO DE TUS AJUSTES
   // ============================================================
   
   const ajusteSeccion = {
@@ -12,25 +12,25 @@ export const MapSection = () => {
   };
 
   const ajusteTitulo = {
-    desdeArriba: '130px', 
-    desdeIzquierda: '80px',
+    arriba: '120px',    // <--- Valor recuperado de tu captura
+    izquierda: '40px',  // <--- Valor recuperado de tu captura
   };
 
   const ajusteMapa = {
-    desdeArriba: '40px',
-    desdeDerecha: '40px',
-    tamaño: '550px',
-  };
-
-  const ajusteTexto = {
-    desdeArriba: '430px', // Bájalo hasta la zona blanca del fondo
-    desdeIzquierda: '80px',
-    anchoMax: '450px',
+    arriba: '70px',     // <--- Valor recuperado de tu captura
+    derecha: '40px',    // <--- Valor recuperado de tu captura
+    tamaño: '550px',    // <--- Valor recuperado de tu captura
   };
 
   const ajusteBotones = {
-    desdeAbajo: '40px',
-    desdeDerecha: '60px',
+    arriba: '100px',    // <--- Valor recuperado de tu captura (ajuste relativo)
+    derecha: '80px',    // <--- Valor recuperado de tu captura
+  };
+
+  const ajusteTexto = {
+    desdeArriba: '430px', // Ajustado para caer en la franja blanca
+    desdeIzquierda: '40px',
+    anchoMax: '450px',
   };
 
   // ============================================================
@@ -52,12 +52,12 @@ export const MapSection = () => {
         }}
       />
 
-      {/* 2. MAPA NEURAL (Imagen independiente) */}
+      {/* 2. MAPA NEURAL */}
       <motion.div
         className="absolute z-10 pointer-events-none"
         style={{ 
-          top: ajusteMapa.desdeArriba,
-          right: ajusteMapa.desdeDerecha
+          top: ajusteMapa.arriba,
+          right: ajusteMapa.derecha
         }}
       >
         <img
@@ -68,12 +68,12 @@ export const MapSection = () => {
         />
       </motion.div>
       
-      {/* 3. TÍTULO */}
+      {/* 3. TÍTULO EN 3 NIVELES */}
       <div 
         className="absolute z-20"
         style={{ 
-          top: ajusteTitulo.desdeArriba, 
-          left: ajusteTitulo.desdeIzquierda 
+          top: ajusteTitulo.arriba, 
+          left: ajusteTitulo.izquierda 
         }}
       >
         <span className="text-gold font-semibold tracking-widest uppercase text-sm block mb-2">La Visión</span>
@@ -84,7 +84,7 @@ export const MapSection = () => {
         </h2>
       </div>
 
-      {/* 4. PÁRRAFO */}
+      {/* 4. PÁRRAFO (Sobre la franja blanca) */}
       <motion.p
         className="absolute z-20 text-navy-dark font-extrabold text-lg leading-relaxed"
         style={{ 
@@ -100,14 +100,14 @@ export const MapSection = () => {
       <div 
         className="absolute z-20 flex gap-4"
         style={{ 
-          bottom: ajusteBotones.desdeAbajo,
-          right: ajusteBotones.desdeDerecha
+          bottom: '40px', // Ajuste fijo para que no floten
+          right: ajusteBotones.derecha
         }}
       >
-        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
+        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
           <Shield size={14} className="text-gold" /> Cobertura Transfronteriza
         </span>
-        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
+        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
           <Network size={14} className="text-gold" /> Red de Inteligencia Legal
         </span>
       </div>
