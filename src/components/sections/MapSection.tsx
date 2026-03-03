@@ -25,7 +25,7 @@ export const MapSection = () => {
 
   const ajusteTexto = {
     desdeArriba: '73%',  // Ajusta para que caiga en la franja blanca
-    desdeIzquierda: '100%',
+    desdeIzquierda: '10%',
     anchoMax: '450px',
   };
 
