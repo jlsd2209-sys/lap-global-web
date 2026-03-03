@@ -12,14 +12,15 @@ export const MapSection = () => {
   };
 
   const ajusteTitulo = {
-    desdeArriba: '25%',   // <--- MUEVE EL TÍTULO ARRIBA/ABAJO
-    desdeIzquierda: '14%', // <--- MUEVE EL TÍTULO IZQUIERDA/DERECHA
+    desdeArriba: '22%',    // Subí un poco para dar espacio a las 3 líneas
+    desdeIzquierda: '14%',
   };
 
   const ajusteMapa = {
-    desdeArriba: '8%',
-    desdeDerecha: '8%',
-    tamaño: '480px',
+    desdeArriba: '5%',
+    desdeDerecha: '2%',    // Lo acerqué más al borde para que se vea mejor
+    tamaño: '520px',       // Un poco más grande para que destaque
+    opacidad: '0.6',       // <--- AJUSTA ESTO (0.1 invisible, 1.0 total)
   };
 
   const ajusteTexto = {
@@ -41,25 +42,9 @@ export const MapSection = () => {
       style={{ height: ajusteSeccion.altura }}
     >
       
-      {/* 1. MAPA NEURAL (Capa z-10: Se coloca al fondo de todo) */}
-      <motion.div
-        className="absolute z-10"
-        style={{ 
-          top: ajusteMapa.desdeArriba,
-          right: ajusteMapa.desdeDerecha
-        }}
-      >
-        <img
-          src={neuralMap}
-          alt="Mapa Neural"
-          style={{ width: ajusteMapa.tamaño }}
-          className="h-auto opacity-80" // Un poco de transparencia para que funda mejor
-        />
-      </motion.div>
-
-      {/* 2. FONDO PRINCIPAL (Capa z-20: Encima del mapa para taparlo) */}
+      {/* 1. FONDO PRINCIPAL (Capa z-10) */}
       <div 
-        className="absolute inset-0 z-20 pointer-events-none"
+        className="absolute inset-0 z-10"
         style={{
           backgroundImage: 'url("/Fondo Mapa PNG.png")',
           backgroundSize: '100% 100%',
@@ -67,8 +52,25 @@ export const MapSection = () => {
           backgroundRepeat: 'no-repeat'
         }}
       />
+
+      {/* 2. MAPA NEURAL (Capa z-20: Ahora encima del fondo para que sea visible) */}
+      <motion.div
+        className="absolute z-20 pointer-events-none"
+        style={{ 
+          top: ajusteMapa.desdeArriba,
+          right: ajusteMapa.desdeDerecha,
+          opacity: ajusteMapa.opacidad // Controlas la transparencia aquí
+        }}
+      >
+        <img
+          src={neuralMap}
+          alt="Mapa Neural"
+          style={{ width: ajusteMapa.tamaño }}
+          className="h-auto drop-shadow-2xl"
+        />
+      </motion.div>
       
-      {/* 3. TÍTULO (Capa z-30: Encima de todo) */}
+      {/* 3. TÍTULO (Capa z-30) */}
       <div 
         className="absolute z-30"
         style={{ 
@@ -76,14 +78,15 @@ export const MapSection = () => {
           left: ajusteTitulo.desdeIzquierda 
         }}
       >
-        <span className="text-gold font-semibold tracking-widest uppercase text-sm block">La Visión</span>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold leading-tight text-white">
-          Seguridad Jurídica en la Era de la <br />
-          <span className="text-gold">Inteligencia Artificial</span>
+        <span className="text-gold font-semibold tracking-widest uppercase text-sm block mb-2">La Visión</span>
+        <h2 className="font-serif font-bold leading-tight">
+          <span className="text-white text-3xl md:text-4xl lg:text-5xl block">Seguridad Jurídica</span>
+          <span className="text-white/80 text-xl md:text-2xl italic block my-1">en la Era de la</span>
+          <span className="text-gold text-3xl md:text-4xl lg:text-5xl block">Inteligencia Artificial</span>
         </h2>
       </div>
 
-      {/* 4. PÁRRAFO (Franja blanca - Capa z-30) */}
+      {/* 4. PÁRRAFO (Franja blanca) */}
       <motion.p
         className="absolute z-30 text-navy-dark font-extrabold text-lg leading-relaxed"
         style={{ 
@@ -95,7 +98,7 @@ export const MapSection = () => {
         Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
       </motion.p>
 
-      {/* 5. BOTONES (Capa z-30) */}
+      {/* 5. BOTONES */}
       <div 
         className="absolute z-30 flex gap-4"
         style={{ 
