@@ -20,17 +20,17 @@ export const MapSection = () => {
   const ajusteMapa = {
     desdeArriba: '8%',  // Menos % para subirlo, más % para bajarlo
     desdeDerecha: '5%', // Más % para moverlo a la IZQUIERDA
-    tamaño: '550px',    // Ancho de la imagen del mapa
+    tamaño: '500px',    // Ancho de la imagen del mapa
   };
 
   const ajusteTexto = {
-    desdeArriba: '52%',  // Ajusta para que caiga en la franja blanca
-    desdeIzquierda: '8%',
-    anchoMax: '450px',
+    desdeArriba: '75%',  // Ajusta para que caiga en la franja blanca
+    desdeIzquierda: '5%',
+    anchoMax: '400px',
   };
 
   const ajusteBotones = {
-    desdeAbajo: '10%',    // Distancia desde el suelo de la sección
+    desdeAbajo: '5%',    // Distancia desde el suelo de la sección
     desdeDerecha: '5%',
   };
 
