@@ -52,14 +52,14 @@ export const MapSection = () => {
             <motion.div
               className="relative"
               style={{ 
-                marginTop: '100px', // <--- CAMBIA ESTE VALOR para bajar el mapa
-                marginRight: '50px' // <--- AUMENTA ESTO para mover el mapa más a la IZQUIERDA
+                marginTop: '80px', // <--- CAMBIA ESTE VALOR para bajar el mapa
+                marginRight: '20px' // <--- AUMENTA ESTO para mover el mapa más a la IZQUIERDA
               }}
             >
               <img
                 src={neuralMap}
                 alt="Mapa Neural"
-                className="w-full max-w-[500px] h-auto drop-shadow-2xl"
+                className="w-full max-w-[450px] h-auto drop-shadow-2xl"
               />
             </motion.div>
 
@@ -67,8 +67,8 @@ export const MapSection = () => {
             <div 
               className="flex gap-4"
               style={{ 
-                marginTop: '150px', // <--- CAMBIA ESTE VALOR para bajar los botones a la franja azul de abajo
-                marginRight: '10px' // <--- CAMBIA ESTE VALOR para pegarlos más al borde derecho
+                marginTop: '100px', // <--- CAMBIA ESTE VALOR para bajar los botones a la franja azul de abajo
+                marginRight: '50px' // <--- CAMBIA ESTE VALOR para pegarlos más al borde derecho
               }}
             >
               <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
