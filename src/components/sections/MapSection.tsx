@@ -13,7 +13,7 @@ export const MapSection = () => {
 
   const ajusteTitulo = {
     desdeArriba: '25%',   // <--- MUEVE EL TÍTULO ARRIBA/ABAJO
-    desdeIzquierda: '15%', // <--- MUEVE EL TÍTULO IZQUIERDA/DERECHA
+    desdeIzquierda: '12%', // <--- MUEVE EL TÍTULO IZQUIERDA/DERECHA
   };
 
   const ajusteMapa = {
@@ -24,7 +24,7 @@ export const MapSection = () => {
 
   const ajusteTexto = {
     desdeArriba: '73%',
-    desdeIzquierda: '15%',
+    desdeIzquierda: '12%',
     anchoMax: '450px',
   };
 
