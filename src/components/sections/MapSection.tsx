@@ -9,7 +9,7 @@ export const MapSection = () => {
   // ============================================================
   
   const ajusteSeccion = {
-    altura: '500px',    // <--- CAMBIA ESTO para que la sección sea más alta o baja
+    altura: '600px',    // <--- CAMBIA ESTO para que la sección sea más alta o baja
   };
 
   const ajusteFondo = {
@@ -20,7 +20,7 @@ export const MapSection = () => {
   const ajusteMapa = {
     desdeArriba: '8%',  // Menos % para subirlo, más % para bajarlo
     desdeDerecha: '5%', // Más % para moverlo a la IZQUIERDA
-    tamaño: '580px',    // Ancho de la imagen del mapa
+    tamaño: '550px',    // Ancho de la imagen del mapa
   };
 
   const ajusteTexto = {
@@ -30,8 +30,8 @@ export const MapSection = () => {
   };
 
   const ajusteBotones = {
-    desdeAbajo: '5%',    // Distancia desde el suelo de la sección
-    desdeDerecha: '10%',
+    desdeAbajo: '10%',    // Distancia desde el suelo de la sección
+    desdeDerecha: '5%',
   };
 
   // ============================================================
