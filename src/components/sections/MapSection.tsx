@@ -2,18 +2,20 @@ import { motion } from 'framer-motion';
 import { Globe, Scale, Network, Shield, FileText } from 'lucide-react';
 import { Particles } from '../Particles';
 import neuralMap from '@/assets/neural-map.png';
-import bgCircles from '@/assets/bg-circles.png';
+
 export const MapSection = () => {
-  const services = [
-  { icon: Globe, label: 'Monitor de Riesgo', sublabel: '(Arg-Ven)' },
-  { icon: Scale, label: 'Análisis Penal', sublabel: '(Arg-Ven)' },
-  { icon: FileText, label: 'Auditoría Documental', sublabel: '' }];
+  // Se eliminaron: Monitor de Riesgo, Análisis Penal y Auditoría Documental
+  const services = []; 
  
   return (
     <section className="relative py-24 overflow-hidden pb-[20px] pt-[40px]">
-      {/* Background image */}
+      {/* Background image - Apuntando a carpeta public de GitHub */}
       <div className="absolute inset-0">
-        <img src={bgCircles} alt="" className="w-full h-full object-cover" />
+        <img 
+          src="/Fondo de mapa PNG.png" 
+          alt="Fondo decorativo" 
+          className="w-full h-full object-cover" 
+        />
         <div className="absolute inset-0 bg-charcoal-dark/40" />
       </div>
       
@@ -30,8 +32,8 @@ export const MapSection = () => {
                 fill="none"
                 stroke="hsl(var(--gold))"
                 strokeWidth="0.5"
-                opacity="0.3" />
-
+                opacity="0.3" 
+              />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#hexagons)" />
@@ -59,11 +61,11 @@ export const MapSection = () => {
               </h2>
             </div>
             
-            <p className="text-cream-light/80 text-lg leading-relaxed max-w-lg">Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva. Transformamos datos masivos en Inteligencia Accionable, mitigando el riesgo antes de su cristalización procesal.
-
+            <p className="text-cream-light/80 text-lg leading-relaxed max-w-lg">
+              Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva. Transformamos datos masivos en Inteligencia Accionable, mitigando el riesgo antes de su cristalización procesal.
             </p>
 
-            {/* Service modules */}
+            {/* Service modules - Solo aparecerán si hay items en el array services */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -82,16 +84,7 @@ export const MapSection = () => {
                   <service.icon className="w-4 h-4 text-gold" />
                   <span>{service.label} {service.sublabel}</span>
                 </motion.div>
-              )
-
-
-
-
-
-
-
-
-              )}
+              ))}
             </motion.div>
           </motion.div>
 
@@ -104,7 +97,6 @@ export const MapSection = () => {
             className="relative"
             style={{ perspective: '1000px' }}>
 
-            {/* Neural Map Image with 3D effect */}
             <motion.div
               className="relative w-full max-w-lg mx-auto"
               animate={{ rotateY: [0, 8, 0, -8, 0], rotateX: [0, -2, 0, 2, 0] }}
@@ -124,33 +116,32 @@ export const MapSection = () => {
                   className="w-full h-auto relative z-10 scale-110 object-fill border-0 border-none opacity-100 shadow-none rounded-xl"
                   style={{
                     filter: 'drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.6))'
-                  }} />
-
+                  }} 
+                />
               </div>
               
-              {/* Animated sparkles overlay */}
               <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
-                {[...Array(12)].map((_, i) =>
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 bg-gold rounded-full"
-                  style={{
-                    left: `${15 + Math.random() * 70}%`,
-                    top: `${10 + Math.random() * 80}%`,
-                    boxShadow: '0 0 6px 2px rgba(201, 169, 97, 0.8), 0 0 12px 4px rgba(0, 212, 255, 0.4)'
-                  }}
-                  animate={{
-                    opacity: [0, 1, 0],
-                    scale: [0.5, 1.5, 0.5]
-                  }}
-                  transition={{
-                    duration: 2 + Math.random() * 2,
-                    repeat: Infinity,
-                    delay: Math.random() * 3,
-                    ease: "easeInOut"
-                  }} />
-
-                )}
+                {[...Array(12)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-gold rounded-full"
+                    style={{
+                      left: `${15 + Math.random() * 70}%`,
+                      top: `${10 + Math.random() * 80}%`,
+                      boxShadow: '0 0 6px 2px rgba(201, 169, 97, 0.8), 0 0 12px 4px rgba(0, 212, 255, 0.4)'
+                    }}
+                    animate={{
+                      opacity: [0, 1, 0],
+                      scale: [0.5, 1.5, 0.5]
+                    }}
+                    transition={{
+                      duration: 2 + Math.random() * 2,
+                      repeat: Infinity,
+                      delay: Math.random() * 3,
+                      ease: "easeInOut"
+                    }} 
+                  />
+                ))}
               </div>
             </motion.div>
 
@@ -175,8 +166,7 @@ export const MapSection = () => {
         </div>
       </div>
 
-      {/* Bottom decorative line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-    </section>);
-
+    </section>
+  );
 };
