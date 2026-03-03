@@ -9,7 +9,7 @@ export const MapSection = () => {
   // ============================================================
   
   const ajusteSeccion = {
-    altura: '450px',    // <--- CAMBIA ESTO para que la sección sea más alta o baja
+    altura: '500px',    // <--- CAMBIA ESTO para que la sección sea más alta o baja
   };
 
   const ajusteFondo = {
