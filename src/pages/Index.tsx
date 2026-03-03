@@ -15,7 +15,8 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
-        {/* Decorative gold diagonal divider between Hero and Map */}
+        
+        {/* Divisor entre Hero y Map - Se mantiene activo */}
         <div className="relative h-20 overflow-hidden bg-gradient-to-b from-charcoal-dark to-navy-dark">
           <div className="absolute inset-0">
             <svg className="w-full h-full border" preserveAspectRatio="none" viewBox="0 0 1440 80">
@@ -24,16 +25,22 @@ const Index = () => {
             </svg>
           </div>
         </div>
+
         <MapSection />
-        {/* Decorative gold diagonal divider between Map and Services */}
-        <div className="relative h-20 overflow-hidden bg-gradient-to-b from-charcoal-dark to-navy-dark">
+
+        {/* --- SECCIÓN COMENTADA TEMPORALMENTE --- */}
+        {/* Este es el divisor diagonal que genera la franja azul/dorada debajo del mapa */}
+        {/* <div className="relative h-20 overflow-hidden bg-gradient-to-b from-charcoal-dark to-navy-dark">
           <div className="absolute inset-0">
             <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 80">
               <polygon points="0,0 1440,60 1440,80 0,80" fill="hsl(var(--navy-dark))" />
               <line x1="0" y1="0" x2="1440" y2="60" stroke="hsl(var(--gold))" strokeWidth="2" />
             </svg>
           </div>
-        </div>
+        </div> 
+        */}
+        {/* --- FIN DE SECCIÓN COMENTADA --- */}
+
         <ServicesSection />
         <AdvantagesSection />
         <ResultsSection />
@@ -41,8 +48,8 @@ const Index = () => {
       </main>
       <Footer />
       <FloatingButtons />
-    </div>);
-
+    </div>
+  );
 };
 
 export default Index;
