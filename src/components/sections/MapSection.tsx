@@ -5,35 +5,42 @@ import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
   // ============================================================
-  // PANEL DE CONTROL: AJUSTA LOS VALORES AQUÍ (Usa px o %)
+  // PANEL DE CONTROL: AJUSTA TODO AQUÍ
   // ============================================================
   
+  const ajusteSeccion = {
+    altura: '500px',    // <--- CAMBIA ESTO para que la sección sea más alta o baja
+  };
+
   const ajusteFondo = {
-    ancho: '100%',      // Puedes poner '110%' para hacerlo más grande
-    alto: '100%',       // Puedes poner '110%' para que cubra más arriba/abajo
+    ancho: '100%',      // 100% cubre el ancho total
+    alto: '100%',       // 100% cubre la altura de la sección
   };
 
   const ajusteMapa = {
-    desdeArriba: '10%',  // <--- Mover ARRIBA/ABAJO (Menos % sube, más % baja)
-    desdeDerecha: '5%',  // <--- Mover DERECHA/IZQUIERDA (Más % va a la izquierda)
-    tamaño: '550px',     // <--- TAMAÑO del mapa
+    desdeArriba: '8%',  // Menos % para subirlo, más % para bajarlo
+    desdeDerecha: '5%', // Más % para moverlo a la IZQUIERDA
+    tamaño: '580px',    // Ancho de la imagen del mapa
   };
 
   const ajusteTexto = {
-    desdeArriba: '55%',  // <--- Bajar el párrafo a la zona blanca
-    desdeIzquierda: '8%',// <--- Mover a la derecha o izquierda
-    anchoMax: '450px',   // <--- Qué tan ancho es el bloque de texto
+    desdeArriba: '52%',  // Ajusta para que caiga en la franja blanca
+    desdeIzquierda: '8%',
+    anchoMax: '450px',
   };
 
   const ajusteBotones = {
-    desdeAbajo: '10%',    // <--- Subir o bajar los botones del fondo
-    desdeDerecha: '5%', // <--- Pegarlos más a la derecha o izquierda
+    desdeAbajo: '5%',    // Distancia desde el suelo de la sección
+    desdeDerecha: '10%',
   };
 
   // ============================================================
 
   return (
-    <section className="relative w-full overflow-hidden bg-navy-dark h-[750px]">
+    <section 
+      className="relative w-full overflow-hidden bg-navy-dark" 
+      style={{ height: ajusteSeccion.altura }} // <--- Aquí se aplica el tamaño
+    >
       
       {/* 1. FONDO (Independiente) */}
       <div 
@@ -46,7 +53,7 @@ export const MapSection = () => {
         }}
       />
       
-      {/* 2. TÍTULO (Fijo arriba) */}
+      {/* 2. TÍTULO */}
       <div className="absolute top-[10%] left-[8%] z-20">
         <span className="text-gold font-semibold tracking-widest uppercase text-sm block">La Visión</span>
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold leading-tight text-white">
@@ -55,7 +62,7 @@ export const MapSection = () => {
         </h2>
       </div>
 
-      {/* 3. PÁRRAFO (Se mueve sobre la franja blanca) */}
+      {/* 3. PÁRRAFO (Franja blanca) */}
       <motion.p
         className="absolute z-20 text-navy-dark font-extrabold text-lg leading-relaxed"
         style={{ 
@@ -67,7 +74,7 @@ export const MapSection = () => {
         Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
       </motion.p>
 
-      {/* 4. MAPA NEURAL (Se mueve y cambia de tamaño) */}
+      {/* 4. MAPA NEURAL */}
       <motion.div
         className="absolute z-20"
         style={{ 
@@ -83,7 +90,7 @@ export const MapSection = () => {
         />
       </motion.div>
 
-      {/* 5. BOTONES (Al fondo a la derecha) */}
+      {/* 5. BOTONES */}
       <div 
         className="absolute z-20 flex gap-4"
         style={{ 
