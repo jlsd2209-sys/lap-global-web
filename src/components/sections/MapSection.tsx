@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Network, Shield } from 'lucide-react';
-import { Particles } from '../Particles';
 import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
@@ -9,28 +8,28 @@ export const MapSection = () => {
   // ============================================================
   
   const ajusteSeccion = {
-    altura: '600px',    // <--- CAMBIA ESTO para que la sección sea más alta o baja
+    altura: '600px',
   };
 
-  const ajusteFondo = {
-    ancho: '100%',      // 100% cubre el ancho total
-    alto: '100%',       // 100% cubre la altura de la sección
+  const ajusteTitulo = {
+    desdeArriba: '20%',   // <--- MUEVE EL TÍTULO ARRIBA/ABAJO
+    desdeIzquierda: '10%', // <--- MUEVE EL TÍTULO IZQUIERDA/DERECHA
   };
 
   const ajusteMapa = {
-    desdeArriba: '8%',  // Menos % para subirlo, más % para bajarlo
-    desdeDerecha: '8%', // Más % para moverlo a la IZQUIERDA
-    tamaño: '480px',    // Ancho de la imagen del mapa
+    desdeArriba: '8%',
+    desdeDerecha: '8%',
+    tamaño: '480px',
   };
 
   const ajusteTexto = {
-    desdeArriba: '73%',  // Ajusta para que caiga en la franja blanca
+    desdeArriba: '73%',
     desdeIzquierda: '10%',
     anchoMax: '450px',
   };
 
   const ajusteBotones = {
-    desdeAbajo: '4%',    // Distancia desde el suelo de la sección
+    desdeAbajo: '4%',
     desdeDerecha: '5%',
   };
 
@@ -39,44 +38,12 @@ export const MapSection = () => {
   return (
     <section 
       className="relative w-full overflow-hidden bg-navy-dark" 
-      style={{ height: ajusteSeccion.altura }} // <--- Aquí se aplica el tamaño
+      style={{ height: ajusteSeccion.altura }}
     >
       
-      {/* 1. FONDO (Independiente) */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url("/Fondo Mapa PNG.png")',
-          backgroundSize: `${ajusteFondo.ancho} ${ajusteFondo.alto}`,
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      
-      {/* 2. TÍTULO */}
-      <div className="absolute top-[10%] left-[8%] z-20">
-        <span className="text-gold font-semibold tracking-widest uppercase text-sm block">La Visión</span>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold leading-tight text-white">
-          Seguridad Jurídica <br />
-          <span className="text-gold">Inteligencia Artificial</span>
-        </h2>
-      </div>
-
-      {/* 3. PÁRRAFO (Franja blanca) */}
-      <motion.p
-        className="absolute z-20 text-navy-dark font-extrabold text-lg leading-relaxed"
-        style={{ 
-          top: ajusteTexto.desdeArriba,
-          left: ajusteTexto.desdeIzquierda,
-          maxWidth: ajusteTexto.anchoMax
-        }} 
-      >
-        Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
-      </motion.p>
-
-      {/* 4. MAPA NEURAL */}
+      {/* 1. MAPA NEURAL (Capa z-10: Se coloca al fondo de todo) */}
       <motion.div
-        className="absolute z-20"
+        className="absolute z-10"
         style={{ 
           top: ajusteMapa.desdeArriba,
           right: ajusteMapa.desdeDerecha
@@ -86,13 +53,51 @@ export const MapSection = () => {
           src={neuralMap}
           alt="Mapa Neural"
           style={{ width: ajusteMapa.tamaño }}
-          className="h-auto drop-shadow-2xl"
+          className="h-auto opacity-80" // Un poco de transparencia para que funda mejor
         />
       </motion.div>
 
-      {/* 5. BOTONES */}
+      {/* 2. FONDO PRINCIPAL (Capa z-20: Encima del mapa para taparlo) */}
       <div 
-        className="absolute z-20 flex gap-4"
+        className="absolute inset-0 z-20 pointer-events-none"
+        style={{
+          backgroundImage: 'url("/Fondo Mapa PNG.png")',
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      {/* 3. TÍTULO (Capa z-30: Encima de todo) */}
+      <div 
+        className="absolute z-30"
+        style={{ 
+          top: ajusteTitulo.desdeArriba, 
+          left: ajusteTitulo.desdeIzquierda 
+        }}
+      >
+        <span className="text-gold font-semibold tracking-widest uppercase text-sm block">La Visión</span>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold leading-tight text-white">
+          Seguridad Jurídica <br />
+          <span className="text-gold">Inteligencia Artificial</span>
+        </h2>
+      </div>
+
+      {/* 4. PÁRRAFO (Franja blanca - Capa z-30) */}
+      <motion.p
+        className="absolute z-30 text-navy-dark font-extrabold text-lg leading-relaxed"
+        style={{ 
+          top: ajusteTexto.desdeArriba,
+          left: ajusteTexto.desdeIzquierda,
+          maxWidth: ajusteTexto.anchoMax
+        }} 
+      >
+        Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
+      </motion.p>
+
+      {/* 5. BOTONES (Capa z-30) */}
+      <div 
+        className="absolute z-30 flex gap-4"
         style={{ 
           bottom: ajusteBotones.desdeAbajo,
           right: ajusteBotones.desdeDerecha
