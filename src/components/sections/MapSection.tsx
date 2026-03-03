@@ -21,8 +21,8 @@ export const MapSection = () => {
   };
 
   const configBotones = {
-    arriba: '180px',   // Para bajarlos a la zona azul oscuro
-    derecha: '30px',   // Para alinearlos a la derecha
+    arriba: '100px',   // Para bajarlos a la zona azul oscuro
+    derecha: '50px',   // Para alinearlos a la derecha
   };
 
   // ==========================================
