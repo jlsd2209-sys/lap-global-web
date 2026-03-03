@@ -12,7 +12,7 @@ export const MapSection = () => {
       {/* Background image - Apuntando a carpeta public de GitHub */}
       <div className="absolute inset-0">
         <img 
-          src="/Fondo de mapa PNG.png" 
+          src="/Fondo Mapa PNG.png" 
           alt="Fondo decorativo" 
           className="w-full h-full object-cover" 
         />
