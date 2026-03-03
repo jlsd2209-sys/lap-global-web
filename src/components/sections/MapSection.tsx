@@ -1,29 +1,36 @@
 import { motion } from 'framer-motion';
-import { Globe, Scale, Network, Shield, FileText } from 'lucide-react';
+import { Network, Shield } from 'lucide-react';
 import { Particles } from '../Particles';
 import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
-  // Se eliminaron: Monitor de Riesgo, Análisis Penal y Auditoría Documental
+  // Array de servicios vacío según lo solicitado anteriormente
   const services = []; 
  
   return (
-    <section className="relative py-24 overflow-hidden pb-[20px] pt-[40px]">
-      {/* Background image - Apuntando a carpeta public de GitHub */}
-      <div className="absolute inset-0">
+    // SEGUNDO CAMBIO: Eliminamos paddings excesivos que podrían interferir con la imagen
+    <section className="relative overflow-hidden bg-navy-dark">
+      {/* PRIMER CAMBIO: Contenedor de imagen con relación de aspecto forzada */}
+      <div className="relative w-full aspect-video md:aspect-[21/9] lg:aspect-[21/9] overflow-hidden">
         <img 
-          src="/Fondo Mapa PNG.png" 
+          src="/Fondo Mapa PNG.png" // Ajusta el nombre si lo cambiaste
           alt="Fondo decorativo" 
-          className="w-full h-full object-cover" 
+          // Usamos 'object-contain' para asegurar que se vea TODA la imagen, 
+          // y la centramos con 'object-center'.
+          className="absolute inset-0 w-full h-full object-contain object-center z-0" 
         />
-        <div className="absolute inset-0 bg-charcoal-dark/40" />
+        {/* Un pequeño overlay para asegurar legibilidad si el fondo es muy claro */}
+        <div className="absolute inset-0 bg-charcoal-dark/20 z-10" />
       </div>
       
-      {/* Animated particles background */}
-      <Particles count={50} colors={['#D4AF37', '#C9A961', '#00D4FF']} />
+      {/* TERCER CAMBIO: Ajustamos el z-index de los elementos superpuestos */}
+      {/* Animated particles background - Detrás del contenido pero sobre la imagen */}
+      <div className="absolute inset-0 z-20 pointer-events-none">
+        <Particles count={30} colors={['#D4AF37', '#C9A961', '#00D4FF']} />
+      </div>
       
-      {/* Hexagonal pattern overlay */}
-      <div className="absolute inset-0 opacity-10 pb-[80px]">
+      {/* Hexagonal pattern overlay - Muy sutil sobre la imagen */}
+      <div className="absolute inset-0 opacity-5 z-15 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="hexagons" width="50" height="43.4" patternUnits="userSpaceOnUse" patternTransform="scale(2)">
@@ -40,7 +47,8 @@ export const MapSection = () => {
         </svg>
       </div>
 
-      <div className="container relative z-10 pt-0 pb-0">
+      {/* Contenido principal - Con z-index alto y padding superior negativo para subirlo sobre la imagen */}
+      <div className="container relative z-30 pt-12 pb-24 -mt-[10%] md:-mt-[15%]">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <motion.div
@@ -61,31 +69,9 @@ export const MapSection = () => {
               </h2>
             </div>
             
-            <p className="text-cream-light/80 text-lg leading-relaxed max-w-lg">
+            <p className="text-cream-light/80 text-lg leading-relaxed max-w-lg bg-navy-dark/60 p-4 rounded-lg backdrop-blur-sm">
               Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva. Transformamos datos masivos en Inteligencia Accionable, mitigando el riesgo antes de su cristalización procesal.
             </p>
-
-            {/* Service modules - Solo aparecerán si hay items en el array services */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap gap-4 pt-4">
-
-              {services.map((service, index) => (
-                <motion.div
-                  key={service.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gold/30 bg-navy-dark/50 text-cream-light text-sm">
-                  <service.icon className="w-4 h-4 text-gold" />
-                  <span>{service.label} {service.sublabel}</span>
-                </motion.div>
-              ))}
-            </motion.div>
           </motion.div>
 
           {/* Right Content - Neural Map Image with Sparkles */}
@@ -103,19 +89,18 @@ export const MapSection = () => {
               transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
               style={{ transformStyle: 'preserve-3d' }}>
 
-              <div className="relative overflow-hidden opacity-80 shadow-inner rounded-lg" style={{
+              <div className="relative overflow-hidden opacity-90 shadow-2xl rounded-lg" style={{
                 maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 75%, transparent 100%), linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
                 WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 75%, transparent 100%)',
                 maskComposite: 'intersect',
                 WebkitMaskComposite: 'destination-in',
-                marginTop: '-2rem'
               }}>
                 <img
                   src={neuralMap}
                   alt="Mapa de conexiones neuronales de Latinoamérica"
-                  className="w-full h-auto relative z-10 scale-110 object-fill border-0 border-none opacity-100 shadow-none rounded-xl"
+                  className="w-full h-auto relative z-10 scale-110 object-fill border-0 border-none rounded-xl"
                   style={{
-                    filter: 'drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.6))'
+                    filter: 'drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.8))'
                   }} 
                 />
               </div>
@@ -151,13 +136,13 @@ export const MapSection = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="flex justify-center gap-6 mt-6 flex-wrap">
+              className="flex justify-center gap-6 mt-12 flex-wrap bg-navy-dark/50 p-3 rounded-full backdrop-blur-sm">
 
-              <span className="flex items-center gap-2 text-gold-light text-sm">
+              <span className="flex items-center gap-2 text-gold-light text-sm font-medium">
                 <Shield className="text-gold" size={16} />
                 Cobertura Transfronteriza
               </span>
-              <span className="flex items-center gap-2 text-gold-light text-sm">
+              <span className="flex items-center gap-2 text-gold-light text-sm font-medium">
                 <Network className="text-gold" size={16} />
                 Red de Inteligencia Legal
               </span>
@@ -166,7 +151,7 @@ export const MapSection = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+      {/* Eliminada la línea decorativa inferior para una transición más limpia */}
     </section>
   );
 };
