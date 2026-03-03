@@ -4,8 +4,31 @@ import { Particles } from '../Particles';
 import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
+  // ==========================================
+  // PANEL DE CONTROL: ¡JUEGA CON ESTOS VALORES!
+  // ==========================================
+  
+  const configMapa = {
+    arriba: '20px',    // Menos es más arriba, más es más abajo
+    derecha: '10px',   // Más es más a la IZQUIERDA, menos es más a la DERECHA
+    escala: '580px',   // Ancho del mapa (ej: 400px, 600px...)
+  };
+
+  const configParrafo = {
+    arriba: '120px',   // Para bajarlo a la franja blanca
+    izquierda: '40px', // Para separarlo del borde
+    anchoMax: '450px', // Qué tan ancho quieres el bloque de texto
+  };
+
+  const configBotones = {
+    arriba: '180px',   // Para bajarlos a la zona azul oscuro
+    derecha: '30px',   // Para alinearlos a la derecha
+  };
+
+  // ==========================================
+
   return (
-    <section className="relative w-full overflow-hidden bg-navy-dark min-h-[650px] flex items-center">
+    <section className="relative w-full overflow-hidden bg-navy-dark min-h-[700px] flex items-center">
       
       {/* FONDO PRINCIPAL */}
       <div 
@@ -21,11 +44,9 @@ export const MapSection = () => {
       <div className="container relative z-20 mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-8 items-start pt-12">
           
-          {/* --- BLOQUE IZQUIERDO --- */}
+          {/* SECCIÓN IZQUIERDA (Títulos y Párrafo) */}
           <div className="flex flex-col">
-            
-            {/* Título: Se queda arriba */}
-            <motion.div className="mb-[120px]"> {/* <--- AJUSTA ESTE MARGEN para separar el título del párrafo */}
+            <motion.div className="mb-10">
               <span className="text-gold font-semibold tracking-widest uppercase text-sm block">La Visión</span>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold leading-tight">
                 <span className="text-white">Seguridad Jurídica</span><br />
@@ -33,42 +54,42 @@ export const MapSection = () => {
               </h2>
             </motion.div>
 
-            {/* Párrafo: DEBE CAER EN LA FRANJA BLANCA */}
             <motion.p
-              className="text-navy-dark font-extrabold text-lg leading-relaxed max-w-md"
+              className="text-navy-dark font-extrabold text-lg leading-relaxed"
               style={{ 
-                marginTop: '80px',  // <--- CAMBIA ESTE VALOR para subir o bajar el texto dentro del blanco
-                marginLeft: '20px'  // <--- CAMBIA ESTE VALOR para moverlo a la derecha/izquierda
+                marginTop: configParrafo.arriba,
+                marginLeft: configParrafo.izquierda,
+                maxWidth: configParrafo.anchoMax
               }} 
             >
               Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
             </motion.p>
           </div>
 
-          {/* --- BLOQUE DERECHO --- */}
+          {/* SECCIÓN DERECHA (Mapa y Botones) */}
           <div className="relative flex flex-col items-center lg:items-end">
             
-            {/* Mapa Neural: MOVIMIENTO HACIA EL HUECO DERECHO */}
+            {/* Mapa Neural */}
             <motion.div
-              className="relative"
               style={{ 
-                marginTop: '80px', // <--- CAMBIA ESTE VALOR para bajar el mapa
-                marginRight: '20px' // <--- AUMENTA ESTO para mover el mapa más a la IZQUIERDA
+                marginTop: configMapa.arriba,
+                marginRight: configMapa.derecha
               }}
             >
               <img
                 src={neuralMap}
                 alt="Mapa Neural"
-                className="w-full max-w-[450px] h-auto drop-shadow-2xl"
+                style={{ width: configMapa.escala }}
+                className="h-auto drop-shadow-2xl"
               />
             </motion.div>
 
-            {/* Badges: AJUSTE AL FONDO A LA DERECHA */}
+            {/* Botones / Badges */}
             <div 
               className="flex gap-4"
               style={{ 
-                marginTop: '100px', // <--- CAMBIA ESTE VALOR para bajar los botones a la franja azul de abajo
-                marginRight: '50px' // <--- CAMBIA ESTE VALOR para pegarlos más al borde derecho
+                marginTop: configBotones.arriba,
+                marginRight: configBotones.derecha
               }}
             >
               <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
