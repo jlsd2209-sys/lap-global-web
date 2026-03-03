@@ -4,7 +4,7 @@ import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
   // ============================================================
-  // PANEL DE CONTROL: RECUPERADO DE TUS AJUSTES
+  // PANEL DE CONTROL: TUS AJUSTES CONSERVADOS
   // ============================================================
   
   const ajusteSeccion = {
@@ -12,25 +12,26 @@ export const MapSection = () => {
   };
 
   const ajusteTitulo = {
-    arriba: '120px',    // <--- Valor recuperado de tu captura
-    izquierda: '40px',  // <--- Valor recuperado de tu captura
+    desdeArriba: '22%',    
+    desdeIzquierda: '14%',
   };
 
   const ajusteMapa = {
-    arriba: '70px',     // <--- Valor recuperado de tu captura
-    derecha: '40px',    // <--- Valor recuperado de tu captura
-    tamaño: '550px',    // <--- Valor recuperado de tu captura
-  };
-
-  const ajusteBotones = {
-    arriba: '100px',    // <--- Valor recuperado de tu captura (ajuste relativo)
-    derecha: '80px',    // <--- Valor recuperado de tu captura
+    desdeArriba: '5%',
+    desdeDerecha: '2%',    
+    tamaño: '520px',       
+    opacidad: '0.6',       
   };
 
   const ajusteTexto = {
-    desdeArriba: '430px', // Ajustado para caer en la franja blanca
-    desdeIzquierda: '40px',
+    desdeArriba: '73%',
+    desdeIzquierda: '14%',
     anchoMax: '450px',
+  };
+
+  const ajusteBotones = {
+    desdeAbajo: '4%',
+    desdeDerecha: '5%',
   };
 
   // ============================================================
@@ -43,7 +44,7 @@ export const MapSection = () => {
       
       {/* 1. FONDO PRINCIPAL */}
       <div 
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-10"
         style={{
           backgroundImage: 'url("/Fondo Mapa PNG.png")',
           backgroundSize: '100% 100%',
@@ -54,26 +55,27 @@ export const MapSection = () => {
 
       {/* 2. MAPA NEURAL */}
       <motion.div
-        className="absolute z-10 pointer-events-none"
+        className="absolute z-20 pointer-events-none"
         style={{ 
-          top: ajusteMapa.arriba,
-          right: ajusteMapa.derecha
+          top: ajusteMapa.desdeArriba,
+          right: ajusteMapa.desdeDerecha,
+          opacity: ajusteMapa.opacidad 
         }}
       >
         <img
           src={neuralMap}
           alt="Mapa Neural"
           style={{ width: ajusteMapa.tamaño }}
-          className="h-auto opacity-80 drop-shadow-2xl"
+          className="h-auto drop-shadow-2xl"
         />
       </motion.div>
       
       {/* 3. TÍTULO EN 3 NIVELES */}
       <div 
-        className="absolute z-20"
+        className="absolute z-30"
         style={{ 
-          top: ajusteTitulo.arriba, 
-          left: ajusteTitulo.izquierda 
+          top: ajusteTitulo.desdeArriba, 
+          left: ajusteTitulo.desdeIzquierda 
         }}
       >
         <span className="text-gold font-semibold tracking-widest uppercase text-sm block mb-2">La Visión</span>
@@ -84,9 +86,9 @@ export const MapSection = () => {
         </h2>
       </div>
 
-      {/* 4. PÁRRAFO (Sobre la franja blanca) */}
+      {/* 4. PÁRRAFO (Franja blanca) */}
       <motion.p
-        className="absolute z-20 text-navy-dark font-extrabold text-lg leading-relaxed"
+        className="absolute z-30 text-navy-dark font-extrabold text-lg leading-relaxed"
         style={{ 
           top: ajusteTexto.desdeArriba,
           left: ajusteTexto.desdeIzquierda,
@@ -98,10 +100,10 @@ export const MapSection = () => {
 
       {/* 5. BOTONES */}
       <div 
-        className="absolute z-20 flex gap-4"
+        className="absolute z-30 flex gap-4"
         style={{ 
-          bottom: '40px', // Ajuste fijo para que no floten
-          right: ajusteBotones.derecha
+          bottom: ajusteBotones.desdeAbajo,
+          right: ajusteBotones.desdeDerecha
         }}
       >
         <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
