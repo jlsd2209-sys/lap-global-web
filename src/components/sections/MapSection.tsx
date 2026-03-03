@@ -4,23 +4,27 @@ import { Particles } from '../Particles';
 import neuralMap from '@/assets/neural-map.png';
 
 export const MapSection = () => {
-  const services = []; 
- 
   return (
     <section className="relative w-full overflow-hidden bg-navy-dark min-h-[600px] flex items-center">
       
-      {/* CAPA DE FONDO: Ajustada para cubrir el 100% del ancho sin deformar */}
+      {/* CAPA DE FONDO PRINCIPAL */}
       <div 
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url("/Fondo Mapa PNG.png")',
-          backgroundSize: '100% 100%', // Esto estira la imagen para que ocupe todo el ancho y alto de la sección
+          backgroundImage: 'url("/do Mapa PNG.png")',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       >
-        {/* Overlay sutil para mejorar el contraste del texto */}
-        <div className="absolute inset-0 bg-navy-dark/20" />
+        {/* MEJORA DE UNIÓN SUPERIOR: Degradado que desvanece el borde de la imagen hacia el navy-dark */}
+        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-navy-dark via-navy-dark/40 to-transparent z-10" />
+
+        {/* MEJORA DE UNIÓN INFERIOR: Degradado que desvanece la imagen hacia el navy-dark abajo */}
+        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-navy-dark via-navy-dark/40 to-transparent z-10" />
+
+        {/* OVERLAY DE COLOR: Ajustamos la opacidad general para que los negros de la imagen se mezclen con el fondo */}
+        <div className="absolute inset-0 bg-navy-dark/10 z-0" />
       </div>
       
       {/* Partículas y Patrón Hexagonal */}
@@ -28,11 +32,11 @@ export const MapSection = () => {
         <Particles count={30} colors={['#D4AF37', '#C9A961', '#00D4FF']} />
       </div>
 
-      {/* CONTENIDO PRINCIPAL: Ahora con mayor z-index para estar sobre el fondo */}
-      <div className="container relative z-20 mx-auto px-4 py-20">
+      {/* CONTENIDO PRINCIPAL */}
+      <div className="container relative z-30 mx-auto px-4 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           
-          {/* Bloque de Texto (Izquierda) */}
+          {/* Bloque de Texto */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -56,7 +60,7 @@ export const MapSection = () => {
             </p>
           </motion.div>
 
-          {/* Mapa Neural (Derecha) */}
+          {/* Mapa Neural */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -85,7 +89,6 @@ export const MapSection = () => {
 
         </div>
       </div>
-
     </section>
   );
 };
