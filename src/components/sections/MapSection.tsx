@@ -59,7 +59,7 @@ export const MapSection = () => {
               <img
                 src={neuralMap}
                 alt="Mapa Neural"
-                className="w-full max-w-[600px] h-auto drop-shadow-2xl"
+                className="w-full max-w-[500px] h-auto drop-shadow-2xl"
               />
             </motion.div>
 
