@@ -58,7 +58,7 @@ export const MapSection = () => {
           ],
         }}
         transition={{
-          duration: 2.5, // Respiración un poco más rápida para energía pura
+          duration: 2.7, // Respiración un poco más rápida para energía pura
           ease: "easeInOut",
           repeat: Infinity,
         }}
