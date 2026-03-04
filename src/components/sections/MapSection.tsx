@@ -15,7 +15,7 @@ export const MapSection = () => {
   const ajusteMapa = {
     desdeArriba: '2%',
     desdeDerecha: '11%',    
-    tamaño: '450px',       
+    tamaño: '445px',       
     opacidad: isHovered ? '0.90' : '0.70', // Reacción de opacidad
   };
   const ajusteTexto = { desdeArriba: '73%', desdeIzquierda: '14%', anchoMax: '450px' };
