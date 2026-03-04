@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { Network, Shield } from 'lucide-react';
+// 1. Importación del componente de partículas
+import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
   // ============================================================
@@ -41,7 +43,7 @@ export const MapSection = () => {
       style={{ height: ajusteSeccion.altura }}
     >
       
-      {/* 1. FONDO PRINCIPAL */}
+      {/* 1. FONDO PRINCIPAL (Capa z-10) */}
       <div 
         className="absolute inset-0 z-10"
         style={{
@@ -52,7 +54,12 @@ export const MapSection = () => {
         }}
       />
 
-      {/* 2. MAPA NEURAL (Nueva imagen desde carpeta public) */}
+      {/* 2. PARTÍCULAS (Capa z-15) - Integradas aquí */}
+      <div className="absolute inset-0 z-15 pointer-events-none opacity-40">
+        <Particles count={30} />
+      </div>
+
+      {/* 3. MAPA NEURAL (Capa z-20) */}
       <motion.div
         className="absolute z-20 pointer-events-none"
         style={{ 
@@ -69,7 +76,7 @@ export const MapSection = () => {
         />
       </motion.div>
       
-      {/* 3. TÍTULO EN 3 NIVELES */}
+      {/* 4. TÍTULO EN 3 NIVELES (Capa z-30) */}
       <div 
         className="absolute z-30"
         style={{ 
@@ -85,7 +92,7 @@ export const MapSection = () => {
         </h2>
       </div>
 
-      {/* 4. PÁRRAFO (Franja blanca) */}
+      {/* 5. PÁRRAFO (Capa z-30) */}
       <motion.p
         className="absolute z-30 text-navy-dark font-extrabold text-lg leading-relaxed"
         style={{ 
@@ -97,7 +104,7 @@ export const MapSection = () => {
         Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
       </motion.p>
 
-      {/* 5. BOTONES */}
+      {/* 6. BOTONES (Capa z-30) */}
       <div 
         className="absolute z-30 flex gap-4"
         style={{ 
@@ -105,10 +112,10 @@ export const MapSection = () => {
           right: ajusteBotones.desdeDerecha
         }}
       >
-        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
+        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
           <Shield size={14} className="text-gold" /> Cobertura Transfronteriza
         </span>
-        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
+        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
           <Network size={14} className="text-gold" /> Red de Inteligencia Legal
         </span>
       </div>
