@@ -23,9 +23,9 @@ export const MapSection = () => {
   const movil = {
     altura: '750px',
     titulo: { arriba: '12%', izquierda: '5%' },
-    mapa: { arriba: '10%', derecha: '6%', tamaño: '280px', opacidad: '0.60' },
-    texto: { arriba: '60%', izquierda: '5%', ancho: '60%' },
-    boton: { abajo: '20%', derecha: '10%' }
+    mapa: { arriba: '15%', derecha: '8%', tamaño: '250px', opacidad: '0.60' },
+    texto: { arriba: '60%', izquierda: '5%', ancho: '20%' },
+    boton: { abajo: '40%', derecha: '10%' }
   };
 
   return (
