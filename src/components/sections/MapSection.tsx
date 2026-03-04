@@ -31,11 +31,11 @@ export const MapSection = () => {
   // 📱 PANEL DE CONTROL: MÓVIL (Ajusta aquí tus tamaños de letra)
   // ============================================================
   const movil = {
-    altura: '800px',
+    altura: '600px',
     titulo: { arriba: '10%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
-    mapa:   { arriba: '12%', derecha: '-10%', tamaño: '320px', opacidad: '0.50' },
-    texto:  { arriba: '62%', izquierda: '5%', ancho: '90%', size: '0.95rem', color: '#FFFFFF' },
-    boton:  { abajo: '8%', derecha: '5%', size: '9px' }
+    mapa:   { arriba: '12%', derecha: '-10%', tamaño: '280px', opacidad: '0.50' },
+    texto:  { arriba: '73%', izquierda: '5%', ancho: '90%', size: '0.95rem', color: '#0A192F' },
+    boton:  { abajo: '20%', derecha: '5%', size: '9px' }
   };
 
   // Selección automática de valores
