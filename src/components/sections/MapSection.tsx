@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Network, Shield } from 'lucide-react';
+import { Network } from 'lucide-react';
 import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
@@ -49,7 +49,6 @@ export const MapSection = () => {
           top: ajusteMapa.desdeArriba,
           right: ajusteMapa.desdeDerecha,
         }}
-        // CAMBIADO A COLOR CIAN/BLANCO (Energía de IA)
         animate={{
           filter: [
             "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))",
@@ -58,7 +57,7 @@ export const MapSection = () => {
           ],
         }}
         transition={{
-          duration: 2.7, // Respiración un poco más rápida para energía pura
+          duration: 2.7,
           ease: "easeInOut",
           repeat: Infinity,
         }}
@@ -93,14 +92,12 @@ export const MapSection = () => {
             maxWidth: ajusteTexto.anchoMax
           }} 
         >
-          Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
+          Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
         </motion.p>
 
+        {/* CONTENEDOR DE BOTÓN ÚNICO REFINADO */}
         <div className="absolute flex gap-4" style={{ bottom: ajusteBotones.desdeAbajo, right: ajusteBotones.desdeDerecha }}>
-          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
-            <Shield size={14} className="text-gold" /> Cobertura Transfronteriza
-          </span>
-          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
+          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg backdrop-blur-sm">
             <Network size={14} className="text-gold" /> Red de Inteligencia Legal
           </span>
         </div>
