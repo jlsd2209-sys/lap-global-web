@@ -18,7 +18,7 @@ export const MapSection = () => {
   };
 
   const ajusteTexto = { desdeArriba: '73%', desdeIzquierda: '14%', anchoMax: '450px' };
-  const ajusteBotones = { desdeAbajo: '4%', desdeDerecha: '5%' };
+  const ajusteBotones = { desdeAbajo: '4%', desdeDerecha: '10%' };
 
   return (
     <section 
