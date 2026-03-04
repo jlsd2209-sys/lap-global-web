@@ -23,7 +23,7 @@ export const MapSection = () => {
     titulo: { arriba: '22%', izquierda: '14%' },
     mapa: { arriba: '2%', derecha: '13%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
     texto: { arriba: '73%', izquierda: '14%', anchoMax: '450px' },
-    boton: { abajo: '4%', derecha: '15%', size: '10px' }
+    boton: { abajo: '4%', derecha: '15%', size: '12px' }
   };
 
   // ============================================================
