@@ -1,59 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Network } from 'lucide-react';
 import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  // Escucha el tamaño de la ventana para que los ajustes cambien en tiempo real
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const esMovil = windowWidth < 768;
 
   // ============================================================
-  // 🖥️ PANEL DE CONTROL: ESCRITORIO
+  // 🖥️ PANEL DE CONTROL: ESCRITORIO (Ajustes exactos imagen 1)
   // ============================================================
   const escritorio = {
     altura: '600px',
-    titulo: { arriba: '22%', izquierda: '14%' },
-    mapa: { arriba: '2%', derecha: '13%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
-    texto: { arriba: '73%', izquierda: '14%', ancho: '450px' },
-    boton: { abajo: '4%', derecha: '15%' },
-    // AJUSTE DE LETRAS ESCRITORIO
-    fuentes: {
-      tituloPrincipal: '3rem', // Tamaño del h2
-      tituloItalic: '1.5rem',  // Tamaño de "en la era de la"
-      parrafo: '1.125rem',     // Tamaño del texto descriptivo
-      boton: '10px'            // Tamaño letra botón
-    }
+    titulo: { arriba: '22%', izquierda: '14%', size: '3.2rem', sizeItalic: '1.6rem' },
+    mapa:   { arriba: '2%', derecha: '13%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
+    texto:  { arriba: '73%', izquierda: '14%', ancho: '450px', size: '1.1rem', color: '#0A192F' },
+    boton:  { abajo: '4%', derecha: '15%', size: '10px' }
   };
 
   // ============================================================
-  // 📱 PANEL DE CONTROL: MÓVIL (Ajusta aquí para que no se amontone)
+  // 📱 PANEL DE CONTROL: MÓVIL (Ajusta aquí tus tamaños de letra)
   // ============================================================
   const movil = {
-    altura: '850px', // Te sugiero subirla un poco para que respire
-    titulo: { arriba: '8%', izquierda: '5%' },
-    mapa: { arriba: '25%', derecha: '5%', tamaño: '280px', opacidad: '0.40' },
-    texto: { arriba: '65%', izquierda: '5%', ancho: '90%' },
-    boton: { abajo: '30%', derecha: '10%' },
-    // AJUSTE DE LETRAS MÓVIL (Aquí puedes bajar los tamaños)
-    fuentes: {
-      tituloPrincipal: '1.0rem', // Más pequeño para que no choque
-      tituloItalic: '0.5rem', 
-      parrafo: '0.2rem',        // Texto más fino para móvil
-      boton: '7px'
-    }
+    altura: '800px',
+    titulo: { arriba: '10%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
+    mapa:   { arriba: '12%', derecha: '-10%', tamaño: '320px', opacidad: '0.50' },
+    texto:  { arriba: '62%', izquierda: '5%', ancho: '90%', size: '0.95rem', color: '#FFFFFF' },
+    boton:  { abajo: '8%', derecha: '5%', size: '9px' }
   };
 
-  // Lógica para detectar móvil de forma segura
-  const esMovil = typeof window !== 'undefined' && window.innerWidth < 768;
+  // Selección automática de valores
   const p = esMovil ? movil : escritorio;
 
   return (
     <section 
       className="relative w-full overflow-hidden bg-navy-dark" 
-      style={{ height: p.altura }}
+      style={{ height: p.altura, transition: 'height 0.3s ease' }}
     >
       {/* 1. FONDO */}
-      <div 
-        className="absolute inset-0 z-0"
+      <div className="absolute inset-0 z-0"
         style={{
           backgroundImage: 'url("/Fondo Mapa PNG.png")',
           backgroundSize: 'cover',
@@ -64,7 +58,7 @@ export const MapSection = () => {
 
       {/* 2. PARTÍCULAS */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-        <Particles count={30} />
+        <Particles count={esMovil ? 20 : 50} />
       </div>
 
       {/* 3. MAPA CON AURA */}
@@ -82,51 +76,53 @@ export const MapSection = () => {
         <img
           src="/Mapa con escudo.png"
           alt="Mapa con escudo"
-          style={{ width: p.mapa.tamaño, opacity: p.mapa.opacidad }}
-          className="h-auto transition-opacity duration-500"
+          style={{ width: p.mapa.tamaño, opacity: p.mapa.opacidad, transition: 'all 0.4s ease' }}
+          className="h-auto"
         />
       </motion.div>
       
       {/* 4. CONTENIDO */}
       <div className="relative z-30 h-full w-full">
-        {/* TÍTULO */}
-        <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
-          <span className="text-gold font-semibold tracking-widest uppercase text-xs block mb-2">La Visión</span>
-          <h2 className="font-serif font-bold leading-tight" style={{ fontSize: p.fuentes.tituloPrincipal }}>
+        
+        {/* TÍTULO CON TAMAÑO AJUSTABLE */}
+        <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda, width: esMovil ? '90%' : 'auto' }}>
+          <span className="text-gold font-semibold tracking-widest uppercase text-[12px] block mb-2">La Visión</span>
+          <h2 className="font-serif font-bold leading-tight" style={{ fontSize: p.titulo.size }}>
             <span className="text-white block">Seguridad Jurídica</span>
-            <span className="text-white/80 italic block my-1" style={{ fontSize: p.fuentes.tituloItalic }}>en la Era de la</span>
+            <span className="text-white/80 italic block my-1" style={{ fontSize: p.titulo.sizeItalic }}>en la Era de la</span>
             <span className="text-gold block">Inteligencia Artificial</span>
           </h2>
         </div>
 
-        {/* TEXTO */}
+        {/* PARRAFO CON TAMAÑO Y COLOR AJUSTABLE */}
         <motion.p
           className="absolute font-extrabold leading-relaxed"
           style={{ 
             top: p.texto.arriba,
             left: p.texto.izquierda,
             maxWidth: p.texto.ancho,
-            fontSize: p.fuentes.parrafo,
-            color: esMovil ? '#FFFFFF' : '#0A192F' // Blanco en móvil para legibilidad, oscuro en PC
+            fontSize: p.texto.size,
+            color: p.texto.color,
+            textShadow: esMovil ? '1px 1px 4px rgba(0,0,0,0.8)' : 'none'
           }} 
         >
           Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
         </motion.p>
 
-        {/* BOTÓN */}
+        {/* BOTÓN CON TAMAÑO AJUSTABLE */}
         <div 
           className="absolute" 
-          style={{ bottom: p.boton.abajo, right: p.boton.derecha }}
+          style={{ bottom: p.boton.abajo, right: esMovil ? 'auto' : p.boton.right, left: esMovil ? '5%' : 'auto' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           <motion.button
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 text-white font-bold uppercase bg-navy-dark/80 px-6 py-3 rounded-full border border-gold/40 shadow-lg backdrop-blur-sm transition-all"
-            style={{ fontSize: p.fuentes.boton }}
+            className="flex items-center gap-3 text-white font-bold uppercase bg-navy-dark/90 px-6 py-4 rounded-full border border-gold/40 shadow-xl backdrop-blur-md transition-all whitespace-nowrap"
+            style={{ fontSize: p.boton.size }}
           >
-            <Network size={16} className={isHovered ? 'text-cyan-400' : 'text-gold'} />
-            <span>Red de Inteligencia Legal</span>
+            <Network size={18} className={isHovered ? 'text-cyan-400' : 'text-gold'} />
+            <span className={isHovered ? 'text-cyan-50' : 'text-white'}>Red de Inteligencia Legal</span>
           </motion.button>
         </div>
       </div>
