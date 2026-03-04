@@ -34,7 +34,7 @@ export const MapSection = () => {
     altura: '600px',
     titulo: { arriba: '20%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
     mapa:   { arriba: '9%', derecha: '6%', tamaño: '280px', opacidad: '0.50' },
-    texto:  { arriba: '72.8%', izquierda: '5%', ancho: '62%', size: '0.8rem', color: '#0A192F' },
+    texto:  { arriba: '72.6%', izquierda: '5%', ancho: '62%', size: '0.8rem', color: '#0A192F' },
     boton:  { abajo: '30%', derecha: '0%', size: '9px' }
   };
 
