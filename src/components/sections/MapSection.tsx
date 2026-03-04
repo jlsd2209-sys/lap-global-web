@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Network, Shield } from 'lucide-react';
-// 1. IMPORTACIÓN DEL COMPONENTE
 import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
@@ -21,7 +20,8 @@ export const MapSection = () => {
     desdeArriba: '2%',
     desdeDerecha: '11%',    
     tamaño: '450px',       
-    opacidad: '0.7',       
+    // Subí la opacidad para que el resplandor se note más
+    opacidad: '0.8',       
   };
 
   const ajusteTexto = {
@@ -43,7 +43,7 @@ export const MapSection = () => {
       style={{ height: ajusteSeccion.altura }}
     >
       
-      {/* 1. FONDO (Z-0: Nivel más bajo) */}
+      {/* 1. FONDO (Capa z-0) */}
       <div 
         className="absolute inset-0 z-0"
         style={{
@@ -54,29 +54,46 @@ export const MapSection = () => {
         }}
       />
 
-      {/* 2. PARTÍCULAS (Z-10: Por encima del fondo para que se vean) */}
+      {/* 2. PARTÍCULAS (Capa z-10) */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <Particles count={50} />
       </div>
 
-      {/* 3. MAPA NEURAL (Z-20: Por encima de las partículas) */}
+      {/* 3. MAPA NEURAL CON EFECTO DE RESPLANDOR (Capa z-20) */}
       <motion.div
         className="absolute z-20 pointer-events-none"
         style={{ 
           top: ajusteMapa.desdeArriba,
           right: ajusteMapa.desdeDerecha,
-          opacity: ajusteMapa.opacidad 
+        }}
+        // ANIMACIÓN DE RESPLANDOR RESPIRATORIO
+        animate={{
+          // Sombra dorada que cambia de intensidad
+          boxShadow: [
+            "0 0 20px rgba(212, 175, 55, 0.2)", // Resplandor bajo
+            "0 0 60px rgba(212, 175, 55, 0.6)", // Resplandor alto
+            "0 0 20px rgba(212, 175, 55, 0.2)"  // Resplandor bajo (círculo)
+          ],
+        }}
+        transition={{
+          duration: 4, // Duración de un ciclo completo (4 segundos)
+          ease: "easeInOut", // Suavizado al inicio y final
+          repeat: Infinity, // Repetir infinitamente
+          repeatType: "loop" // Volver a empezar el ciclo
         }}
       >
         <img
           src="/Mapa con escudo.png"
           alt="Mapa con escudo"
-          style={{ width: ajusteMapa.tamaño }}
+          style={{ 
+            width: ajusteMapa.tamaño,
+            opacity: ajusteMapa.opacidad 
+          }}
           className="h-auto drop-shadow-2xl"
         />
       </motion.div>
       
-      {/* 4. CONTENIDO PRINCIPAL (Z-30: Nivel más alto) */}
+      {/* 4. CONTENIDO PRINCIPAL (Capa z-30) */}
       <div className="relative z-30 h-full w-full">
         
         {/* Título */}
@@ -115,10 +132,10 @@ export const MapSection = () => {
             right: ajusteBotones.desdeDerecha
           }}
         >
-          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
+          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
             <Shield size={14} className="text-gold" /> Cobertura Transfronteriza
           </span>
-          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
+          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
             <Network size={14} className="text-gold" /> Red de Inteligencia Legal
           </span>
         </div>
