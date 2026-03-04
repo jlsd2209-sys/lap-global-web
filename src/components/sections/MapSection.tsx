@@ -14,7 +14,7 @@ export const MapSection = () => {
     desdeArriba: '2%',
     desdeDerecha: '11%',    
     tamaño: '450px',       
-    opacidad: '0.85', 
+    opacidad: '0.80', 
   };
 
   const ajusteTexto = { desdeArriba: '73%', desdeIzquierda: '14%', anchoMax: '450px' };
@@ -58,7 +58,7 @@ export const MapSection = () => {
           ],
         }}
         transition={{
-          duration: 3, // Respiración un poco más rápida para energía pura
+          duration: 2.5, // Respiración un poco más rápida para energía pura
           ease: "easeInOut",
           repeat: Infinity,
         }}
