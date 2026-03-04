@@ -32,9 +32,9 @@ export const MapSection = () => {
   const movil = {
     altura: '600px',
     titulo: { arriba: '20%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
-    mapa:   { arriba: '9%', derecha: '6%', tamaño: '340px', opacidad: '0.50' },
+    mapa:   { arriba: '9%', derecha: '4%', tamaño: '330px', opacidad: '0.50' },
     texto:  { arriba: '73%', izquierda: '5%', ancho: '55%', size: '0.8rem' },
-    boton:  { abajo: '4%', izquierda: '50%', size: '9px' } // Cambiado a left para estabilidad
+    boton:  { abajo: '30%', izquierda: '5%', size: '9px' } // Cambiado a left para estabilidad
   };
 
   const p = esMovil ? movil : escritorio;
