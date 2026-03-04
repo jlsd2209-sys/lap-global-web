@@ -42,23 +42,23 @@ export const MapSection = () => {
         <Particles count={50} />
       </div>
 
-      {/* 3. MAPA CON AURA QUE SIGUE LA SILUETA (Capa z-20) */}
+      {/* 3. MAPA CON AURA CIAN / ENERGÍA PURA (Capa z-20) */}
       <motion.div
         className="absolute z-20 pointer-events-none"
         style={{ 
           top: ajusteMapa.desdeArriba,
           right: ajusteMapa.desdeDerecha,
         }}
-        // ANIMACIÓN DE AURA DORADA (Ajustable en filter y duration)
+        // CAMBIADO A COLOR CIAN/BLANCO (Energía de IA)
         animate={{
           filter: [
-            "drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))",
-            "drop-shadow(0 0 30px rgba(212, 175, 55, 0.65))",
-            "drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))"
+            "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))",
+            "drop-shadow(0 0 40px rgba(140, 230, 255, 0.75))",
+            "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))"
           ],
         }}
         transition={{
-          duration: 3.5, // Velocidad de la respiración (más alto = más lento)
+          duration: 3, // Respiración un poco más rápida para energía pura
           ease: "easeInOut",
           repeat: Infinity,
         }}
