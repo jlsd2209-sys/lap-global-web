@@ -30,13 +30,13 @@ export const MapSection = () => {
   const movil = {
     altura: '850px', // Te sugiero subirla un poco para que respire
     titulo: { arriba: '8%', izquierda: '5%' },
-    mapa: { arriba: '20%', derecha: '5%', tamaño: '280px', opacidad: '0.40' },
+    mapa: { arriba: '25%', derecha: '5%', tamaño: '280px', opacidad: '0.40' },
     texto: { arriba: '65%', izquierda: '5%', ancho: '90%' },
     boton: { abajo: '5%', derecha: '10%' },
     // AJUSTE DE LETRAS MÓVIL (Aquí puedes bajar los tamaños)
     fuentes: {
-      tituloPrincipal: '1.8rem', // Más pequeño para que no choque
-      tituloItalic: '1.1rem', 
+      tituloPrincipal: '1.5rem', // Más pequeño para que no choque
+      tituloItalic: '1.0rem', 
       parrafo: '0.6rem',        // Texto más fino para móvil
       boton: '7px'
     }
