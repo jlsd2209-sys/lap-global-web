@@ -20,7 +20,6 @@ export const MapSection = () => {
     desdeArriba: '2%',
     desdeDerecha: '11%',    
     tamaño: '450px',       
-    // Subí la opacidad para que el resplandor se note más
     opacidad: '0.8',       
   };
 
@@ -59,7 +58,7 @@ export const MapSection = () => {
         <Particles count={50} />
       </div>
 
-      {/* 3. MAPA NEURAL CON EFECTO DE RESPLANDOR (Capa z-20) */}
+      {/* 3. MAPA NEURAL CON EFECTO DE RESPLANDOR PERFECTO (Capa z-20) */}
       <motion.div
         className="absolute z-20 pointer-events-none"
         style={{ 
@@ -68,18 +67,23 @@ export const MapSection = () => {
         }}
         // ANIMACIÓN DE RESPLANDOR RESPIRATORIO
         animate={{
-          // Sombra dorada que cambia de intensidad
-          boxShadow: [
-            "0 0 20px rgba(212, 175, 55, 0.2)", // Resplandor bajo
-            "0 0 60px rgba(212, 175, 55, 0.6)", // Resplandor alto
-            "0 0 20px rgba(212, 175, 55, 0.2)"  // Resplandor bajo (círculo)
+          // MÁSCARA CSS QUE RESPIRA
+          maskImage: [
+            "radial-gradient(circle at center, black 0%, black 100%)",
+            "radial-gradient(circle at center, transparent 0%, black 100%)",
+            "radial-gradient(circle at center, black 0%, black 100%)"
           ],
+          WebkitMaskImage: [
+            "radial-gradient(circle at center, black 0%, black 100%)",
+            "radial-gradient(circle at center, transparent 0%, black 100%)",
+            "radial-gradient(circle at center, black 0%, black 100%)"
+          ]
         }}
         transition={{
-          duration: 4, // Duración de un ciclo completo (4 segundos)
-          ease: "easeInOut", // Suavizado al inicio y final
-          repeat: Infinity, // Repetir infinitamente
-          repeatType: "loop" // Volver a empezar el ciclo
+          duration: 4, 
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "loop"
         }}
       >
         <img
@@ -89,7 +93,7 @@ export const MapSection = () => {
             width: ajusteMapa.tamaño,
             opacity: ajusteMapa.opacidad 
           }}
-          className="h-auto drop-shadow-2xl"
+          className="h-auto drop-shadow-2xl filter blur-[1px]" // Pequeño desenfoque para suavizar los bordes
         />
       </motion.div>
       
