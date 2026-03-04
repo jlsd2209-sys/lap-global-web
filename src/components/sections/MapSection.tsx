@@ -14,7 +14,7 @@ export const MapSection = () => {
     desdeArriba: '2%',
     desdeDerecha: '11%',    
     tamaño: '450px',       
-    opacidad: '0.85', // Un poco más de opacidad para que brille mejor
+    opacidad: '0.85', 
   };
 
   const ajusteTexto = { desdeArriba: '73%', desdeIzquierda: '14%', anchoMax: '450px' };
@@ -49,16 +49,16 @@ export const MapSection = () => {
           top: ajusteMapa.desdeArriba,
           right: ajusteMapa.desdeDerecha,
         }}
-        // ANIMACIÓN DE AURA DORADA
+        // ANIMACIÓN DE AURA DORADA (Ajustable en filter y duration)
         animate={{
           filter: [
-            "drop-shadow(0 0 5px rgba(212, 175, 55, 0.3))",
-            "drop-shadow(0 0 25px rgba(212, 175, 55, 0.7))",
-            "drop-shadow(0 0 5px rgba(212, 175, 55, 0.3))"
+            "drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))",
+            "drop-shadow(0 0 30px rgba(212, 175, 55, 0.65))",
+            "drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))"
           ],
         }}
         transition={{
-          duration: 3,
+          duration: 3.5, // Velocidad de la respiración (más alto = más lento)
           ease: "easeInOut",
           repeat: Infinity,
         }}
@@ -105,7 +105,6 @@ export const MapSection = () => {
           </span>
         </div>
       </div>
-
     </section>
   );
 };
