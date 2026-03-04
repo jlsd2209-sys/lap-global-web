@@ -7,31 +7,31 @@ export const MapSection = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   // ============================================================
-  // 🎛️ PANEL DE CONTROL (AJUSTA AQUÍ TUS TAMAÑOS Y POSICIONES)
+  // 🎛️ PANEL DE CONTROL (AJUSTES INDIVIDUALES)
   // ============================================================
   
-  // 🖥️ AJUSTES PARA COMPUTADORA (Escritorio)
+  // 🖥️ AJUSTES ESCRITORIO
   const escritorio = {
-    alturaSeccion: '600px',
+    altura: '600px',
     titulo: { arriba: '22%', izquierda: '14%' },
     mapa:   { arriba: '2%', derecha: '11%', tamaño: '445px', opacidad: isHovered ? 0.90 : 0.70 },
-    texto:  { arriba: '73%', izquierda: '14%', anchoMax: '450px' },
+    texto:  { arriba: '73%', izquierda: '14%', ancho: '450px' },
     boton:  { abajo: '4%', derecha: '15%' }
   };
 
-  // 📱 AJUSTES PARA CELULAR (Móvil)
+  // 📱 AJUSTES MÓVIL
   const movil = {
-    alturaSeccion: '750px',
-    titulo: { arriba: '12%', izquierda: '0%' }, // 0% e 'invisible' el left porque se centra solo
-    mapa:   { arriba: '8%', derecha: '-15%', tamaño: '320px', opacidad: 0.50 },
-    texto:  { arriba: '55%', izquierda: '50%', anchoMax: '90%' },
+    altura: '750px',
+    titulo: { arriba: '12%' },
+    mapa:   { arriba: '8%', derecha: '-10%', tamaño: '300px', opacidad: 0.50 },
+    texto:  { arriba: '55%', ancho: '90%' },
     boton:  { abajo: '8%' }
   };
 
   return (
     <section 
       className="relative w-full overflow-hidden bg-navy-dark" 
-      style={{ height: `calc(window.innerWidth < 768 ? ${movil.alturaSeccion} : ${escritorio.alturaSeccion})` }}
+      style={{ height: escritorio.altura }} // Forzamos altura base de escritorio
     >
       {/* 1. FONDO */}
       <div className="absolute inset-0 z-0"
@@ -47,13 +47,14 @@ export const MapSection = () => {
         <Particles count={50} />
       </div>
 
-      {/* 3. MAPA CON AURA */}
+      {/* 3. MAPA CON AURA (Visible y posicionado) */}
       <motion.div
-        className="absolute z-20 pointer-events-none flex justify-center md:justify-start"
+        className="absolute z-20 pointer-events-none 
+                   top-[8%] right-[-10%]     /* Móvil por defecto */
+                   md:top-[2%] md:right-[11%]" /* Escritorio */
         style={{ 
-          // Esta lógica elige automáticamente entre el ajuste móvil o escritorio
-          top: window.innerWidth < 768 ? movil.mapa.arriba : escritorio.mapa.arriba,
-          right: window.innerWidth < 768 ? movil.mapa.derecha : escritorio.mapa.derecha,
+          // Solo aplicamos los tamaños del panel de control
+          width: 'auto' 
         }}
         animate={{
           filter: isHovered 
@@ -66,24 +67,23 @@ export const MapSection = () => {
         <img
           src="/Mapa con escudo.png"
           alt="Mapa con escudo"
+          className="h-auto w-[300px] md:w-[445px]" // Tamaños fijos para evitar que desaparezca
           style={{ 
-            width: window.innerWidth < 768 ? movil.mapa.tamaño : escritorio.mapa.tamaño, 
-            opacity: window.innerWidth < 768 ? movil.mapa.opacidad : escritorio.mapa.opacidad, 
+            opacity: escritorio.mapa.opacidad, 
             transition: 'all 0.4s ease' 
           }}
-          className="h-auto"
         />
       </motion.div>
       
-      {/* 4. CONTENIDO */}
+      {/* 4. CONTENIDO (Título y Texto) */}
       <div className="relative z-30 h-full w-full">
         
         {/* TÍTULO */}
         <div 
           className="absolute w-full md:w-auto text-center md:text-left px-6"
           style={{ 
-            top: window.innerWidth < 768 ? movil.titulo.arriba : escritorio.titulo.arriba, 
-            left: window.innerWidth < 768 ? movil.titulo.izquierda : escritorio.titulo.izquierda 
+            top: escritorio.titulo.arriba, 
+            left: escritorio.titulo.izquierda 
           }}
         >
           <span className="text-gold font-semibold tracking-widest uppercase text-xs md:text-sm block mb-2">La Visión</span>
@@ -96,23 +96,22 @@ export const MapSection = () => {
 
         {/* TEXTO DESCRIPTIVO */}
         <motion.p
-          className="absolute text-white md:text-navy-dark font-bold md:font-extrabold text-base md:text-lg leading-relaxed text-center md:text-left"
+          className="absolute text-white md:text-navy-dark font-bold md:font-extrabold text-base md:text-lg leading-relaxed text-center md:text-left
+                     left-1/2 -translate-x-1/2 md:left-[14%] md:translate-x-0"
           style={{ 
-            top: window.innerWidth < 768 ? movil.texto.arriba : escritorio.texto.arriba,
-            left: window.innerWidth < 768 ? movil.texto.izquierda : escritorio.texto.izquierda,
-            maxWidth: window.innerWidth < 768 ? movil.texto.anchoMax : escritorio.texto.anchoMax,
-            transform: window.innerWidth < 768 ? 'translateX(-50%)' : 'none'
+            top: escritorio.texto.arriba,
+            maxWidth: escritorio.texto.ancho,
           }} 
         >
           Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
         </motion.p>
 
-        {/* BOTÓN REACCIÓN */}
+        {/* BOTÓN */}
         <div 
           className="absolute left-1/2 -translate-x-1/2 md:left-auto" 
           style={{ 
-            bottom: window.innerWidth < 768 ? movil.boton.abajo : escritorio.boton.abajo, 
-            right: window.innerWidth < 768 ? 'auto' : escritorio.boton.derecha 
+            bottom: escritorio.boton.abajo, 
+            right: escritorio.boton.derecha 
           }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
