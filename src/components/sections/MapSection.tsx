@@ -33,9 +33,9 @@ export const MapSection = () => {
   const movil = {
     altura: '600px',
     titulo: { arriba: '20%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
-    mapa:   { arriba: '10%', derecha: '8%', tamaño: '270px', opacidad: '0.50' },
-    texto:  { arriba: '75%', izquierda: '5%', ancho: '60%', size: '0.8rem', color: '#0A192F' },
-    boton:  { abajo: '30%', derecha: '0%', size: '8px' }
+    mapa:   { arriba: '9%', derecha: '6%', tamaño: '280px', opacidad: '0.50' },
+    texto:  { arriba: '74%', izquierda: '5%', ancho: '62%', size: '0.8rem', color: '#0A192F' },
+    boton:  { abajo: '30%', derecha: '0%', size: '9px' }
   };
 
   // Selección automática de valores
