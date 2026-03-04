@@ -27,10 +27,10 @@ export const MapSection = () => {
   // ============================================================
   const movil = {
     altura: '600px',
-    titulo: { arriba: '20%', izquierda: '1%', size: '1.8rem' },
-    mapa:   { arriba: '25%', derecha: '-10%', tamaño: '340px', opacidad: '0.50' },
-    texto:  { arriba: '72.4%', izquierda: '-20%', ancho: '55%', size: '0.8rem' },
-    boton:  { abajo: '10%', derecha: '-20%', size: '8.5px' }
+    titulo: { arriba: '20%', izquierda: '-40%', size: '1.8rem' },
+    mapa:   { arriba: '35%', derecha: '-10%', tamaño: '340px', opacidad: '0.50' },
+    texto:  { arriba: '72.4%', izquierda: '-40%', ancho: '55%', size: '0.8rem' },
+    boton:  { abajo: '10%', derecha: '-40%', size: '8.5px' }
   };
 
   return (
