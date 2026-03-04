@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { Network, Shield } from 'lucide-react';
-// 1. Importación del componente de partículas
+// 1. IMPORTACIÓN DEL COMPONENTE
 import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
   // ============================================================
-  // PANEL DE CONTROL: TUS AJUSTES CONSERVADOS
+  // PANEL DE CONTROL: TUS AJUSTES EXACTOS CONSERVADOS
   // ============================================================
   
   const ajusteSeccion = {
@@ -20,7 +20,7 @@ export const MapSection = () => {
   const ajusteMapa = {
     desdeArriba: '2%',
     desdeDerecha: '11%',    
-    tamaño: '455px',       
+    tamaño: '450px',       
     opacidad: '0.7',       
   };
 
@@ -43,9 +43,9 @@ export const MapSection = () => {
       style={{ height: ajusteSeccion.altura }}
     >
       
-      {/* 1. FONDO PRINCIPAL (Capa z-10) */}
+      {/* 1. FONDO (Z-0: Nivel más bajo) */}
       <div 
-        className="absolute inset-0 z-10"
+        className="absolute inset-0 z-0"
         style={{
           backgroundImage: 'url("/Fondo Mapa PNG.png")',
           backgroundSize: '100% 100%',
@@ -54,12 +54,12 @@ export const MapSection = () => {
         }}
       />
 
-      {/* 2. PARTÍCULAS (Capa z-15) - Integradas aquí */}
-      <div className="absolute inset-0 z-15 pointer-events-none opacity-40">
-        <Particles count={30} />
+      {/* 2. PARTÍCULAS (Z-10: Por encima del fondo para que se vean) */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <Particles count={50} />
       </div>
 
-      {/* 3. MAPA NEURAL (Capa z-20) */}
+      {/* 3. MAPA NEURAL (Z-20: Por encima de las partículas) */}
       <motion.div
         className="absolute z-20 pointer-events-none"
         style={{ 
@@ -76,48 +76,52 @@ export const MapSection = () => {
         />
       </motion.div>
       
-      {/* 4. TÍTULO EN 3 NIVELES (Capa z-30) */}
-      <div 
-        className="absolute z-30"
-        style={{ 
-          top: ajusteTitulo.desdeArriba, 
-          left: ajusteTitulo.desdeIzquierda 
-        }}
-      >
-        <span className="text-gold font-semibold tracking-widest uppercase text-sm block mb-2">La Visión</span>
-        <h2 className="font-serif font-bold leading-tight">
-          <span className="text-white text-3xl md:text-4xl lg:text-5xl block">Seguridad Jurídica</span>
-          <span className="text-white/80 text-xl md:text-2xl italic block my-1">en la Era de la</span>
-          <span className="text-gold text-3xl md:text-4xl lg:text-5xl block">Inteligencia Artificial</span>
-        </h2>
-      </div>
+      {/* 4. CONTENIDO PRINCIPAL (Z-30: Nivel más alto) */}
+      <div className="relative z-30 h-full w-full">
+        
+        {/* Título */}
+        <div 
+          className="absolute"
+          style={{ 
+            top: ajusteTitulo.desdeArriba, 
+            left: ajusteTitulo.desdeIzquierda 
+          }}
+        >
+          <span className="text-gold font-semibold tracking-widest uppercase text-sm block mb-2">La Visión</span>
+          <h2 className="font-serif font-bold leading-tight">
+            <span className="text-white text-3xl md:text-4xl lg:text-5xl block">Seguridad Jurídica</span>
+            <span className="text-white/80 text-xl md:text-2xl italic block my-1">en la Era de la</span>
+            <span className="text-gold text-3xl md:text-4xl lg:text-5xl block">Inteligencia Artificial</span>
+          </h2>
+        </div>
 
-      {/* 5. PÁRRAFO (Capa z-30) */}
-      <motion.p
-        className="absolute z-30 text-navy-dark font-extrabold text-lg leading-relaxed"
-        style={{ 
-          top: ajusteTexto.desdeArriba,
-          left: ajusteTexto.desdeIzquierda,
-          maxWidth: ajusteTexto.anchoMax
-        }} 
-      >
-        Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
-      </motion.p>
+        {/* Párrafo */}
+        <motion.p
+          className="absolute text-navy-dark font-extrabold text-lg leading-relaxed"
+          style={{ 
+            top: ajusteTexto.desdeArriba,
+            left: ajusteTexto.desdeIzquierda,
+            maxWidth: ajusteTexto.anchoMax
+          }} 
+        >
+          Bienvenido a nuestro ecosistema de defensa penal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
+        </motion.p>
 
-      {/* 6. BOTONES (Capa z-30) */}
-      <div 
-        className="absolute z-30 flex gap-4"
-        style={{ 
-          bottom: ajusteBotones.desdeAbajo,
-          right: ajusteBotones.desdeDerecha
-        }}
-      >
-        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
-          <Shield size={14} className="text-gold" /> Cobertura Transfronteriza
-        </span>
-        <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40 shadow-lg">
-          <Network size={14} className="text-gold" /> Red de Inteligencia Legal
-        </span>
+        {/* Botones */}
+        <div 
+          className="absolute flex gap-4"
+          style={{ 
+            bottom: ajusteBotones.desdeAbajo,
+            right: ajusteBotones.desdeDerecha
+          }}
+        >
+          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
+            <Shield size={14} className="text-gold" /> Cobertura Transfronteriza
+          </span>
+          <span className="flex items-center gap-2 text-white text-[10px] font-bold uppercase bg-navy-dark/60 px-4 py-2 rounded-full border border-gold/40">
+            <Network size={14} className="text-gold" /> Red de Inteligencia Legal
+          </span>
+        </div>
       </div>
 
     </section>
