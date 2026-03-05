@@ -3,9 +3,9 @@ import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'luc
 import { Particles } from '../Particles';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
-const SECTION_PADDING = 'py-24';
-const GAP = 'gap-8';
-const TITLE_SIZE = 'text-2xl md:text-3xl lg:text-4xl';
+const SECTION_PADDING = 'py-20';
+const GAP = 'gap-6';
+const TITLE_SIZE = 'text-2xl md:text-3xl';
 /* ───────────────────────────── */
 
 const row1 = [
@@ -26,57 +26,60 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    whileHover={{ scale: 1.05 }}
-    className="group relative flex flex-col text-center p-8 bg-[#0f172a]/40 backdrop-blur-xl rounded-2xl border border-[#c5a059]/30 transition-all duration-500 hover:border-[#c5a059] hover:shadow-[0_0_30px_rgba(197,160,89,0.2)] overflow-hidden cursor-pointer"
+    whileHover={{ scale: 1.04 }}
+    className="group relative flex flex-col text-center p-8 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer"
   >
-    {/* Destello interno premium */}
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(197,160,89,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    {/* 1. Iluminación interna reactiva */}
+    <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
     
     <div className="relative z-10">
-      <div className="text-[#c5a059] mb-6 flex justify-center group-hover:scale-110 transition-transform duration-500">
-        <item.icon className="w-14 h-14" strokeWidth={1.2} />
+      {/* Icono Premium */}
+      <div className="text-[#c5a059] mb-6 flex justify-center">
+        <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
       </div>
 
-      <h3 className="text-xl font-serif font-bold text-white mb-4 tracking-tight leading-tight">
-        {item.title}
-      </h3>
+      {/* Título */}
+      <div className="flex items-center justify-center gap-2 mb-3">
+        <span className="text-lg font-serif font-bold text-white">
+          {item.title}
+        </span>
+      </div>
 
-      <p className="text-slate-300 text-sm md:text-base leading-relaxed font-sans font-light">
-        {item.desc}
-      </p>
+      {/* Descripción */}
+      <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
     </div>
   </motion.div>
 );
 
 export const ServicesSection = () => {
   return (
-    <section id="servicios" className={`${SECTION_PADDING} relative bg-[#060b13] overflow-hidden`}>
+    <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── FONDO DINÁMICO MEJORADO ── */}
-      <div className="absolute inset-0 z-0">
+      {/* ── FONDO CON IMAGEN ── */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <img 
           src="/fondo-servicios.jpg.png" 
           alt="" 
-          className="w-full h-full object-cover opacity-20 mix-blend-overlay" 
+          className="w-full h-full object-cover" 
         />
-        {/* Gradiente para eliminar el "exceso de azul" y dar profundidad real */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(15,23,42,0.8),#060b13)]" />
+        <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
-      {/* ── PARTÍCULAS (Configuración Mapa) ── */}
+      {/* ── 2. PARTÍCULAS (Restauradas al 100% de brillo y cantidad) ── */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-        <Particles count={55} />
+        <Particles count={50} />
       </div>
 
-      <div className="relative z-20 container mx-auto px-6">
+      {/* ── CONTENIDO DE LA SECCIÓN ── */}
+      <div className="relative z-20 container mx-auto px-4 md:px-8">
         
-        {/* Título Fila 1 */}
+        {/* Fila 1 – Centro de Inteligencia */}
         <motion.h2
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-12 tracking-widest uppercase`}
-        >
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
+          style={{ fontVariant: 'small-caps' }}>
           Centro de Inteligencia Transnacional
         </motion.h2>
         
@@ -84,20 +87,16 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        {/* Divisor */}
-        <div className="my-20 flex justify-center items-center gap-4 opacity-50">
-          <div className="h-[1px] w-24 bg-gradient-to-r from-transparent to-[#c5a059]" />
-          <div className="w-2 h-2 rotate-45 border border-[#c5a059]" />
-          <div className="h-[1px] w-24 bg-gradient-to-l from-transparent to-[#c5a059]" />
-        </div>
+        {/* Separador Dorado Elegante */}
+        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
 
-        {/* Título Fila 2 */}
+        {/* Fila 2 – Módulos de Alianza */}
         <motion.h2
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-12 tracking-widest uppercase`}
-        >
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
+          style={{ fontVariant: 'small-caps' }}>
           Módulos de Alianza Estratégica
         </motion.h2>
         
