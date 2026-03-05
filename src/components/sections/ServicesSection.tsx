@@ -27,58 +27,57 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
     whileHover={{ scale: 1.04 }}
-    className="group relative flex flex-col text-center p-8 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer"
+    className="group relative flex flex-col text-center p-8 bg-white/5 backdrop-blur-lg rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/30 overflow-hidden cursor-pointer"
   >
-    {/* 1. Iluminación interna reactiva */}
-    <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
+    {/* Iluminación interna reactiva - Subimos un poco la opacidad para contraste */}
+    <div className="absolute inset-0 bg-gradient-to-br from-cyan/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
     
     <div className="relative z-10">
-      {/* Icono Premium */}
       <div className="text-[#c5a059] mb-6 flex justify-center">
         <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
       </div>
 
-      {/* Título */}
       <div className="flex items-center justify-center gap-2 mb-3">
-        <span className="text-lg font-serif font-bold text-white">
+        <span className="text-lg font-serif font-bold text-white uppercase tracking-wider">
           {item.title}
         </span>
       </div>
 
-      {/* Descripción */}
-      <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
+      <p className="text-gray-200 text-sm leading-relaxed">{item.desc}</p>
     </div>
   </motion.div>
 );
 
 export const ServicesSection = () => {
   return (
-    <section id="servicios" className={`${SECTION_PADDING} relative`}>
+    <section id="servicios" className={`${SECTION_PADDING} relative overflow-hidden`}>
       
-      {/* ── FONDO CON IMAGEN ── */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      {/* ── FONDO DINÁMICO (Adiós al azul plano) ── */}
+      <div className="absolute inset-0 z-0">
         <img 
           src="/fondo-servicios.jpg.png" 
           alt="" 
-          className="w-full h-full object-cover" 
+          className="w-full h-full object-cover opacity-40" 
         />
-        <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
+        {/* Degradado Radial para dar profundidad: de un azul acero a un azul profundo casi negro */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1526]/90 via-[#0f1d33]/80 to-[#0a1526]/95"></div>
+        {/* Luces sutiles en las esquinas para romper la monotonía azul */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(197,160,89,0.05),transparent_70%)]"></div>
       </div>
 
-      {/* ── 2. PARTÍCULAS (Restauradas al 100% de brillo y cantidad) ── */}
+      {/* ── PARTÍCULAS (Brillo Máximo) ── */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-        <Particles count={50} />
+        <Particles count={60} />
       </div>
 
-      {/* ── CONTENIDO DE LA SECCIÓN ── */}
+      {/* ── CONTENIDO ── */}
       <div className="relative z-20 container mx-auto px-4 md:px-8">
         
-        {/* Fila 1 – Centro de Inteligencia */}
         <motion.h2
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-[0.2em]`}
           style={{ fontVariant: 'small-caps' }}>
           Centro de Inteligencia Transnacional
         </motion.h2>
@@ -87,15 +86,13 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        {/* Separador Dorado Elegante */}
-        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
+        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/50 to-transparent max-w-4xl mx-auto" />
 
-        {/* Fila 2 – Módulos de Alianza */}
         <motion.h2
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-[0.2em]`}
           style={{ fontVariant: 'small-caps' }}>
           Módulos de Alianza Estratégica
         </motion.h2>
