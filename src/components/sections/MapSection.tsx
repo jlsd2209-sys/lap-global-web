@@ -32,7 +32,7 @@ export const MapSection = () => {
   const movil = {
     altura: '600px',
     titulo: { arriba: '20%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
-    mapa:   { arriba: '9%', derecha: '4%', tamaño: '310px', opacidad: isHovered ? '0.85' : '0.50' },
+    mapa:   { arriba: '9%', derecha: '4%', tamaño: '310px', opacidad: isHovered ? '0.85' : '0.55' },
     texto:  { arriba: '72.4%', izquierda: '5%', ancho: '55%', size: '0.8rem' },
     boton:  { abajo: '30%', izquierda: '5%', size: '9px' }
   };
