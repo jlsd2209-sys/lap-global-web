@@ -48,11 +48,20 @@ export const Header = () => {
     setIsMenuOpen(false);
   };
 
+  // Definimos el estilo del degradado para reusarlo y asegurar que no desaparezca
+  const goldGradientStyle = {
+    backgroundImage: 'linear-gradient(to right, #c5a059, #f1d592, #c5a059)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    display: 'table'
+  };
+
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
-        {/* LOGO Y NOMBRE: Efecto Blanco -> Degradado Corregido */}
+        {/* LOGO Y NOMBRE: Solución definitiva al parpadeo/desaparición */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -63,14 +72,15 @@ export const Header = () => {
           </div>
           
           <span 
-            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 
-                       text-white group-hover:gradient-text-gold group-hover:text-transparent"
+            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 text-white group-hover:text-transparent"
             style={{ 
               display: 'table',
-              WebkitBackgroundClip: 'text' // Asegura que el recorte funcione en el hover
+              // Cuando hay hover en el grupo (a), aplicamos el degradado
             }} 
           >
-            Unidad de Asuntos Transnacionales & IA
+            <span className="group-hover:bg-gradient-to-r group-hover:from-gold group-hover:to-gold-bright group-hover:bg-clip-text">
+              Unidad de Asuntos Transnacionales & IA
+            </span>
           </span>
         </a>
 
@@ -85,8 +95,8 @@ export const Header = () => {
                   onClick={(e) => handleNavClick(e, item.href)} 
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
                     ${isActive 
-                      ? 'gradient-text-gold text-transparent font-bold scale-105' 
-                      : 'text-white hover:gradient-text-gold hover:text-transparent hover:scale-105'}`}
+                      ? 'gradient-text-gold text-transparent font-bold' 
+                      : 'text-white hover:gradient-text-gold hover:text-transparent'}`}
                   style={{ display: 'table' }}
                 >
                   {item.label}
