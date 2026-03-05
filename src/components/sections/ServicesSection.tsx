@@ -20,7 +20,7 @@ const row2 = [
   { icon: Newspaper, title: 'Boletín Jurídico', desc: 'Actualizaciones normativas periódicas y alertas.', locked: true }
 ];
 
-const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
+const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -32,7 +32,7 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
     <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
     
     <div className="relative z-10">
-      {/* Icono Premium (SIN CÍRCULO, limpios y elegantes) */}
+      {/* Icono Premium */}
       <div className="text-[#c5a059] mb-6 flex justify-center">
         <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
       </div>
@@ -49,7 +49,7 @@ const Card = ({ item, index }: {item: typeof row1[0];index: number;}) => (
       <p className="text-gray-300 text-sm mb-6 leading-relaxed">{item.desc}</p>
     </div>
 
-    {/* Botón (Limpio, solo con tu clase oficial button-pulse) */}
+    {/* Botón */}
     <div className="relative z-10 mt-auto">
       {item.locked ? (
         <div className="py-3 px-4 rounded-full text-sm font-semibold bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700">
@@ -71,23 +71,24 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── FONDO CON IMAGEN Y CAPA PROFUNDA ── */}
+      {/* ── 1. FONDO CON IMAGEN Y CAPA PROFUNDA ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {/* Imagen con la extensión corregida exactamente como está en GitHub */}
         <img 
           src="/fondo-servicios.jpg.png" 
           alt="" 
           className="w-full h-full object-cover" 
         />
-        {/* Capa de pintura azul noche profundo */}
+        {/* Capa de pintura azul noche profundo con desenfoque */}
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
-      {/* ── PARTÍCULAS OFICIALES DE TU PÁGINA ── */}
-      <Particles count={30} />
+      {/* ── 2. PARTÍCULAS (Ajustadas para destellos idénticos a la sección mapa) ── */}
+      <div className="absolute inset-0 z-10 pointer-events-none opacity-60">
+        <Particles count={45} />
+      </div>
 
-      {/* ── CONTENIDO DE LA SECCIÓN ── */}
-      <div className="relative z-10 container mx-auto px-4 md:px-8">
+      {/* ── 3. CONTENIDO DE LA SECCIÓN (z-20 para estar sobre las partículas) ── */}
+      <div className="relative z-20 container mx-auto px-4 md:px-8">
         
         {/* Fila 1 – Centro de Inteligencia */}
         <motion.h2
