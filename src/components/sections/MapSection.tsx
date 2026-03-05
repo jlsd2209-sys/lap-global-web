@@ -67,14 +67,14 @@ export const MapSection = () => {
 
       {/* 3. MAPA CON DOBLE DISPARADOR (Trigger en Mapa + Trigger en Botón) */}
       <motion.div
-        className="absolute z-20 cursor-pointer pointer-events-auto" // Activamos eventos aquí también
+        className="absolute z-20 cursor-pointer pointer-events-auto"
         style={{ 
           top: p.mapa.arriba, 
           right: p.mapa.derecha 
         }}
         onMouseEnter={() => !esMovil && setIsHovered(true)}
         onMouseLeave={() => !esMovil && setIsHovered(false)}
-        onClick={handleToggleClick} // En móvil, tocar el mapa también lo ilumina
+        onClick={handleToggleClick}
         animate={{
           filter: isHovered 
             ? [
@@ -110,11 +110,21 @@ export const MapSection = () => {
       {/* 4. CONTENIDO */}
       <div className="relative z-30 h-full w-full pointer-events-none">
         
-        {/* TÍTULO - "La Visión" e "Inteligencia Artificial" con el mismo efecto */}
+        {/* TÍTULO */}
         <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
-          <span className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2">
+          {/* AJUSTE "LA VISIÓN": Forzamos el renderizado del degradado */}
+          <span 
+            className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2"
+            style={{ 
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              display: 'table' // Ayuda a que el gradiente se limite al texto
+            }}
+          >
             La Visión
           </span>
+          
           <h2 className="font-serif font-bold leading-tight">
             <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
               Seguridad Jurídica
@@ -122,7 +132,15 @@ export const MapSection = () => {
             <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>
               en la Era de la
             </span>
-            <span className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
+            <span 
+              className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl block" 
+              style={{ 
+                fontSize: esMovil ? p.titulo.size : '',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
               Inteligencia Artificial
             </span>
           </h2>
@@ -143,7 +161,7 @@ export const MapSection = () => {
 
         {/* BOTÓN */}
         <div 
-          className="absolute pointer-events-auto" // Reactivamos eventos para el botón
+          className="absolute pointer-events-auto"
           style={{ 
             bottom: p.boton.abajo, 
             right: esMovil ? 'auto' : escritorio.boton.derecha,
