@@ -21,6 +21,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isLogoHovered, setIsLogoHovered] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,6 +62,8 @@ export const Header = () => {
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
           className="flex items-center gap-4 group cursor-pointer"
+          onMouseEnter={() => setIsLogoHovered(true)}
+          onMouseLeave={() => setIsLogoHovered(false)}
         >
           <div className="relative w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img 
@@ -70,8 +73,9 @@ export const Header = () => {
             />
           </div>
           <span 
-            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 group-hover:gradient-text-gold"
-            style={{ display: 'inline-block' }}
+            className={`hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 ${
+              isLogoHovered ? 'gradient-text-gold' : 'text-white'
+            }`}
           >
             Unidad de Asuntos Transnacionales & IA
           </span>
