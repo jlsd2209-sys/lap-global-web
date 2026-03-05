@@ -52,7 +52,7 @@ export const Header = () => {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
-        {/* LOGO Y NOMBRE: De Blanco a Degradado Metálico en Hover */}
+        {/* LOGO Y NOMBRE: Efecto Blanco -> Degradado Corregido */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -63,14 +63,18 @@ export const Header = () => {
           </div>
           
           <span 
-            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 group-hover:gradient-text-gold"
-            style={{ display: 'table' }} // Mantenemos el 'table' para que el degradado no se estire
+            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 
+                       text-white group-hover:gradient-text-gold group-hover:text-transparent"
+            style={{ 
+              display: 'table',
+              WebkitBackgroundClip: 'text' // Asegura que el recorte funcione en el hover
+            }} 
           >
             Unidad de Asuntos Transnacionales & IA
           </span>
         </a>
 
-        {/* NAVEGACIÓN: Blanco a Degradado Metálico */}
+        {/* NAVEGACIÓN DESKTOP */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
@@ -80,7 +84,9 @@ export const Header = () => {
                   href={item.href} 
                   onClick={(e) => handleNavClick(e, item.href)} 
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
-                    ${isActive ? 'gradient-text-gold font-bold scale-105' : 'text-white hover:gradient-text-gold hover:scale-105'}`}
+                    ${isActive 
+                      ? 'gradient-text-gold text-transparent font-bold scale-105' 
+                      : 'text-white hover:gradient-text-gold hover:text-transparent hover:scale-105'}`}
                   style={{ display: 'table' }}
                 >
                   {item.label}
