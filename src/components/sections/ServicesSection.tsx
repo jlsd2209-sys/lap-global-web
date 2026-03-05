@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
 import { Particles } from '../Particles';
 
-/* ── CONFIGURACIÓN DE DISEÑO (Alineada con tus otras secciones) ── */
-const SECTION_PADDING = 'py-14'; // Igual que Advantages y CTA
+/* ── CONFIGURACIÓN DE DISEÑO (Consistente con tus otras secciones) ── */
+const SECTION_PADDING = 'py-14'; 
 const GAP = 'gap-6';
-const TITLE_SIZE = 'text-3xl md:text-4xl'; // Consistente con Results y Advantages
+const TITLE_SIZE = 'text-3xl md:text-4xl'; // Tamaño exacto de tus Advantages y Results
 /* ───────────────────────────── */
 
 const row1 = [
@@ -29,20 +29,14 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
     whileHover={{ scale: 1.04 }}
     className="group relative flex flex-col text-center p-8 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer"
   >
-    {/* Iluminación interna reactiva original */}
     <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
-    
     <div className="relative z-10">
       <div className="text-[#c5a059] mb-6 flex justify-center">
         <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
       </div>
-
       <div className="flex items-center justify-center gap-2 mb-3">
-        <span className="text-lg font-serif font-bold text-white">
-          {item.title}
-        </span>
+        <span className="text-lg font-serif font-bold text-white">{item.title}</span>
       </div>
-
       <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
     </div>
   </motion.div>
@@ -50,16 +44,17 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
 
 export const ServicesSection = () => {
   return (
-    <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
+    <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px] bg-[#0a1526]`}>
       
-      {/* ── FONDO ORIGINAL ── */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      {/* ── FONDO UNIFICADO (Sin líneas fantasma) ── */}
+      <div className="absolute inset-0 z-0">
         <img 
           src="/fondo-servicios.jpg.png" 
           alt="" 
-          className="w-full h-full object-cover" 
+          className="w-full h-full object-cover opacity-60" 
         />
-        <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
+        {/* Usamos un solo overlay sólido con gradiente para evitar costuras visuales */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1526]/90 via-[#0a1526]/80 to-[#0a1526]/95 backdrop-blur-[1px]"></div>
       </div>
 
       {/* ── PARTÍCULAS (Brillo 100%) ── */}
@@ -67,10 +62,8 @@ export const ServicesSection = () => {
         <Particles count={50} />
       </div>
 
-      {/* ── CONTENIDO DE LA SECCIÓN ── */}
       <div className="relative z-20 container mx-auto px-4 md:px-8">
         
-        {/* Título Fila 1 (Ajustado a tus otros H2) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -86,10 +79,9 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        {/* Separador - Estilo sutil original */}
-        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
+        {/* Separador sutil sin bordes duros */}
+        <div className="my-16 h-[1px] bg-gradient-to-r from-transparent via-[#c5a059]/30 to-transparent max-w-3xl mx-auto" />
 
-        {/* Título Fila 2 (Ajustado a tus otros H2) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
