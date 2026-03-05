@@ -15,7 +15,6 @@ export const MapSection = () => {
 
   const esMovil = windowWidth < 768;
 
-  // Lógica para toggle en móvil
   const handleToggleClick = () => {
     if (esMovil) {
       setIsHovered(!isHovered);
@@ -23,7 +22,7 @@ export const MapSection = () => {
   };
 
   // ============================================================
-  // 🖥️ PANEL ESCRITORIO: AJUSTES ORIGINALES
+  // 🖥️ PANEL ESCRITORIO: AJUSTES ORIGINALES (INTACTOS)
   // ============================================================
   const escritorio = {
     altura: '600px',
@@ -34,7 +33,7 @@ export const MapSection = () => {
   };
 
   // ============================================================
-  // 📱 PANEL MÓVIL: TUS ÚLTIMOS AJUSTES (Iluminación activada)
+  // 📱 PANEL MÓVIL: AJUSTES ORIGINALES (INTACTOS)
   // ============================================================
   const movil = {
     altura: '600px',
@@ -66,7 +65,7 @@ export const MapSection = () => {
         <Particles count={esMovil ? 20 : 50} />
       </div>
 
-      {/* 3. MAPA CON EL EFECTO ESPECTACULAR QUE ENVIASTE */}
+      {/* 3. MAPA */}
       <motion.div
         className="absolute z-20 pointer-events-none"
         style={{ 
@@ -108,30 +107,38 @@ export const MapSection = () => {
       {/* 4. CONTENIDO */}
       <div className="relative z-30 h-full w-full">
         
-        {/* TÍTULO */}
+        {/* TÍTULO - Ahora con degradado en La Visión e Inteligencia Artificial */}
         <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
-          <span className="text-gold font-semibold tracking-widest uppercase text-sm block mb-2">La Visión</span>
+          <span className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2">
+            La Visión
+          </span>
           <h2 className="font-serif font-bold leading-tight">
-            <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>Seguridad Jurídica</span>
-            <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>en la Era de la</span>
-            <span className="text-gold text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>Inteligencia Artificial</span>
+            <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
+              Seguridad Jurídica
+            </span>
+            <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>
+              en la Era de la
+            </span>
+            <span className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
+              Inteligencia Artificial
+            </span>
           </h2>
         </div>
 
-        {/* PARRAFO */}
+        {/* PARRAFO - Color navy-dark para fondo claro */}
         <motion.p
-          className="absolute text-navy-dark font-extrabold text-lg leading-relaxed"
+          className="absolute text-navy-dark font-extrabold leading-relaxed"
           style={{ 
             top: p.texto.arriba,
             left: p.texto.izquierda,
             maxWidth: esMovil ? p.texto.ancho : escritorio.texto.anchoMax,
-            fontSize: esMovil ? p.texto.size : '' 
+            fontSize: esMovil ? p.texto.size : '1.125rem' // text-lg es 1.125rem
           }} 
         >
           Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
         </motion.p>
 
-        {/* BOTÓN CON DISPARADOR (Hover + Click Toggle para móvil) */}
+        {/* BOTÓN */}
         <div 
           className="absolute" 
           style={{ 
