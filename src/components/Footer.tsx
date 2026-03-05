@@ -1,5 +1,5 @@
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png'; // Importamos el logo
+import logoShield from '@/assets/logo-shield.png'; 
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
@@ -42,13 +42,13 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:text-gold transition-colors"
+              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 hover:opacity-80 transition-opacity"
             >
-              {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
               <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <span>Unidad de Asuntos Transnacionales & IA</span>
+              {/* APLICACIÓN DEL EFECTO GRADIENTE AL TÍTULO */}
+              <span className="gradient-text-gold">Unidad de Asuntos Transnacionales & IA</span>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
               Innovación legal con inteligencia artificial para Sudamérica. 
@@ -72,7 +72,8 @@ export const Footer = () => {
 
           {/* Navigation - COLUMNA CENTRADA */}
           <div className="flex flex-col items-center">
-            <h3 className="text-lg font-serif text-white mb-6">Navegación</h3>
+            {/* APLICACIÓN DEL EFECTO GRADIENTE AL ENCABEZADO */}
+            <h3 className="text-lg font-serif font-bold mb-6 gradient-text-gold">Navegación</h3>
             <ul className="flex flex-col gap-3 items-center">
               {navLinks.map((link) => (
                 <li key={link.href}>
@@ -90,10 +91,12 @@ export const Footer = () => {
 
           {/* Contact */}
           <div className="flex flex-col items-start md:items-end">
-            <h3 className="text-lg font-serif text-white mb-6">Contacto</h3>
+            {/* APLICACIÓN DEL EFECTO GRADIENTE AL ENCABEZADO */}
+            <h3 className="text-lg font-serif font-bold mb-6 gradient-text-gold">Contacto</h3>
             <ul className="flex flex-col gap-4 items-start md:items-end">
               {contactInfo.map((info, index) => (
-                <li key={index} className="flex items-start gap-3 text-cream-light/80">
+                <li key={index} className="flex items-start gap-3 text-cream-light/80 group">
+                  {/* El icono hereda el color dorado base para no saturar, o puedes usar gradient-text-gold si es texto */}
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
                   {info.href ? (
                     <a href={info.href} className="hover:text-gold transition-colors text-left md:text-right">
@@ -111,7 +114,7 @@ export const Footer = () => {
         {/* Copyright */}
         <div className="text-center pt-8 border-t border-gold/10">
           <p className="text-cream-light/60 text-sm">
-            © 2026 Unidad de Asuntos Transnacionales & IA. Todos los derechos reservados.
+            © 2026 <span className="gradient-text-gold font-semibold">Unidad de Asuntos Transnacionales & IA</span>. Todos los derechos reservados.
           </p>
         </div>
       </div>
