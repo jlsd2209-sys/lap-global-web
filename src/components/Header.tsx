@@ -48,20 +48,11 @@ export const Header = () => {
     setIsMenuOpen(false);
   };
 
-  // Definimos el estilo del degradado para reusarlo y asegurar que no desaparezca
-  const goldGradientStyle = {
-    backgroundImage: 'linear-gradient(to right, #c5a059, #f1d592, #c5a059)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
-    display: 'table'
-  };
-
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
-        {/* LOGO Y NOMBRE: Solución definitiva al parpadeo/desaparición */}
+        {/* LOGO Y NOMBRE: De Blanco a Degradado Metálico en Hover */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -72,19 +63,14 @@ export const Header = () => {
           </div>
           
           <span 
-            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 text-white group-hover:text-transparent"
-            style={{ 
-              display: 'table',
-              // Cuando hay hover en el grupo (a), aplicamos el degradado
-            }} 
+            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 group-hover:gradient-text-gold"
+            style={{ display: 'table' }}
           >
-            <span className="group-hover:bg-gradient-to-r group-hover:from-gold group-hover:to-gold-bright group-hover:bg-clip-text">
-              Unidad de Asuntos Transnacionales & IA
-            </span>
+            Unidad de Asuntos Transnacionales & IA
           </span>
         </a>
 
-        {/* NAVEGACIÓN DESKTOP */}
+        {/* NAVEGACIÓN: Restaurada a su estado correcto (Blanco -> Degradado) */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
@@ -94,9 +80,7 @@ export const Header = () => {
                   href={item.href} 
                   onClick={(e) => handleNavClick(e, item.href)} 
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
-                    ${isActive 
-                      ? 'gradient-text-gold text-transparent font-bold' 
-                      : 'text-white hover:gradient-text-gold hover:text-transparent'}`}
+                    ${isActive ? 'gradient-text-gold font-bold' : 'text-white hover:gradient-text-gold'}`}
                   style={{ display: 'table' }}
                 >
                   {item.label}
@@ -107,7 +91,7 @@ export const Header = () => {
           })}
         </ul>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE MENU TOGGLE */}
         <button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
