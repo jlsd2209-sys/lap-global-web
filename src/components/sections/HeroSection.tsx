@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Calendar, ArrowDown } from 'lucide-react';
 import { Particles } from '../Particles';
 import bgCircles from '@/assets/bg-circles.png';
+
 export const HeroSection = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -15,7 +16,9 @@ export const HeroSection = () => {
       });
     }
   };
-  return <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden py-[100px] pb-0 pt-[50px]">
+
+  return (
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden py-[100px] pb-0 pt-[50px]">
       {/* Background */}
       <div className="absolute inset-0">
         <img src={bgCircles} alt="" className="w-full h-full object-cover" />
@@ -35,37 +38,31 @@ export const HeroSection = () => {
 
       {/* Content */}
       <div className="container relative z-10 text-center max-w-4xl px-4">
-        <motion.h1 initial={{
-        opacity: 0,
-        y: 30
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.8
-      }} className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 gradient-text leading-tight">Inteligencia Artificial al Servicio del Derecho </motion.h1>
+        <motion.h1 
+          initial={{ opacity: 0, y: 30 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.8 }} 
+          /* Aplicamos la clase gradient-text-gold para el efecto blanco -> dorado */
+          className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
+        >
+          Inteligencia Artificial al Servicio del Derecho 
+        </motion.h1>
 
-        <motion.p initial={{
-        opacity: 0,
-        y: 30
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.8,
-        delay: 0.2
-      }} className="text-lg md:text-xl text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed">Automatización legal de última generación para clientes en Venezuela y Argentina</motion.p>
+        <motion.p 
+          initial={{ opacity: 0, y: 30 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.8, delay: 0.2 }} 
+          className="text-lg md:text-xl text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed"
+        >
+          Automatización legal de última generación para clientes en Venezuela y Argentina
+        </motion.p>
 
-        <motion.div initial={{
-        opacity: 0,
-        y: 30
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.8,
-        delay: 0.4
-      }} className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.8, delay: 0.4 }} 
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        >
           <a href="#contacto" onClick={(e) => handleNavClick(e, '#contacto')} className="button-pulse inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-semibold rounded-full transition-all hover:shadow-xl hover:shadow-gold/40">
             <Calendar size={20} />
             Solicitar Consulta
@@ -76,5 +73,6 @@ export const HeroSection = () => {
           </a>
         </motion.div>
       </div>
-    </section>;
+    </section>
+  );
 };
