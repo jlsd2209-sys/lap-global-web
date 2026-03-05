@@ -1,68 +1,74 @@
 import { motion } from 'framer-motion';
-import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper, Lock } from 'lucide-react';
+import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react'; // Eliminado 'Lock'
 import { Particles } from '../Particles';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
 const SECTION_PADDING = 'py-20';
-const GAP = 'gap-6';
+const GAP = 'gap-8'; // Aumenté el espacio un poco ya que las tarjetas son más pequeñas
 const TITLE_SIZE = 'text-2xl md:text-3xl';
 /* ───────────────────────────── */
 
-const row1 = [
-  { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', desc: 'Vigilancia continua de indicadores de riesgo preventivo.', locked: false },
-  { icon: Scale, title: 'Análisis Penal (Arg-Ven)', desc: 'Evaluación jurisdiccional transnacional asistida por IA.', locked: false },
-  { icon: FileSearch, title: 'Auditoría Documental', desc: 'Análisis exhaustivo e inteligente de documentación legal.', locked: false }
+// Unificamos y limpiamos los arrays. Ya no necesitamos la propiedad 'locked'.
+const allServices = [
+  // Fila 1 - Centro de Inteligencia
+  { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', desc: 'Vigilancia continua de indicadores de riesgo preventivo.' },
+  { icon: Scale, title: 'Análisis Penal (Arg-Ven)', desc: 'Evaluación jurisdiccional transnacional asistida por IA.' },
+  { icon: FileSearch, title: 'Auditoría Documental', desc: 'Análisis exhaustivo e inteligente de documentación legal.' },
+  // Fila 2 - Módulos de Alianza
+  { icon: Landmark, title: 'Memoria Documental', desc: 'Repositorio de precedentes y jurisprudencia corporativa.' },
+  { icon: FileBarChart, title: 'Informes Automáticos', desc: 'Reportes y dictámenes generados en tiempo real.' },
+  { icon: Newspaper, title: 'Boletín Jurídico', desc: 'Actualizaciones normativas periódicas y alertas.' }
 ];
 
-const row2 = [
-  { icon: Landmark, title: 'Memoria Documental', desc: 'Repositorio de precedentes y jurisprudencia corporativa.', locked: true },
-  { icon: FileBarChart, title: 'Informes Automáticos', desc: 'Reportes y dictámenes generados en tiempo real.', locked: true },
-  { icon: Newspaper, title: 'Boletín Jurídico', desc: 'Actualizaciones normativas periódicas y alertas.', locked: true }
-];
-
-const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
+// Nueva Tarjeta Premium: Animación de escala, hover de luz y sin botones.
+const PremiumCard = ({ item, index }: {item: typeof allServices[0]; index: number;}) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
+    // 1. Animación de Entrada (Al cargar la página)
+    initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="group relative flex flex-col justify-between text-center p-6 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:-translate-y-2 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden"
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+
+    // 2. Animación de Hover (El efecto de hacerse "un poquito más grande")
+    whileHover={{ 
+      scale: 1.04, // Un aumento sutil del 4% (igual que el mapa)
+      transition: { duration: 0.4, ease: "easeInOut" } // Transición suave y elegante
+    }}
+
+    // Clases base de la tarjeta. Eliminado 'justify-between' porque ya no hay botón al final.
+    className="group relative flex flex-col items-center text-center p-8 bg-cream/5 backdrop-blur-lg rounded-3xl border-2 border-[#c5a059]/20 transition-all duration-500 overflow-hidden cursor-pointer"
+    style={{
+      // Blindamos los detalles de iluminación y sombra que ya tenías
+      boxShadow: '0 10px 30px -10px rgba(10, 25, 47, 0.3)',
+    }}
   >
-    {/* Efecto de iluminación interna al pasar el ratón */}
-    <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
+    {/* 3. EFECTO DE LUZ INTERNA (Se mantiene y se blindó) */}
+    <div 
+      className="absolute inset-0 bg-gradient-to-br from-cyan/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" 
+      style={{
+        // Agregamos un shadow extra en hover para la tarjeta completa, igual que en el código de base
+        '--tw-shadow': '0 20px 25px -5px rgba(0, 255, 255, 0.1), 0 8px 10px -6px rgba(0, 255, 255, 0.1)',
+        '--tw-shadow-colored': '0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color)',
+        'box-shadow': 'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)',
+      }}
+    />
     
+    {/* Contenido z-10 para estar sobre la luz */}
     <div className="relative z-10">
       {/* Icono Premium */}
-      <div className="text-[#c5a059] mb-6 flex justify-center">
-        <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
+      <div className="text-[#c5a059] mb-8 flex justify-center">
+        <item.icon className="w-14 h-14 relative z-10" strokeWidth={1} />
       </div>
 
-      {/* Título */}
-      <div className="flex items-center justify-center gap-2 mb-3">
-        <span className="text-lg font-serif font-bold text-white">
+      {/* Título (Texto intacto, Lock eliminado) */}
+      <div className="flex items-center justify-center mb-4">
+        <span className="text-xl font-serif font-bold text-white tracking-wide">
           {item.title}
         </span>
-        {item.locked && <Lock className="w-4 h-4 text-[#c5a059]/60 flex-shrink-0" />}
       </div>
 
-      {/* Descripción */}
-      <p className="text-gray-300 text-sm mb-6 leading-relaxed">{item.desc}</p>
-    </div>
-
-    {/* Botón */}
-    <div className="relative z-10 mt-auto">
-      {item.locked ? (
-        <div className="py-3 px-4 rounded-full text-sm font-semibold bg-slate-800/60 text-gray-400 cursor-not-allowed border border-slate-700">
-          Módulo Restringido
-        </div>
-      ) : (
-        <a 
-          href="/asistente" 
-          className="button-pulse w-full inline-flex justify-center items-center py-3 px-4 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-semibold rounded-full transition-all hover:shadow-xl hover:shadow-gold/40 text-sm"
-        >
-          Consultar
-        </a>
-      )}
+      {/* Descripción (Texto intacto) */}
+      <p className="text-gray-300 text-base leading-relaxed">{item.desc}</p>
     </div>
   </motion.div>
 );
@@ -71,7 +77,7 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── 1. FONDO CON IMAGEN Y CAPA PROFUNDA ── */}
+      {/* ── FONDO CON IMAGEN Y CAPA PROFUNDA ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img 
           src="/fondo-servicios.jpg.png" 
@@ -82,43 +88,49 @@ export const ServicesSection = () => {
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
-      {/* ── 2. PARTÍCULAS (Ajustadas para destellos idénticos a la sección mapa) ── */}
+      {/* ── PARTÍCULAS (Mantenemos tu ajuste de destellos) ── */}
       <div className="absolute inset-0 z-10 pointer-events-none opacity-60">
         <Particles count={45} />
       </div>
 
-      {/* ── 3. CONTENIDO DE LA SECCIÓN (z-20 para estar sobre las partículas) ── */}
-      <div className="relative z-20 container mx-auto px-4 md:px-8">
+      {/* ── CONTENIDO DE LA SECCIÓN (z-20 para estar sobre las partículas) ── */}
+      <div className="relative z-20 container mx-auto px-6 md:px-12">
         
         {/* Fila 1 – Centro de Inteligencia */}
         <motion.h2
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-12 tracking-wide`}
           style={{ fontVariant: 'small-caps' }}>
           Centro de Inteligencia Transnacional
         </motion.h2>
         
-        <div className={`grid grid-cols-1 md:grid-cols-3 ${GAP}`}>
-          {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
+        {/* Usamos un grid de 1 columna para que las 3 tarjetas de la fila 1 ocupen su lugar */}
+        <div className={`grid grid-cols-1 md:grid-cols-3 ${GAP} mb-14`}>
+          {allServices.slice(0, 3).map((item, i) => (
+            <PremiumCard key={item.title} item={item} index={i} />
+          ))}
         </div>
 
         {/* Separador Dorado Elegante */}
-        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
+        <div className="my-16 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-5xl mx-auto" />
 
         {/* Fila 2 – Módulos de Alianza */}
         <motion.h2
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-wide`}
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-12 tracking-wide`}
           style={{ fontVariant: 'small-caps' }}>
           Módulos de Alianza Estratégica
         </motion.h2>
         
+        {/* Usamos un grid de 1 columna para las otras 3 tarjetas */}
         <div className={`grid grid-cols-1 md:grid-cols-3 ${GAP}`}>
-          {row2.map((item, i) => <Card key={item.title} item={item} index={i} />)}
+          {allServices.slice(3, 6).map((item, i) => (
+            <PremiumCard key={item.title} item={item} index={i + 3} /> // index + 3 para el delay correcto
+          ))}
         </div>
       </div>
     </section>
