@@ -3,27 +3,27 @@ import { useRef, useEffect, useState } from 'react';
 import { Gauge, TrendingUp, Clock } from 'lucide-react';
 
 const results = [
-{
-  icon: Gauge,
-  target: 70,
-  symbol: '%',
-  text: 'Reducción en Tiempo de Análisis'
-},
-{
-  icon: TrendingUp,
-  target: 10,
-  symbol: 'x',
-  text: 'Mayor Capacidad de Casos'
-},
-{
-  icon: Clock,
-  target: 24,
-  symbol: '/7',
-  text: 'Disponibilidad de IA'
-}];
+  {
+    icon: Gauge,
+    target: 70,
+    symbol: '%',
+    text: 'Reducción en Tiempo de Análisis'
+  },
+  {
+    icon: TrendingUp,
+    target: 10,
+    symbol: 'x',
+    text: 'Mayor Capacidad de Casos'
+  },
+  {
+    icon: Clock,
+    target: 24,
+    symbol: '/7',
+    text: 'Disponibilidad de IA'
+  }
+];
 
-
-const Counter = ({ target, duration = 2000 }: {target: number;duration?: number;}) => {
+const Counter = ({ target, duration = 2000 }: {target: number; duration?: number;}) => {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -32,7 +32,6 @@ const Counter = ({ target, duration = 2000 }: {target: number;duration?: number;
     if (isInView) {
       let start = 0;
       const increment = target / (duration / 16);
-
       const timer = setInterval(() => {
         start += increment;
         if (start >= target) {
@@ -42,7 +41,6 @@ const Counter = ({ target, duration = 2000 }: {target: number;duration?: number;
           setCount(Math.floor(start));
         }
       }, 16);
-
       return () => clearInterval(timer);
     }
   }, [isInView, target, duration]);
@@ -53,29 +51,36 @@ const Counter = ({ target, duration = 2000 }: {target: number;duration?: number;
 export const ResultsSection = () => {
   return (
     <section className="py-12 bg-charcoal-dark pt-[40px] pb-[40px]">
-      <div className="container">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-8">
-
-          {/* TÍTULO ACTUALIZADO CON GRADIENTE */}
-          <h2 className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold">
+          className="text-center mb-8"
+        >
+          {/* TÍTULO CON AJUSTE DE RENDERIZADO PARA IGUALAR AL CTA */}
+          <h2 
+            className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold mx-auto"
+            style={{ 
+              display: 'table', // Fuerza al degradado a ajustarse al texto y no al ancho total
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
             Impacto Medible
           </h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {results.map((result, index) =>
-          <motion.div
-            key={result.text}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="group text-center p-5 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20">
-
+          {results.map((result, index) => (
+            <motion.div
+              key={result.text}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group text-center p-5 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20"
+            >
               {/* Icon */}
               <div className="text-gold mb-4">
                 <result.icon className="w-12 h-12 mx-auto" />
@@ -96,8 +101,9 @@ export const ResultsSection = () => {
                 {result.text}
               </p>
             </motion.div>
-          )}
+          ))}
         </div>
       </div>
-    </section>);
+    </section>
+  );
 };
