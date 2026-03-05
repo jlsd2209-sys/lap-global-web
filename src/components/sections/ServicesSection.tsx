@@ -3,9 +3,9 @@ import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'luc
 import { Particles } from '../Particles';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
-const SECTION_PADDING = 'py-20';
-const GAP = 'gap-6';
-const TITLE_SIZE = 'text-2xl md:text-3xl';
+const SECTION_PADDING = 'py-24';
+const GAP = 'gap-8';
+const TITLE_SIZE = 'text-2xl md:text-3xl lg:text-4xl';
 /* ───────────────────────────── */
 
 const row1 = [
@@ -26,59 +26,57 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    whileHover={{ scale: 1.04 }}
-    className="group relative flex flex-col text-center p-8 bg-white/5 backdrop-blur-lg rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/30 overflow-hidden cursor-pointer"
+    whileHover={{ scale: 1.05 }}
+    className="group relative flex flex-col text-center p-8 bg-[#0f172a]/40 backdrop-blur-xl rounded-2xl border border-[#c5a059]/30 transition-all duration-500 hover:border-[#c5a059] hover:shadow-[0_0_30px_rgba(197,160,89,0.2)] overflow-hidden cursor-pointer"
   >
-    {/* Iluminación interna reactiva - Subimos un poco la opacidad para contraste */}
-    <div className="absolute inset-0 bg-gradient-to-br from-cyan/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
+    {/* Destello interno premium */}
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(197,160,89,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     
     <div className="relative z-10">
-      <div className="text-[#c5a059] mb-6 flex justify-center">
-        <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
+      <div className="text-[#c5a059] mb-6 flex justify-center group-hover:scale-110 transition-transform duration-500">
+        <item.icon className="w-14 h-14" strokeWidth={1.2} />
       </div>
 
-      <div className="flex items-center justify-center gap-2 mb-3">
-        <span className="text-lg font-serif font-bold text-white uppercase tracking-wider">
-          {item.title}
-        </span>
-      </div>
+      <h3 className="text-xl font-serif font-bold text-white mb-4 tracking-tight leading-tight">
+        {item.title}
+      </h3>
 
-      <p className="text-gray-200 text-sm leading-relaxed">{item.desc}</p>
+      <p className="text-slate-300 text-sm md:text-base leading-relaxed font-sans font-light">
+        {item.desc}
+      </p>
     </div>
   </motion.div>
 );
 
 export const ServicesSection = () => {
   return (
-    <section id="servicios" className={`${SECTION_PADDING} relative overflow-hidden`}>
+    <section id="servicios" className={`${SECTION_PADDING} relative bg-[#060b13] overflow-hidden`}>
       
-      {/* ── FONDO DINÁMICO (Adiós al azul plano) ── */}
+      {/* ── FONDO DINÁMICO MEJORADO ── */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/fondo-servicios.jpg.png" 
           alt="" 
-          className="w-full h-full object-cover opacity-40" 
+          className="w-full h-full object-cover opacity-20 mix-blend-overlay" 
         />
-        {/* Degradado Radial para dar profundidad: de un azul acero a un azul profundo casi negro */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1526]/90 via-[#0f1d33]/80 to-[#0a1526]/95"></div>
-        {/* Luces sutiles en las esquinas para romper la monotonía azul */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(197,160,89,0.05),transparent_70%)]"></div>
+        {/* Gradiente para eliminar el "exceso de azul" y dar profundidad real */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(15,23,42,0.8),#060b13)]" />
       </div>
 
-      {/* ── PARTÍCULAS (Brillo Máximo) ── */}
+      {/* ── PARTÍCULAS (Configuración Mapa) ── */}
       <div className="absolute inset-0 z-10 pointer-events-none">
-        <Particles count={60} />
+        <Particles count={55} />
       </div>
 
-      {/* ── CONTENIDO ── */}
-      <div className="relative z-20 container mx-auto px-4 md:px-8">
+      <div className="relative z-20 container mx-auto px-6">
         
+        {/* Título Fila 1 */}
         <motion.h2
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-[0.2em]`}
-          style={{ fontVariant: 'small-caps' }}>
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-12 tracking-widest uppercase`}
+        >
           Centro de Inteligencia Transnacional
         </motion.h2>
         
@@ -86,14 +84,20 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/50 to-transparent max-w-4xl mx-auto" />
+        {/* Divisor */}
+        <div className="my-20 flex justify-center items-center gap-4 opacity-50">
+          <div className="h-[1px] w-24 bg-gradient-to-r from-transparent to-[#c5a059]" />
+          <div className="w-2 h-2 rotate-45 border border-[#c5a059]" />
+          <div className="h-[1px] w-24 bg-gradient-to-l from-transparent to-[#c5a059]" />
+        </div>
 
+        {/* Título Fila 2 */}
         <motion.h2
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-10 tracking-[0.2em]`}
-          style={{ fontVariant: 'small-caps' }}>
+          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-12 tracking-widest uppercase`}
+        >
           Módulos de Alianza Estratégica
         </motion.h2>
         
