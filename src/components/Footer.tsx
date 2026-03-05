@@ -1,5 +1,5 @@
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png'; // Importamos el logo
+import logoShield from '@/assets/logo-shield.png';
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
@@ -42,12 +42,12 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:text-gold transition-colors"
+              className="flex items-center gap-3 font-serif text-lg font-bold text-white mb-4 hover:gradient-text-gold transition-colors"
             >
-              {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
-              <div className="w-12 h-12 flex items-center justify-center">
+              <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
+              {/* Se bajó el tamaño de text-xl a text-lg como pediste */}
               <span>Unidad de Asuntos Transnacionales & IA</span>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
@@ -70,16 +70,16 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Navigation - COLUMNA CENTRADA */}
-          <div className="flex flex-col items-center">
+          {/* Navigation - ALINEADA A LA IZQUIERDA (items-start en lugar de items-center) */}
+          <div className="flex flex-col items-start">
             <h3 className="text-lg font-serif text-white mb-6">Navegación</h3>
-            <ul className="flex flex-col gap-3 items-center">
+            <ul className="flex flex-col gap-3 items-start">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-cream-light/80 hover:text-gold hover:translate-x-1 transition-all inline-block"
+                    className="text-cream-light/80 hover:gradient-text-gold hover:scale-105 transition-all inline-block"
                   >
                     {link.label}
                   </a>
@@ -88,19 +88,19 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="flex flex-col items-start md:items-end">
+          {/* Contact - ALINEADA A LA IZQUIERDA (removido el md:items-end) */}
+          <div className="flex flex-col items-start">
             <h3 className="text-lg font-serif text-white mb-6">Contacto</h3>
-            <ul className="flex flex-col gap-4 items-start md:items-end">
+            <ul className="flex flex-col gap-4 items-start">
               {contactInfo.map((info, index) => (
                 <li key={index} className="flex items-start gap-3 text-cream-light/80">
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
                   {info.href ? (
-                    <a href={info.href} className="hover:text-gold transition-colors text-left md:text-right">
+                    <a href={info.href} className="hover:gradient-text-gold transition-colors text-left">
                       {info.text}
                     </a>
                   ) : (
-                    <span className="text-left md:text-right">{info.text}</span>
+                    <span className="text-left">{info.text}</span>
                   )}
                 </li>
               ))}
