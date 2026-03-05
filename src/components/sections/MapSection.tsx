@@ -15,6 +15,13 @@ export const MapSection = () => {
 
   const esMovil = windowWidth < 768;
 
+  // Lógica para toggle en móvil
+  const handleToggleClick = () => {
+    if (esMovil) {
+      setIsHovered(!isHovered);
+    }
+  };
+
   // ============================================================
   // 🖥️ PANEL ESCRITORIO: AJUSTES ORIGINALES
   // ============================================================
@@ -124,7 +131,7 @@ export const MapSection = () => {
           Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
         </motion.p>
 
-        {/* BOTÓN CON DISPARADOR (Hover) */}
+        {/* BOTÓN CON DISPARADOR (Hover + Click Toggle para móvil) */}
         <div 
           className="absolute" 
           style={{ 
@@ -132,8 +139,9 @@ export const MapSection = () => {
             right: esMovil ? 'auto' : escritorio.boton.derecha,
             left: esMovil ? p.boton.izquierda : 'auto'
           }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={() => !esMovil && setIsHovered(true)}
+          onMouseLeave={() => !esMovil && setIsHovered(false)}
+          onClick={handleToggleClick}
         >
           <motion.button
             whileHover={{ scale: 1.1, backgroundColor: 'rgba(10, 25, 47, 0.9)' }}
