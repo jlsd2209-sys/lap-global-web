@@ -60,16 +60,19 @@ export const Header = () => {
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
-          className="flex items-center gap-4 cursor-pointer"
+          className="flex items-center gap-4 group cursor-pointer"
         >
-          <div className="relative w-16 h-16 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+          <div className="relative w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img 
               alt="LAP Global & IA Logo" 
               className="w-full h-full object-contain drop-shadow-2xl" 
               src={logoShield} 
             />
           </div>
-          <span className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 hover:gradient-text-gold">
+          <span 
+            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 group-hover:gradient-text-gold"
+            style={{ display: 'inline-block' }}
+          >
             Unidad de Asuntos Transnacionales & IA
           </span>
         </a>
