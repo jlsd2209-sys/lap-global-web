@@ -1,23 +1,25 @@
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
+import logoShield from '@/assets/logo-shield.png'; // Importamos el logo
 
 const socialLinks = [
-{ icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-{ icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-{ icon: MessageCircle, href: 'https://wa.me/5491112345678', label: 'WhatsApp' }];
-
+  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+  { icon: MessageCircle, href: 'https://wa.me/5491112345678', label: 'WhatsApp' }
+];
 
 const navLinks = [
-{ label: 'Inicio', href: '#home' },
-{ label: 'Servicios', href: '#servicios' },
-{ label: 'Nosotros', href: '#nosotros' },
-{ label: 'Contacto', href: '#contacto' }];
-
+  { label: 'Inicio', href: '#home' },
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Nosotros', href: '#nosotros' },
+  { label: 'Contacto', href: '#contacto' }
+];
 
 const contactInfo = [
-{ icon: Mail, text: 'contacto@lapglobal.ai', href: 'mailto:contacto@lapglobal.ai' },
-{ icon: Phone, text: '+54 9 11 1234-5678', href: 'tel:+5491112345678' },
-{ icon: MapPin, text: 'Buenos Aires, Argentina', href: null },
-{ icon: MapPin, text: 'Caracas, Venezuela', href: null }];
+  { icon: Mail, text: 'contacto@lapglobal.ai', href: 'mailto:contacto@lapglobal.ai' },
+  { icon: Phone, text: '+54 9 11 1234-5678', href: 'tel:+5491112345678' },
+  { icon: MapPin, text: 'Buenos Aires, Argentina', href: null },
+  { icon: MapPin, text: 'Caracas, Venezuela', href: null }
+];
 
 export const Footer = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -34,15 +36,17 @@ export const Footer = () => {
     <footer className="bg-charcoal-dark py-8 border-t border-gold/20 pt-[15px] pb-[15px]">
       <div className="container pb-0 pt-0">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+          
           {/* Logo & Description */}
-          <div>
+          <div className="flex flex-col items-start">
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:text-gold transition-colors">
-
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-bright flex items-center justify-center">
-                <span className="text-navy-dark font-bold text-lg">L</span>
+              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:text-gold transition-colors"
+            >
+              {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <span>Unidad de Asuntos Transnacionales & IA</span>
             </a>
@@ -51,55 +55,55 @@ export const Footer = () => {
               Transformando la práctica del derecho con tecnología de vanguardia.
             </p>
             <div className="flex gap-4">
-              {socialLinks.map((social) =>
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.label}
-                className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold hover:text-navy-dark transition-all hover:-translate-y-1">
-
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold hover:text-navy-dark transition-all hover:-translate-y-1"
+                >
                   <social.icon size={18} />
                 </a>
-              )}
+              ))}
             </div>
           </div>
 
-          {/* Navigation */}
-          <div>
+          {/* Navigation - COLUMNA CENTRADA */}
+          <div className="flex flex-col items-center">
             <h3 className="text-lg font-serif text-white mb-6">Navegación</h3>
-            <ul className="flex flex-col gap-3">
-              {navLinks.map((link) =>
-              <li key={link.href}>
+            <ul className="flex flex-col gap-3 items-center">
+              {navLinks.map((link) => (
+                <li key={link.href}>
                   <a
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-cream-light/80 hover:text-gold hover:translate-x-1 transition-all inline-block">
-
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="text-cream-light/80 hover:text-gold hover:translate-x-1 transition-all inline-block"
+                  >
                     {link.label}
                   </a>
                 </li>
-              )}
+              ))}
             </ul>
           </div>
 
           {/* Contact */}
-          <div>
+          <div className="flex flex-col items-start md:items-end">
             <h3 className="text-lg font-serif text-white mb-6">Contacto</h3>
-            <ul className="flex flex-col gap-4">
-              {contactInfo.map((info, index) =>
-              <li key={index} className="flex items-start gap-3 text-cream-light/80">
+            <ul className="flex flex-col gap-4 items-start md:items-end">
+              {contactInfo.map((info, index) => (
+                <li key={index} className="flex items-start gap-3 text-cream-light/80">
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
-                  {info.href ?
-                <a href={info.href} className="hover:text-gold transition-colors">
+                  {info.href ? (
+                    <a href={info.href} className="hover:text-gold transition-colors text-left md:text-right">
                       {info.text}
-                    </a> :
-
-                <span>{info.text}</span>
-                }
+                    </a>
+                  ) : (
+                    <span className="text-left md:text-right">{info.text}</span>
+                  )}
                 </li>
-              )}
+              ))}
             </ul>
           </div>
         </div>
@@ -111,6 +115,6 @@ export const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>);
-
+    </footer>
+  );
 };
