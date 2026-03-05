@@ -18,9 +18,9 @@ const navItems = [{
 }];
 
 export const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +52,7 @@ export const Header = () => {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
-        {/* LOGO Y NOMBRE CON EFECTO CORREGIDO */}
+        {/* LOGO Y NOMBRE: De Blanco a Degradado Metálico en Hover */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -63,17 +63,14 @@ export const Header = () => {
           </div>
           
           <span 
-            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-500 group-hover:bg-gradient-to-r group-hover:from-gold group-hover:to-gold-bright group-hover:bg-clip-text group-hover:text-transparent"
-            style={{ 
-              display: 'inline-block',
-              WebkitBackgroundClip: 'text' // Necesario para compatibilidad
-            }}
+            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 group-hover:gradient-text-gold"
+            style={{ display: 'table' }} // Mantenemos el 'table' para que el degradado no se estire
           >
             Unidad de Asuntos Transnacionales & IA
           </span>
         </a>
 
-        {/* NAVEGACIÓN DESKTOP */}
+        {/* NAVEGACIÓN: Blanco a Degradado Metálico */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
@@ -82,10 +79,9 @@ export const Header = () => {
                 <a 
                   href={item.href} 
                   onClick={(e) => handleNavClick(e, item.href)} 
-                  className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block
-                    ${isActive 
-                      ? 'bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-transparent font-bold' 
-                      : 'text-white hover:bg-gradient-to-r hover:from-gold hover:to-gold-bright hover:bg-clip-text hover:text-transparent'}`}
+                  className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
+                    ${isActive ? 'gradient-text-gold font-bold scale-105' : 'text-white hover:gradient-text-gold hover:scale-105'}`}
+                  style={{ display: 'table' }}
                 >
                   {item.label}
                   <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
@@ -95,8 +91,8 @@ export const Header = () => {
           })}
         </ul>
 
-        {/* MOBILE TOGGLE */}
-        <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        {/* MOBILE MENU */}
+        <button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
       </nav>
