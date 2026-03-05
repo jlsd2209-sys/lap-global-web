@@ -1,5 +1,5 @@
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png'; // Importamos el logo
+import logoShield from '@/assets/logo-shield.png'; 
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
@@ -32,12 +32,14 @@ export const Footer = () => {
     }
   };
 
+  // Estilo auxiliar para asegurar que el gradiente funcione en el hover
+  const hoverGradientClass = "hover:bg-gradient-to-r hover:from-gold hover:via-gold-bright hover:to-gold hover:bg-clip-text hover:text-transparent transition-all duration-300";
+
   return (
     <footer className="bg-charcoal-dark py-8 border-t border-gold/20 pt-[15px] pb-[15px]">
       <div className="container pb-0 pt-0">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
           
-          {/* Logo & Description */}
           <div className="flex flex-col items-start">
             <a
               href="#home"
@@ -60,7 +62,6 @@ export const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.label}
                   className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold hover:text-navy-dark transition-all hover:-translate-y-1"
                 >
                   <social.icon size={18} />
@@ -69,7 +70,6 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Navigation - COLUMNA CENTRADA */}
           <div className="flex flex-col items-center">
             <h3 className="text-lg font-serif text-white mb-6">Navegación</h3>
             <ul className="flex flex-col gap-3 items-center">
@@ -78,7 +78,7 @@ export const Footer = () => {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-white hover:gradient-text-gold hover:translate-x-1 transition-all inline-block"
+                    className={`text-white inline-block ${hoverGradientClass}`}
                   >
                     {link.label}
                   </a>
@@ -87,7 +87,6 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
           <div className="flex flex-col items-start md:items-end">
             <h3 className="text-lg font-serif text-white mb-6">Contacto</h3>
             <ul className="flex flex-col gap-4 items-start md:items-end">
@@ -97,12 +96,12 @@ export const Footer = () => {
                   {info.href ? (
                     <a 
                       href={info.href} 
-                      className="hover:gradient-text-gold transition-colors text-left md:text-right"
+                      className={`text-left md:text-right ${hoverGradientClass}`}
                     >
                       {info.text}
                     </a>
                   ) : (
-                    <span className="hover:gradient-text-gold transition-colors text-left md:text-right cursor-default">
+                    <span className={`text-left md:text-right cursor-default ${hoverGradientClass}`}>
                       {info.text}
                     </span>
                   )}
@@ -112,7 +111,6 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="text-center pt-8 border-t border-gold/10">
           <p className="text-cream-light/60 text-sm">
             © 2026 Unidad de Asuntos Transnacionales & IA. Todos los derechos reservados.
