@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png';
+import logoShield from '@/assets/logo-shield.png'; // Importamos el logo
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
@@ -23,8 +22,6 @@ const contactInfo = [
 ];
 
 export const Footer = () => {
-  const [isLogoHovered, setIsLogoHovered] = useState(false);
-
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const target = document.querySelector(href);
@@ -36,31 +33,24 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-charcoal-dark py-12 border-t border-gold/20">
-      <div className="container mx-auto px-4">
-        {/* Ajuste de Grid para alineación exacta como en la foto */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-10">
+    <footer className="bg-charcoal-dark py-8 border-t border-gold/20 pt-[15px] pb-[15px]">
+      <div className="container pb-0 pt-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
           
-          {/* Logo y Descripción */}
-          <div className="md:col-span-5 flex flex-col items-start">
+          {/* Logo & Description */}
+          <div className="flex flex-col items-start">
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-3 group mb-4"
-              onMouseEnter={() => setIsLogoHovered(true)}
-              onMouseLeave={() => setIsLogoHovered(false)}
+              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:text-gold transition-colors"
             >
-              <div className="w-10 h-10 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+              {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
+              <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              {/* TAMAÑO REDUCIDO: text-lg para que sea más elegante */}
-              <span className={`font-serif text-lg font-bold transition-all duration-300 ${
-                isLogoHovered ? 'gradient-text-gold' : 'text-white'
-              }`}>
-                Unidad de Asuntos Transnacionales & IA
-              </span>
+              <span>Unidad de Asuntos Transnacionales & IA</span>
             </a>
-            <p className="text-cream-light/70 text-sm leading-relaxed mb-6 max-w-sm">
+            <p className="text-cream-light/80 leading-relaxed mb-6">
               Innovación legal con inteligencia artificial para Sudamérica. 
               Transformando la práctica del derecho con tecnología de vanguardia.
             </p>
@@ -71,24 +61,25 @@ export const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full bg-gold/5 border border-gold/20 flex items-center justify-center text-gold/80 hover:bg-gold hover:text-navy-dark transition-all"
+                  aria-label={social.label}
+                  className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold hover:text-navy-dark transition-all hover:-translate-y-1"
                 >
-                  <social.icon size={16} />
+                  <social.icon size={18} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Navegación - Alineada a la izquierda con efecto de color */}
-          <div className="md:col-span-3">
-            <h3 className="text-base font-serif text-white mb-6 font-bold uppercase tracking-wider">Navegación</h3>
-            <ul className="flex flex-col gap-3">
+          {/* Navigation - COLUMNA CENTRADA */}
+          <div className="flex flex-col items-center">
+            <h3 className="text-lg font-serif text-white mb-6">Navegación</h3>
+            <ul className="flex flex-col gap-3 items-center">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-cream-light/70 hover:gradient-text-gold transition-all duration-300 text-sm inline-block"
+                    className="text-cream-light/80 hover:text-gold hover:translate-x-1 transition-all inline-block"
                   >
                     {link.label}
                   </a>
@@ -97,22 +88,19 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contacto - Con efecto de color en Email y Teléfono */}
-          <div className="md:col-span-4">
-            <h3 className="text-base font-serif text-white mb-6 font-bold uppercase tracking-wider">Contacto</h3>
-            <ul className="flex flex-col gap-4">
+          {/* Contact */}
+          <div className="flex flex-col items-start md:items-end">
+            <h3 className="text-lg font-serif text-white mb-6">Contacto</h3>
+            <ul className="flex flex-col gap-4 items-start md:items-end">
               {contactInfo.map((info, index) => (
-                <li key={index} className="flex items-start gap-3 text-cream-light/70 text-sm group">
-                  <info.icon className="text-gold mt-0.5 flex-shrink-0" size={16} />
+                <li key={index} className="flex items-start gap-3 text-cream-light/80">
+                  <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
                   {info.href ? (
-                    <a 
-                      href={info.href} 
-                      className="hover:gradient-text-gold transition-all duration-300"
-                    >
+                    <a href={info.href} className="hover:text-gold transition-colors text-left md:text-right">
                       {info.text}
                     </a>
                   ) : (
-                    <span>{info.text}</span>
+                    <span className="text-left md:text-right">{info.text}</span>
                   )}
                 </li>
               ))}
@@ -122,7 +110,7 @@ export const Footer = () => {
 
         {/* Copyright */}
         <div className="text-center pt-8 border-t border-gold/10">
-          <p className="text-cream-light/40 text-xs">
+          <p className="text-cream-light/60 text-sm">
             © 2026 Unidad de Asuntos Transnacionales & IA. Todos los derechos reservados.
           </p>
         </div>
