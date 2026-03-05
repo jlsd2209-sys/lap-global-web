@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
 import { Particles } from '../Particles';
 
-/* ── CONFIGURACIÓN DE DISEÑO (Alineada con tus otras secciones) ── */
+/* ── CONFIGURACIÓN DE DISEÑO ── */
 const SECTION_PADDING = 'py-14'; 
 const GAP = 'gap-6';
 const TITLE_SIZE = 'text-3xl md:text-4xl'; 
@@ -48,6 +48,15 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
 );
 
 export const ServicesSection = () => {
+  // Estilo compartido para asegurar que el gradiente sea idéntico al CTA
+  const titleGradientStyle = {
+    display: 'table',
+    margin: '0 auto',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  };
+
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
       
@@ -61,22 +70,21 @@ export const ServicesSection = () => {
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
-      {/* ── PARTÍCULAS (Brillo 100%) ── */}
+      {/* ── PARTÍCULAS ── */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <Particles count={50} />
       </div>
 
-      {/* ── CONTENIDO DE LA SECCIÓN ── */}
       <div className="relative z-20 container mx-auto px-4 md:px-8">
         
-        {/* Título Fila 1 - Usando exactamente tu clase gradient-text-gold */}
+        {/* Título Fila 1 - Ajuste de Precisión */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
+          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`} style={titleGradientStyle}>
             Centro de Inteligencia Transnacional
           </h2>
         </motion.div>
@@ -88,14 +96,14 @@ export const ServicesSection = () => {
         {/* Separador */}
         <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
 
-        {/* Título Fila 2 - Usando exactamente tu clase gradient-text-gold */}
+        {/* Título Fila 2 - Ajuste de Precisión */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
+          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`} style={titleGradientStyle}>
             Módulos de Alianza Estratégica
           </h2>
         </motion.div>
