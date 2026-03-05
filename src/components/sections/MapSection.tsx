@@ -22,7 +22,7 @@ export const MapSection = () => {
   };
 
   // ============================================================
-  // 🖥️ PANEL ESCRITORIO: AJUSTES ORIGINALES (INTACTOS)
+  // 🖥️ PANEL ESCRITORIO: AJUSTES ORIGINALES
   // ============================================================
   const escritorio = {
     altura: '600px',
@@ -33,7 +33,7 @@ export const MapSection = () => {
   };
 
   // ============================================================
-  // 📱 PANEL MÓVIL: AJUSTES ORIGINALES (INTACTOS)
+  // 📱 PANEL MÓVIL: TUS AJUSTES PRECISOS
   // ============================================================
   const movil = {
     altura: '600px',
@@ -65,13 +65,16 @@ export const MapSection = () => {
         <Particles count={esMovil ? 20 : 50} />
       </div>
 
-      {/* 3. MAPA */}
+      {/* 3. MAPA CON DOBLE DISPARADOR (Trigger en Mapa + Trigger en Botón) */}
       <motion.div
-        className="absolute z-20 pointer-events-none"
+        className="absolute z-20 cursor-pointer pointer-events-auto" // Activamos eventos aquí también
         style={{ 
           top: p.mapa.arriba, 
           right: p.mapa.derecha 
         }}
+        onMouseEnter={() => !esMovil && setIsHovered(true)}
+        onMouseLeave={() => !esMovil && setIsHovered(false)}
+        onClick={handleToggleClick} // En móvil, tocar el mapa también lo ilumina
         animate={{
           filter: isHovered 
             ? [
@@ -105,9 +108,9 @@ export const MapSection = () => {
       </motion.div>
       
       {/* 4. CONTENIDO */}
-      <div className="relative z-30 h-full w-full">
+      <div className="relative z-30 h-full w-full pointer-events-none">
         
-        {/* TÍTULO - Ahora con degradado en La Visión e Inteligencia Artificial */}
+        {/* TÍTULO - "La Visión" e "Inteligencia Artificial" con el mismo efecto */}
         <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
           <span className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2">
             La Visión
@@ -125,14 +128,14 @@ export const MapSection = () => {
           </h2>
         </div>
 
-        {/* PARRAFO - Color navy-dark para fondo claro */}
+        {/* PARRAFO */}
         <motion.p
           className="absolute text-navy-dark font-extrabold leading-relaxed"
           style={{ 
             top: p.texto.arriba,
             left: p.texto.izquierda,
             maxWidth: esMovil ? p.texto.ancho : escritorio.texto.anchoMax,
-            fontSize: esMovil ? p.texto.size : '1.125rem' // text-lg es 1.125rem
+            fontSize: esMovil ? p.texto.size : '1.125rem' 
           }} 
         >
           Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
@@ -140,7 +143,7 @@ export const MapSection = () => {
 
         {/* BOTÓN */}
         <div 
-          className="absolute" 
+          className="absolute pointer-events-auto" // Reactivamos eventos para el botón
           style={{ 
             bottom: p.boton.abajo, 
             right: esMovil ? 'auto' : escritorio.boton.derecha,
