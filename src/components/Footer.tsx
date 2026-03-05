@@ -23,12 +23,12 @@ const contactInfo = [
 ];
 
 export const Footer = () => {
-  const [isTitleHovered, setIsTitleHovered] = useState(false);
-  const [hoveredNavIndex, setHoveredNavIndex] = useState(null);
-  const [hoveredContactIndex, setHoveredContactIndex] = useState(null);
-  const [hoveredSocialIndex, setHoveredSocialIndex] = useState(null);
+  const [isTitleHovered, setIsTitleHovered] = useState<boolean>(false);
+  const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
+  const [hoveredContactIndex, setHoveredContactIndex] = useState<number | null>(null);
+  const [hoveredSocialIndex, setHoveredSocialIndex] = useState<number | null>(null);
 
-  const handleNavClick = (e, href) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
