@@ -34,15 +34,22 @@ const advantages = [{
 export const AdvantagesSection = () => {
   return (
     <section id="nosotros" className="py-14 bg-gradient-to-b from-navy-dark to-charcoal pt-[40px] pb-[40px]">
-      <div className="container">
+      <div className="container mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           whileInView={{ opacity: 1, y: 0 }} 
           viewport={{ once: true }} 
           className="text-center mb-10"
         >
-          {/* TÍTULO ACTUALIZADO CON GRADIENTE */}
-          <h2 className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold">
+          {/* TÍTULO CON AJUSTE DE RENDERIZADO PARA IGUALAR AL CTA */}
+          <h2 
+            className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold mx-auto"
+            style={{ 
+              display: 'table', // Concentra el gradiente solo en el texto
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
             ¿Por Qué la Unidad de Asuntos Transnacionales & IA?
           </h2>
         </motion.div>
