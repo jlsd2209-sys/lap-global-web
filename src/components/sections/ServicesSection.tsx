@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
 import { Particles } from '../Particles';
 
-/* ── CONFIGURACIÓN DE DISEÑO (Consistente con tus otras secciones) ── */
+/* ── CONFIGURACIÓN DE DISEÑO ── */
 const SECTION_PADDING = 'py-14'; 
 const GAP = 'gap-6';
-const TITLE_SIZE = 'text-3xl md:text-4xl'; // Tamaño exacto de tus Advantages y Results
+const TITLE_SIZE = 'text-3xl md:text-4xl'; 
 /* ───────────────────────────── */
 
 const row1 = [
@@ -44,17 +44,17 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
 
 export const ServicesSection = () => {
   return (
-    <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px] bg-[#0a1526]`}>
+    <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
       
-      {/* ── FONDO UNIFICADO (Sin líneas fantasma) ── */}
+      {/* ── FONDO RESTAURADO (Claro y sin líneas) ── */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/fondo-servicios.jpg.png" 
           alt="" 
-          className="w-full h-full object-cover opacity-60" 
+          className="w-full h-full object-cover object-center" 
         />
-        {/* Usamos un solo overlay sólido con gradiente para evitar costuras visuales */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1526]/90 via-[#0a1526]/80 to-[#0a1526]/95 backdrop-blur-[1px]"></div>
+        {/* Volvemos al overlay del 85% que tenías, que es más claro que el anterior */}
+        <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
       {/* ── PARTÍCULAS (Brillo 100%) ── */}
@@ -79,8 +79,8 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        {/* Separador sutil sin bordes duros */}
-        <div className="my-16 h-[1px] bg-gradient-to-r from-transparent via-[#c5a059]/30 to-transparent max-w-3xl mx-auto" />
+        {/* Separador sutil */}
+        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
