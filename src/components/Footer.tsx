@@ -23,10 +23,10 @@ const contactInfo = [
 ];
 
 export const Footer = () => {
-  const [isTitleHovered, setIsTitleHovered] = useState<boolean>(false);
-  const [hoveredNavIndex, setHoveredNavIndex] = useState<number | null>(null);
-  const [hoveredContactIndex, setHoveredContactIndex] = useState<number | null>(null);
-  const [hoveredSocialIndex, setHoveredSocialIndex] = useState<number | null>(null);
+  const [isTitleHovered, setIsTitleHovered] = useState(false);
+  const [hoveredNavIndex, setHoveredNavIndex] = useState(-1);
+  const [hoveredContactIndex, setHoveredContactIndex] = useState(-1);
+  const [hoveredSocialIndex, setHoveredSocialIndex] = useState(-1);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -50,14 +50,12 @@ export const Footer = () => {
               onClick={(e) => handleNavClick(e, '#home')}
               onMouseEnter={() => setIsTitleHovered(true)}
               onMouseLeave={() => setIsTitleHovered(false)}
-              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 transition-colors"
+              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 transition-colors cursor-pointer"
             >
               <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <span className={`whitespace-nowrap transition-all duration-300 ${
-                isTitleHovered ? 'gradient-text-gold' : 'text-white'
-              }`}>
+              <span className={`whitespace-nowrap transition-all duration-300 ${isTitleHovered ? 'gradient-text-gold' : 'text-white'}`}>
                 Unidad de Asuntos Transnacionales & IA
               </span>
             </a>
@@ -74,7 +72,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   aria-label={social.label}
                   onMouseEnter={() => setHoveredSocialIndex(index)}
-                  onMouseLeave={() => setHoveredSocialIndex(null)}
+                  onMouseLeave={() => setHoveredSocialIndex(-1)}
                   className={`w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center transition-all ${
                     hoveredSocialIndex === index 
                       ? 'bg-gold text-navy-dark -translate-y-1' 
@@ -97,8 +95,8 @@ export const Footer = () => {
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
                     onMouseEnter={() => setHoveredNavIndex(index)}
-                    onMouseLeave={() => setHoveredNavIndex(null)}
-                    className={`transition-all inline-block ${
+                    onMouseLeave={() => setHoveredNavIndex(-1)}
+                    className={`transition-all inline-block cursor-pointer ${
                       hoveredNavIndex === index 
                         ? 'gradient-text-gold translate-x-1' 
                         : 'text-cream-light/80'
@@ -122,7 +120,7 @@ export const Footer = () => {
                     <a 
                       href={info.href}
                       onMouseEnter={() => setHoveredContactIndex(index)}
-                      onMouseLeave={() => setHoveredContactIndex(null)}
+                      onMouseLeave={() => setHoveredContactIndex(-1)}
                       className={`transition-colors text-left md:text-right ${
                         hoveredContactIndex === index ? 'gradient-text-gold' : ''
                       }`}
