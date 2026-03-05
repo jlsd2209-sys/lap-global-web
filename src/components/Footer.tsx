@@ -38,27 +38,29 @@ export const Footer = () => {
   return (
     <footer className="bg-charcoal-dark py-12 border-t border-gold/20">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-10">
+        {/* Ajuste de Grid para alineación exacta como en la foto */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-10">
           
-          {/* Columna 1: Logo, Nombre y Redes (Ocupa 5/12) */}
+          {/* Logo y Descripción */}
           <div className="md:col-span-5 flex flex-col items-start">
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-4 group mb-6"
+              className="flex items-center gap-3 group mb-4"
               onMouseEnter={() => setIsLogoHovered(true)}
               onMouseLeave={() => setIsLogoHovered(false)}
             >
-              <div className="w-12 h-12 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+              <div className="w-10 h-10 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <span className={`font-serif text-xl xl:text-2xl font-bold transition-all duration-300 whitespace-nowrap ${
+              {/* TAMAÑO REDUCIDO: text-lg para que sea más elegante */}
+              <span className={`font-serif text-lg font-bold transition-all duration-300 ${
                 isLogoHovered ? 'gradient-text-gold' : 'text-white'
               }`}>
                 Unidad de Asuntos Transnacionales & IA
               </span>
             </a>
-            <p className="text-cream-light/70 leading-relaxed mb-8 max-w-sm">
+            <p className="text-cream-light/70 text-sm leading-relaxed mb-6 max-w-sm">
               Innovación legal con inteligencia artificial para Sudamérica. 
               Transformando la práctica del derecho con tecnología de vanguardia.
             </p>
@@ -69,24 +71,24 @@ export const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-gold/5 border border-gold/20 flex items-center justify-center text-gold/80 hover:bg-gold hover:text-navy-dark transition-all hover:-translate-y-1"
+                  className="w-9 h-9 rounded-full bg-gold/5 border border-gold/20 flex items-center justify-center text-gold/80 hover:bg-gold hover:text-navy-dark transition-all"
                 >
-                  <social.icon size={18} />
+                  <social.icon size={16} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Columna 2: Navegación (Ocupa 3/12) */}
+          {/* Navegación - Alineada a la izquierda con efecto de color */}
           <div className="md:col-span-3">
-            <h3 className="text-lg font-serif text-white mb-6 font-bold">Navegación</h3>
-            <ul className="flex flex-col gap-4">
+            <h3 className="text-base font-serif text-white mb-6 font-bold uppercase tracking-wider">Navegación</h3>
+            <ul className="flex flex-col gap-3">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-cream-light/70 hover:gradient-text-gold transition-all duration-300 inline-block"
+                    className="text-cream-light/70 hover:gradient-text-gold transition-all duration-300 text-sm inline-block"
                   >
                     {link.label}
                   </a>
@@ -95,19 +97,22 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Columna 3: Contacto (Ocupa 4/12) */}
+          {/* Contacto - Con efecto de color en Email y Teléfono */}
           <div className="md:col-span-4">
-            <h3 className="text-lg font-serif text-white mb-6 font-bold">Contacto</h3>
-            <ul className="flex flex-col gap-5">
+            <h3 className="text-base font-serif text-white mb-6 font-bold uppercase tracking-wider">Contacto</h3>
+            <ul className="flex flex-col gap-4">
               {contactInfo.map((info, index) => (
-                <li key={index} className="flex items-start gap-4 text-cream-light/70 group">
-                  <info.icon className="text-gold mt-1 flex-shrink-0 transition-transform group-hover:scale-110" size={18} />
+                <li key={index} className="flex items-start gap-3 text-cream-light/70 text-sm group">
+                  <info.icon className="text-gold mt-0.5 flex-shrink-0" size={16} />
                   {info.href ? (
-                    <a href={info.href} className="hover:gradient-text-gold transition-all duration-300">
+                    <a 
+                      href={info.href} 
+                      className="hover:gradient-text-gold transition-all duration-300"
+                    >
                       {info.text}
                     </a>
                   ) : (
-                    <span className="group-hover:text-cream-light transition-colors">{info.text}</span>
+                    <span>{info.text}</span>
                   )}
                 </li>
               ))}
@@ -117,7 +122,7 @@ export const Footer = () => {
 
         {/* Copyright */}
         <div className="text-center pt-8 border-t border-gold/10">
-          <p className="text-cream-light/40 text-sm">
+          <p className="text-cream-light/40 text-xs">
             © 2026 Unidad de Asuntos Transnacionales & IA. Todos los derechos reservados.
           </p>
         </div>
