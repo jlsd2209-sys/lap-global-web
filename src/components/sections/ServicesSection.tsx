@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
 import { Particles } from '../Particles';
 
-/* ── CONFIGURACIÓN DE DISEÑO (Ajuste de tamaño de títulos) ── */
-const SECTION_PADDING = 'py-20';
+/* ── CONFIGURACIÓN DE DISEÑO (Alineada con tus otras secciones) ── */
+const SECTION_PADDING = 'py-14'; // Igual que Advantages y CTA
 const GAP = 'gap-6';
-const TITLE_SIZE = 'text-3xl md:text-4xl lg:text-5xl'; // Un poco más grandes y escalables
+const TITLE_SIZE = 'text-3xl md:text-4xl'; // Consistente con Results y Advantages
 /* ───────────────────────────── */
 
 const row1 = [
@@ -29,23 +29,20 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
     whileHover={{ scale: 1.04 }}
     className="group relative flex flex-col text-center p-8 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer"
   >
-    {/* 1. Iluminación interna reactiva - SIN CAMBIOS */}
+    {/* Iluminación interna reactiva original */}
     <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
     
     <div className="relative z-10">
-      {/* Icono Premium */}
       <div className="text-[#c5a059] mb-6 flex justify-center">
         <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
       </div>
 
-      {/* Título */}
       <div className="flex items-center justify-center gap-2 mb-3">
         <span className="text-lg font-serif font-bold text-white">
           {item.title}
         </span>
       </div>
 
-      {/* Descripción */}
       <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
     </div>
   </motion.div>
@@ -53,9 +50,9 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
 
 export const ServicesSection = () => {
   return (
-    <section id="servicios" className={`${SECTION_PADDING} relative`}>
+    <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
       
-      {/* ── FONDO CON IMAGEN - ORIGINAL ── */}
+      {/* ── FONDO ORIGINAL ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img 
           src="/fondo-servicios.jpg.png" 
@@ -65,7 +62,7 @@ export const ServicesSection = () => {
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
-      {/* ── 2. PARTÍCULAS (100% Brillo) ── */}
+      {/* ── PARTÍCULAS (Brillo 100%) ── */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <Particles count={50} />
       </div>
@@ -73,32 +70,36 @@ export const ServicesSection = () => {
       {/* ── CONTENIDO DE LA SECCIÓN ── */}
       <div className="relative z-20 container mx-auto px-4 md:px-8">
         
-        {/* Fila 1 – Centro de Inteligencia */}
-        <motion.h2
-          initial={{ opacity: 0, y: 15 }}
+        {/* Título Fila 1 (Ajustado a tus otros H2) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-14 tracking-widest`}
-          style={{ fontVariant: 'small-caps' }}>
-          Centro de Inteligencia Transnacional
-        </motion.h2>
+          className="text-center mb-10"
+        >
+          <h2 className={`${TITLE_SIZE} font-serif font-bold text-white`}>
+            Centro de Inteligencia Transnacional
+          </h2>
+        </motion.div>
         
         <div className={`grid grid-cols-1 md:grid-cols-3 ${GAP}`}>
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        {/* Separador Dorado Elegante */}
-        <div className="my-20 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
+        {/* Separador - Estilo sutil original */}
+        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
 
-        {/* Fila 2 – Módulos de Alianza */}
-        <motion.h2
-          initial={{ opacity: 0, y: 15 }}
+        {/* Título Fila 2 (Ajustado a tus otros H2) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${TITLE_SIZE} text-center font-serif font-bold text-white mb-14 tracking-widest`}
-          style={{ fontVariant: 'small-caps' }}>
-          Módulos de Alianza Estratégica
-        </motion.h2>
+          className="text-center mb-10"
+        >
+          <h2 className={`${TITLE_SIZE} font-serif font-bold text-white`}>
+            Módulos de Alianza Estratégica
+          </h2>
+        </motion.div>
         
         <div className={`grid grid-cols-1 md:grid-cols-3 ${GAP}`}>
           {row2.map((item, i) => <Card key={item.title} item={item} index={i + 3} />)}
