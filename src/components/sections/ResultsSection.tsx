@@ -60,7 +60,8 @@ export const ResultsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-8">
 
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">
+          {/* TÍTULO ACTUALIZADO CON GRADIENTE */}
+          <h2 className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold">
             Impacto Medible
           </h2>
         </motion.div>
@@ -99,5 +100,4 @@ export const ResultsSection = () => {
         </div>
       </div>
     </section>);
-
 };
