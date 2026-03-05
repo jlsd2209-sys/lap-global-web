@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png';
+import logoShield from '@/assets/logo-shield.png'; // Importamos el logo
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
@@ -23,11 +22,6 @@ const contactInfo = [
 ];
 
 export const Footer = () => {
-  const [isTitleHovered, setIsTitleHovered] = useState(false);
-  const [hoveredNavIndex, setHoveredNavIndex] = useState(-1);
-  const [hoveredContactIndex, setHoveredContactIndex] = useState(-1);
-  const [hoveredSocialIndex, setHoveredSocialIndex] = useState(-1);
-
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const target = document.querySelector(href);
@@ -45,39 +39,30 @@ export const Footer = () => {
           
           {/* Logo & Description */}
           <div className="flex flex-col items-start">
-            
+            <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              onMouseEnter={() => setIsTitleHovered(true)}
-              onMouseLeave={() => setIsTitleHovered(false)}
-              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 transition-colors cursor-pointer"
+              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:text-gold transition-colors"
             >
+              {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
               <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <span className={`whitespace-nowrap transition-all duration-300 ${isTitleHovered ? 'gradient-text-gold' : 'text-white'}`}>
-                Unidad de Asuntos Transnacionales & IA
-              </span>
+              <span>Unidad de Asuntos Transnacionales & IA</span>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
               Innovación legal con inteligencia artificial para Sudamérica. 
               Transformando la práctica del derecho con tecnología de vanguardia.
             </p>
             <div className="flex gap-4">
-              {socialLinks.map((social, index) => (
-                
+              {socialLinks.map((social) => (
+                <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  onMouseEnter={() => setHoveredSocialIndex(index)}
-                  onMouseLeave={() => setHoveredSocialIndex(-1)}
-                  className={`w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center transition-all ${
-                    hoveredSocialIndex === index 
-                      ? 'bg-gold text-navy-dark -translate-y-1' 
-                      : 'bg-gold/10 text-gold'
-                  }`}
+                  className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold hover:text-navy-dark transition-all hover:-translate-y-1"
                 >
                   <social.icon size={18} />
                 </a>
@@ -89,18 +74,12 @@ export const Footer = () => {
           <div className="flex flex-col items-center">
             <h3 className="text-lg font-serif text-white mb-6">Navegación</h3>
             <ul className="flex flex-col gap-3 items-center">
-              {navLinks.map((link, index) => (
+              {navLinks.map((link) => (
                 <li key={link.href}>
-                  
+                  <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    onMouseEnter={() => setHoveredNavIndex(index)}
-                    onMouseLeave={() => setHoveredNavIndex(-1)}
-                    className={`transition-all inline-block cursor-pointer ${
-                      hoveredNavIndex === index 
-                        ? 'gradient-text-gold translate-x-1' 
-                        : 'text-cream-light/80'
-                    }`}
+                    className="text-cream-light/80 hover:text-gold hover:translate-x-1 transition-all inline-block"
                   >
                     {link.label}
                   </a>
@@ -117,14 +96,7 @@ export const Footer = () => {
                 <li key={index} className="flex items-start gap-3 text-cream-light/80">
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
                   {info.href ? (
-                    <a 
-                      href={info.href}
-                      onMouseEnter={() => setHoveredContactIndex(index)}
-                      onMouseLeave={() => setHoveredContactIndex(-1)}
-                      className={`transition-colors text-left md:text-right ${
-                        hoveredContactIndex === index ? 'gradient-text-gold' : ''
-                      }`}
-                    >
+                    <a href={info.href} className="hover:text-gold transition-colors text-left md:text-right">
                       {info.text}
                     </a>
                   ) : (
