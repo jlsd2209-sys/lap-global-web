@@ -26,11 +26,10 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    // EFECTO DE ESCALA + RESTAURACIÓN DE TUS BORDES Y SOMBRAS
     whileHover={{ scale: 1.04 }}
     className="group relative flex flex-col text-center p-8 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer"
   >
-    {/* Efecto de iluminación interna (RESTAURADO) */}
+    {/* 1. Iluminación interna reactiva */}
     <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
     
     <div className="relative z-10">
@@ -39,7 +38,7 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
         <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
       </div>
 
-      {/* Título (Sin candados, fuente original) */}
+      {/* Título */}
       <div className="flex items-center justify-center gap-2 mb-3">
         <span className="text-lg font-serif font-bold text-white">
           {item.title}
@@ -56,7 +55,7 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative`}>
       
-      {/* ── FONDO CON IMAGEN Y CAPA PROFUNDA ── */}
+      {/* ── FONDO CON IMAGEN ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img 
           src="/fondo-servicios.jpg.png" 
@@ -66,9 +65,9 @@ export const ServicesSection = () => {
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
-      {/* ── PARTÍCULAS (Con ajuste de destellos) ── */}
-      <div className="absolute inset-0 z-10 pointer-events-none opacity-60">
-        <Particles count={45} />
+      {/* ── 2. PARTÍCULAS (Restauradas al 100% de brillo y cantidad) ── */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <Particles count={50} />
       </div>
 
       {/* ── CONTENIDO DE LA SECCIÓN ── */}
@@ -102,7 +101,7 @@ export const ServicesSection = () => {
         </motion.h2>
         
         <div className={`grid grid-cols-1 md:grid-cols-3 ${GAP}`}>
-          {row2.map((item, i) => <Card key={item.title} item={item} index={i} />)}
+          {row2.map((item, i) => <Card key={item.title} item={item} index={i + 3} />)}
         </div>
       </div>
     </section>
