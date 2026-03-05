@@ -42,12 +42,11 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 hover:opacity-80 transition-opacity"
+              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 transition-colors"
             >
               <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              {/* APLICACIÓN DEL EFECTO GRADIENTE AL TÍTULO */}
               <span className="gradient-text-gold">Unidad de Asuntos Transnacionales & IA</span>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
@@ -61,7 +60,6 @@ export const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.label}
                   className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold hover:bg-gold hover:text-navy-dark transition-all hover:-translate-y-1"
                 >
                   <social.icon size={18} />
@@ -70,17 +68,16 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Navigation - COLUMNA CENTRADA */}
+          {/* Navigation */}
           <div className="flex flex-col items-center">
-            {/* APLICACIÓN DEL EFECTO GRADIENTE AL ENCABEZADO */}
-            <h3 className="text-lg font-serif font-bold mb-6 gradient-text-gold">Navegación</h3>
+            <h3 className="text-lg font-serif font-bold gradient-text-gold mb-6">Navegación</h3>
             <ul className="flex flex-col gap-3 items-center">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-cream-light/80 hover:text-gold hover:translate-x-1 transition-all inline-block"
+                    className="text-white hover:gradient-text-gold transition-all inline-block font-medium"
                   >
                     {link.label}
                   </a>
@@ -91,19 +88,19 @@ export const Footer = () => {
 
           {/* Contact */}
           <div className="flex flex-col items-start md:items-end">
-            {/* APLICACIÓN DEL EFECTO GRADIENTE AL ENCABEZADO */}
-            <h3 className="text-lg font-serif font-bold mb-6 gradient-text-gold">Contacto</h3>
+            <h3 className="text-lg font-serif font-bold gradient-text-gold mb-6">Contacto</h3>
             <ul className="flex flex-col gap-4 items-start md:items-end">
               {contactInfo.map((info, index) => (
-                <li key={index} className="flex items-start gap-3 text-cream-light/80 group">
-                  {/* El icono hereda el color dorado base para no saturar, o puedes usar gradient-text-gold si es texto */}
+                <li key={index} className="flex items-start gap-3 text-white">
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
                   {info.href ? (
-                    <a href={info.href} className="hover:text-gold transition-colors text-left md:text-right">
+                    <a href={info.href} className="hover:gradient-text-gold transition-colors text-left md:text-right font-medium">
                       {info.text}
                     </a>
                   ) : (
-                    <span className="text-left md:text-right">{info.text}</span>
+                    <span className="hover:gradient-text-gold transition-colors text-left md:text-right font-medium cursor-default">
+                      {info.text}
+                    </span>
                   )}
                 </li>
               ))}
