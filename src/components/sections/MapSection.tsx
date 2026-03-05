@@ -1,51 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Network } from 'lucide-react';
 import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
+  // Estado para controlar la reacción del mapa al hover del botón
   const [isHovered, setIsHovered] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Detector de pantalla para ajustar el panel de control
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // ============================================================
-  // PANEL DE CONTROL: TUS AJUSTES EXACTOS (Ahora con adaptabilidad)
+  // PANEL DE CONTROL: TUS AJUSTES EXACTOS (RESTAURADOS AL 100%)
   // ============================================================
-  const ajusteSeccion = { altura: isMobile ? '850px' : '600px' };
-  
-  const ajusteTitulo = { 
-    desdeArriba: isMobile ? '8%' : '22%', 
-    desdeIzquierda: isMobile ? '5%' : '14%' 
-  };
-
+  const ajusteSeccion = { altura: '600px' };
+  const ajusteTitulo = { desdeArriba: '22%', desdeIzquierda: '14%' };
   const ajusteMapa = {
-    desdeArriba: isMobile ? '25%' : '2%',
-    desdeDerecha: isMobile ? '5%' : '13%',    
-    tamaño: isMobile ? '90%' : '445px',       
-    opacidad: isHovered ? '0.90' : '0.70',
+    desdeArriba: '2%',
+    desdeDerecha: '13%',    
+    tamaño: '445px',       
+    opacidad: isHovered ? '0.90' : '0.70', // Reacción de opacidad
   };
-
-  const ajusteTexto = { 
-    desdeArriba: isMobile ? '65%' : '73%', 
-    desdeIzquierda: isMobile ? '5%' : '14%', 
-    anchoMax: isMobile ? '90%' : '450px' 
-  };
-
-  const ajusteBotones = { 
-    desdeAbajo: isMobile ? '2%' : '4%', 
-    desdeDerecha: isMobile ? '5%' : '15%' 
-  };
+  const ajusteTexto = { desdeArriba: '73%', desdeIzquierda: '14%', anchoMax: '450px' };
+  const ajusteBotones = { desdeAbajo: '4%', desdeDerecha: '15%' };
 
   return (
     <section 
-      className="relative w-full overflow-hidden bg-navy-dark transition-all duration-500" 
+      className="relative w-full overflow-hidden bg-navy-dark" 
       style={{ height: ajusteSeccion.altura }}
     >
       
@@ -54,7 +32,7 @@ export const MapSection = () => {
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: 'url("/Fondo Mapa PNG.png")',
-          backgroundSize: isMobile ? 'cover' : '100% 100%',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
@@ -67,19 +45,30 @@ export const MapSection = () => {
 
       {/* 3. MAPA CON AURA REACTIVA */}
       <motion.div
-        className="absolute z-20 pointer-events-none flex justify-center"
+        className="absolute z-20 pointer-events-none"
         style={{ 
           top: ajusteMapa.desdeArriba,
           right: ajusteMapa.desdeDerecha,
-          width: isMobile ? '90%' : 'auto'
         }}
         animate={{
           filter: isHovered 
-            ? ["drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))", "drop-shadow(0 0 60px rgba(140, 230, 255, 1))", "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))"]
-            : ["drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))", "drop-shadow(0 0 40px rgba(140, 230, 255, 0.75))", "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))"],
-          scale: isHovered ? 1.05 : 1,
+            ? [
+                "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))", 
+                "drop-shadow(0 0 60px rgba(140, 230, 255, 1))",
+                "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))"
+              ]
+            : [
+                "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))",
+                "drop-shadow(0 0 40px rgba(140, 230, 255, 0.75))",
+                "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))"
+              ],
+          scale: isHovered ? 1.05 : 1, // El mapa crece sutilmente al hacer hover en el botón
         }}
-        transition={{ duration: isHovered ? 0.4 : 2.7, ease: "easeInOut", repeat: isHovered ? 0 : Infinity }}
+        transition={{
+          duration: isHovered ? 0.4 : 2.7,
+          ease: "easeInOut",
+          repeat: isHovered ? 0 : Infinity, // En hover se mantiene estático o pulsa distinto
+        }}
       >
         <img
           src="/Mapa con escudo.png"
@@ -96,20 +85,20 @@ export const MapSection = () => {
       {/* 4. CONTENIDO */}
       <div className="relative z-30 h-full w-full">
         <div className="absolute" style={{ top: ajusteTitulo.desdeArriba, left: ajusteTitulo.desdeIzquierda }}>
-          {/* "La Visión" ahora con el degradado blanco-oro solicitado */}
+          {/* Ajuste de color: "La Visión" ahora tiene el mismo degradado blanco-oro */}
           <span className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2">
             La Visión
           </span>
           <h2 className="font-serif font-bold leading-tight">
             <span className="text-white text-3xl md:text-4xl lg:text-5xl block">Seguridad Jurídica</span>
             <span className="text-white/80 text-xl md:text-2xl italic block my-1">en la Era de la</span>
-            <span className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl block">Inteligencia Artificial</span>
+            <span className="text-gold text-3xl md:text-4xl lg:text-5xl block">Inteligencia Artificial</span>
           </h2>
         </div>
 
         <motion.p
-          /* Regresamos a text-navy-dark para contraste sobre el fondo blanco de la imagen */
-          className="absolute text-navy-dark font-extrabold text-lg leading-relaxed md:text-xl"
+          /* TAMAÑO RESTAURADO (text-lg) y COLOR navy-dark (para fondo blanco) */
+          className="absolute text-navy-dark font-extrabold text-lg leading-relaxed"
           style={{ 
             top: ajusteTexto.desdeArriba,
             left: ajusteTexto.desdeIzquierda,
@@ -119,7 +108,7 @@ export const MapSection = () => {
           Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
         </motion.p>
 
-        {/* 5. BOTÓN */}
+        {/* BOTÓN CON DISPARADOR DE ESTADO (TRIGGER) */}
         <div 
           className="absolute" 
           style={{ bottom: ajusteBotones.desdeAbajo, right: ajusteBotones.desdeDerecha }}
