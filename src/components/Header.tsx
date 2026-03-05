@@ -56,7 +56,7 @@ export const Header = () => {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
-        {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
+        {/* Logo y Nombre: CORREGIDO para que no desaparezca y use el degradado */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -70,14 +70,14 @@ export const Header = () => {
             />
           </div>
           <span 
-            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 group-hover:gradient-text-gold"
+            className="hidden lg:block font-serif text-xl xl:text-2xl font-bold text-white transition-all duration-300 group-hover:gradient-text-gold group-hover:text-transparent"
             style={{ display: 'inline-block' }}
           >
             Unidad de Asuntos Transnacionales & IA
           </span>
         </a>
 
-        {/* Desktop Navigation con Efectos de Texto Degradado */}
+        {/* Desktop Navigation: SE MANTIENE IGUAL A TU CÓDIGO */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
@@ -87,7 +87,7 @@ export const Header = () => {
                   href={item.href} 
                   onClick={(e) => handleNavClick(e, item.href)} 
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
-                    ${isActive ? 'gradient-text-gold font-bold scale-105' : 'text-white hover:gradient-text-gold hover:scale-105'}`}
+                    ${isActive ? 'gradient-text-gold text-transparent font-bold scale-105' : 'text-white hover:gradient-text-gold hover:text-transparent hover:scale-105'}`}
                 >
                   {item.label}
                   <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
@@ -128,7 +128,7 @@ export const Header = () => {
                       href={item.href} 
                       onClick={(e) => handleNavClick(e, item.href)} 
                       className={`text-2xl font-medium transition-all duration-300 ${
-                        activeSection === item.href.substring(1) ? 'gradient-text-gold' : 'text-white'
+                        activeSection === item.href.substring(1) ? 'gradient-text-gold text-transparent' : 'text-white'
                       }`}
                     >
                       {item.label}
