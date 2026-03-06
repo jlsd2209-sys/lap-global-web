@@ -42,8 +42,8 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              // CAMBIO REALIZADO: Uso directo de la clase gradient-text-gold en hover
-              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:gradient-text-gold transition-all duration-300"
+              // CAMBIO REALIZADO: Efecto degradado en hover usando background-clip para el título del logo
+              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-white hover:text-transparent transition-colors"
             >
               {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
               <div className="w-12 h-12 flex items-center justify-center">
@@ -80,8 +80,8 @@ export const Footer = () => {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    // CAMBIO REALIZADO: Uso directo de la clase gradient-text-gold en hover
-                    className="text-cream-light/80 hover:gradient-text-gold hover:translate-x-1 transition-all duration-300 inline-block"
+                    // CAMBIO REALIZADO: Efecto degradado en hover usando background-clip para enlaces de navegación
+                    className="bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-cream-light/80 hover:text-transparent hover:translate-x-1 transition-all inline-block"
                   >
                     {link.label}
                   </a>
@@ -100,8 +100,8 @@ export const Footer = () => {
                   {info.href ? (
                     <a 
                       href={info.href} 
-                      // CAMBIO REALIZADO: Uso directo de la clase gradient-text-gold en hover
-                      className="hover:gradient-text-gold transition-all duration-300 text-left md:text-right"
+                      // CAMBIO REALIZADO: Efecto degradado en hover usando background-clip para enlaces de contacto
+                      className="bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-cream-light/80 hover:text-transparent transition-colors text-left md:text-right"
                     >
                       {info.text}
                     </a>
