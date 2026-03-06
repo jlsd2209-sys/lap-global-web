@@ -42,8 +42,8 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              // CAMBIO REALIZADO: Ajuste de clases para forzar el degradado en hover
-              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:bg-gradient-to-r hover:from-gold hover:to-gold-bright hover:bg-clip-text hover:text-transparent transition-all duration-300"
+              // CAMBIO REALIZADO: Aplicación de gradient-text-gold en hover con texto transparente
+              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:gradient-text-gold hover:text-transparent transition-all duration-300"
             >
               {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
               <div className="w-12 h-12 flex items-center justify-center">
@@ -80,8 +80,8 @@ export const Footer = () => {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    // CAMBIO REALIZADO: Ajuste de clases para forzar el degradado en hover
-                    className="text-cream-light/80 hover:bg-gradient-to-r hover:from-gold hover:to-gold-bright hover:bg-clip-text hover:text-transparent hover:translate-x-1 transition-all duration-300 inline-block"
+                    // CAMBIO REALIZADO: Aplicación de gradient-text-gold en hover con texto transparente
+                    className="text-cream-light/80 hover:gradient-text-gold hover:text-transparent hover:translate-x-1 transition-all duration-300 inline-block"
                   >
                     {link.label}
                   </a>
@@ -100,8 +100,8 @@ export const Footer = () => {
                   {info.href ? (
                     <a 
                       href={info.href} 
-                      // CAMBIO REALIZADO: Ajuste de clases para forzar el degradado en hover
-                      className="hover:bg-gradient-to-r hover:from-gold hover:to-gold-bright hover:bg-clip-text hover:text-transparent transition-all duration-300 text-left md:text-right"
+                      // CAMBIO REALIZADO: Aplicación de gradient-text-gold en hover con texto transparente
+                      className="hover:gradient-text-gold hover:text-transparent transition-all duration-300 text-left md:text-right"
                     >
                       {info.text}
                     </a>
