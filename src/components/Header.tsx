@@ -72,7 +72,7 @@ export const Header = () => {
               src={logoShield} 
             />
           </div>
-          {/* CAMBIO REALIZADO: Doble capa para el color dorado manteniendo isLogoHovered */}
+          {/* CAMBIO REALIZADO: Doble capa exacta para el Logo */}
           <span className="hidden lg:block font-serif text-xl xl:text-2xl font-bold relative">
             <span className={`absolute inset-0 gradient-text-gold transition-opacity duration-300 whitespace-nowrap ${isLogoHovered ? 'opacity-100' : 'opacity-0'}`}>
               Unidad de Asuntos Transnacionales & IA
@@ -95,12 +95,14 @@ export const Header = () => {
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer group
                     ${isActive ? 'font-bold scale-105' : 'hover:scale-105'}`}
                 >
-                  {/* CAMBIO REALIZADO: Doble capa para el color dorado manteniendo tu lógica de activo/hover */}
-                  <span className={`absolute inset-0 gradient-text-gold transition-opacity duration-300 whitespace-nowrap pt-2 ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                    {item.label}
-                  </span>
-                  <span className={`relative transition-opacity duration-300 whitespace-nowrap ${isActive ? 'opacity-0' : 'text-white group-hover:opacity-0'}`}>
-                    {item.label}
+                  {/* CAMBIO REALIZADO: Contenedor 'relative block' para aislar el texto del padding (py-2) y lograr alineación milimétrica */}
+                  <span className="relative block">
+                    <span className={`absolute inset-0 gradient-text-gold transition-opacity duration-300 whitespace-nowrap ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                      {item.label}
+                    </span>
+                    <span className={`relative transition-opacity duration-300 whitespace-nowrap ${isActive ? 'opacity-0' : 'text-white group-hover:opacity-0'}`}>
+                      {item.label}
+                    </span>
                   </span>
                   <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
                 </a>
