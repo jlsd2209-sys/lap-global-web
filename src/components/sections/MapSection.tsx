@@ -5,11 +5,11 @@ import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
   const [isHovered, setIsHovered] = useState(false);
-  // CORRECCIÓN: Inicializamos en un número fijo para evitar el error de servidor en Vercel
+  // Valor seguro inicial para evitar error en el build de Vercel
   const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
-    // Tomamos el tamaño real una vez que el componente ya montó de forma segura
+    // Tomamos la medida real una vez cargada la página
     setWindowWidth(window.innerWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
@@ -36,14 +36,13 @@ export const MapSection = () => {
   };
 
   // ============================================================
-  // 📱 PANEL MÓVIL: AJUSTADO PARA NO CORTAR PALABRAS
+  // 📱 PANEL MÓVIL: TUS AJUSTES ORIGINALES INTACTOS
   // ============================================================
   const movil = {
     altura: '600px',
     titulo: { arriba: '20%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
     mapa:   { arriba: '9%', derecha: '4%', tamaño: '310px', opacidad: isHovered ? '0.85' : '0.55' },
-    // CORRECCIÓN VITAL: Aumentado el ancho de 55% a 85% para que el texto ocupe toda la franja blanca
-    texto:  { arriba: '72.4%', izquierda: '5%', ancho: '85%', size: '0.8rem' },
+    texto:  { arriba: '72.4%', izquierda: '5%', ancho: '55%', size: '0.8rem' },
     boton:  { abajo: '30%', izquierda: '5%', size: '9px' }
   };
 
@@ -51,138 +50,144 @@ export const MapSection = () => {
 
   return (
     <section 
-      className="relative w-full overflow-hidden bg-navy-dark" 
+      // EL SECRETO ANTI-ZOOM: flex y justify-center para mantener la caja en el medio
+      className="relative w-full bg-navy-dark flex justify-center" 
       style={{ height: p.altura }}
     >
-      {/* 1. FONDO (Restaurado a tu ajuste 100% 100% necesario para tu imagen) */}
-      <div className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url("/Fondo Mapa PNG.png")',
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-
-      {/* 2. PARTÍCULAS */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        <Particles count={esMovil ? 20 : 50} />
-      </div>
-
-      {/* 3. MAPA CON DOBLE DISPARADOR */}
-      <motion.div
-        className="absolute z-20 cursor-pointer pointer-events-auto"
-        style={{ 
-          top: p.mapa.arriba, 
-          right: p.mapa.derecha 
-        }}
-        onMouseEnter={() => !esMovil && setIsHovered(true)}
-        onMouseLeave={() => !esMovil && setIsHovered(false)}
-        onClick={handleToggleClick}
-        animate={{
-          filter: isHovered 
-            ? [
-                "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))", 
-                "drop-shadow(0 0 60px rgba(140, 230, 255, 1))",
-                "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))"
-              ]
-            : [
-                "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))",
-                "drop-shadow(0 0 40px rgba(140, 230, 255, 0.75))",
-                "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))"
-              ],
-          scale: isHovered ? 1.05 : 1, 
-        }}
-        transition={{
-          duration: isHovered ? 0.4 : 2.7,
-          ease: "easeInOut",
-          repeat: isHovered ? 0 : Infinity, 
-        }}
-      >
-        <img
-          src="/Mapa con escudo.png"
-          alt="Mapa con escudo"
-          style={{ 
-            width: p.mapa.tamaño, 
-            opacity: p.mapa.opacidad,
-            transition: 'opacity 0.4s ease'
-          }}
-          className="h-auto"
-        />
-      </motion.div>
-      
-      {/* 4. CONTENIDO */}
-      <div className="relative z-30 h-full w-full pointer-events-none">
+      {/* EL CONTENEDOR MAESTRO: Bloquea el estiramiento a 1920px máximo */}
+      <div className="relative w-full max-w-[1920px] h-full overflow-hidden">
         
-        {/* TÍTULO */}
-        <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
-          {/* CORRECCIÓN: inline-block en lugar de table para evitar cortes de gradiente en móviles angostos */}
-          <span 
-            className="gradient-text-gold font-semibold tracking-widest uppercase text-sm inline-block mb-2"
-            style={{ 
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
-            La Visión
-          </span>
-          
-          <h2 className="font-serif font-bold leading-tight">
-            <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
-              Seguridad Jurídica
-            </span>
-            <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>
-              en la Era de la
-            </span>
-            <span 
-              className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl inline-block" 
-              style={{ 
-                fontSize: esMovil ? p.titulo.size : '',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}
-            >
-              Inteligencia Artificial
-            </span>
-          </h2>
+        {/* 1. FONDO */}
+        <div className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url("/Fondo Mapa PNG.png")',
+            backgroundSize: '100% 100%',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+
+        {/* 2. PARTÍCULAS */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
+          <Particles count={esMovil ? 20 : 50} />
         </div>
 
-        {/* PARRAFO */}
-        <motion.p
-          className="absolute text-navy-dark font-extrabold leading-relaxed"
+        {/* 3. MAPA CON DOBLE DISPARADOR */}
+        <motion.div
+          className="absolute z-20 cursor-pointer pointer-events-auto"
           style={{ 
-            top: p.texto.arriba,
-            left: p.texto.izquierda,
-            width: esMovil ? p.texto.ancho : escritorio.texto.anchoMax, // CORRECCIÓN: Usamos width fijo para forzar el espacio y que no ampute palabras
-            fontSize: esMovil ? p.texto.size : '1.125rem' 
-          }} 
-        >
-          Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
-        </motion.p>
-
-        {/* BOTÓN */}
-        <div 
-          className="absolute pointer-events-auto"
-          style={{ 
-            bottom: p.boton.abajo, 
-            right: esMovil ? 'auto' : escritorio.boton.derecha,
-            left: esMovil ? p.boton.izquierda : 'auto'
+            top: p.mapa.arriba, 
+            right: p.mapa.derecha 
           }}
           onMouseEnter={() => !esMovil && setIsHovered(true)}
           onMouseLeave={() => !esMovil && setIsHovered(false)}
           onClick={handleToggleClick}
+          animate={{
+            filter: isHovered 
+              ? [
+                  "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))", 
+                  "drop-shadow(0 0 60px rgba(140, 230, 255, 1))",
+                  "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))"
+                ]
+              : [
+                  "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))",
+                  "drop-shadow(0 0 40px rgba(140, 230, 255, 0.75))",
+                  "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))"
+                ],
+            scale: isHovered ? 1.05 : 1, 
+          }}
+          transition={{
+            duration: isHovered ? 0.4 : 2.7,
+            ease: "easeInOut",
+            repeat: isHovered ? 0 : Infinity, 
+          }}
         >
-          <motion.button
-            whileHover={{ scale: 1.1, backgroundColor: 'rgba(10, 25, 47, 0.9)' }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 text-white font-bold uppercase bg-navy-dark/60 px-6 py-3 rounded-full border border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.2)] backdrop-blur-sm transition-all whitespace-nowrap"
-            style={{ fontSize: p.boton.size }}
+          <img
+            src="/Mapa con escudo.png"
+            alt="Mapa con escudo"
+            style={{ 
+              width: p.mapa.tamaño, 
+              opacity: p.mapa.opacidad,
+              transition: 'opacity 0.4s ease'
+            }}
+            className="h-auto"
+          />
+        </motion.div>
+        
+        {/* 4. CONTENIDO */}
+        <div className="relative z-30 h-full w-full pointer-events-none">
+          
+          {/* TÍTULO */}
+          <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
+            <span 
+              className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2"
+              style={{ 
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                display: 'table'
+              }}
+            >
+              La Visión
+            </span>
+            
+            <h2 className="font-serif font-bold leading-tight">
+              <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
+                Seguridad Jurídica
+              </span>
+              <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>
+                en la Era de la
+              </span>
+              <span 
+                className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl block" 
+                style={{ 
+                  fontSize: esMovil ? p.titulo.size : '',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  display: 'table'
+                }}
+              >
+                Inteligencia Artificial
+              </span>
+            </h2>
+          </div>
+
+          {/* PARRAFO */}
+          <motion.p
+            className="absolute text-navy-dark font-extrabold leading-relaxed pointer-events-auto"
+            style={{ 
+              top: p.texto.arriba,
+              left: p.texto.izquierda,
+              maxWidth: esMovil ? p.texto.ancho : escritorio.texto.anchoMax,
+              fontSize: esMovil ? p.texto.size : '1.125rem' 
+            }} 
           >
-            <Network size={16} className={`transition-colors ${isHovered ? 'text-cyan-400' : 'text-gold'}`} />
-            <span className={isHovered ? 'text-cyan-50' : 'text-white'}>Red de Inteligencia Legal</span>
-          </motion.button>
+            Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
+          </motion.p>
+
+          {/* BOTÓN */}
+          <div 
+            className="absolute pointer-events-auto"
+            style={{ 
+              bottom: p.boton.abajo, 
+              right: esMovil ? 'auto' : escritorio.boton.derecha,
+              left: esMovil ? p.boton.izquierda : 'auto'
+            }}
+            onMouseEnter={() => !esMovil && setIsHovered(true)}
+            onMouseLeave={() => !esMovil && setIsHovered(false)}
+            onClick={handleToggleClick}
+          >
+            <motion.button
+              whileHover={{ scale: 1.1, backgroundColor: 'rgba(10, 25, 47, 0.9)' }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 text-white font-bold uppercase bg-navy-dark/60 px-6 py-3 rounded-full border border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.2)] backdrop-blur-sm transition-all whitespace-nowrap"
+              style={{ fontSize: p.boton.size }}
+            >
+              <Network size={16} className={`transition-colors ${isHovered ? 'text-cyan-400' : 'text-gold'}`} />
+              <span className={isHovered ? 'text-cyan-50' : 'text-white'}>Red de Inteligencia Legal</span>
+            </motion.button>
+          </div>
         </div>
       </div>
     </section>
