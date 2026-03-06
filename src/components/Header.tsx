@@ -59,7 +59,6 @@ export const Header = () => {
       <nav className="container flex justify-between items-center h-24">
         
         {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
-        {/* CAMBIO REALIZADO: gap-2 en lugar de gap-3 para ahorrar espacio horizontal en móviles. Comentario movido fuera de la etiqueta. */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -74,7 +73,6 @@ export const Header = () => {
               src={logoShield} 
             />
           </div>
-          {/* CAMBIO REALIZADO: text-lg para aumentar exactamente un nivel la medida en celular */}
           <span 
             className={`inline-block font-serif text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
@@ -119,18 +117,20 @@ export const Header = () => {
         {/* Mobile Navigation */}
         <AnimatePresence>
           {isMenuOpen && (
+            {/* CAMBIO REALIZADO: w-64 en lugar de w-4/5 para que el panel no ocupe toda la pantalla, y p-6 para ajustarlo */}
             <motion.div 
               initial={{ x: '100%' }} 
               animate={{ x: 0 }} 
               exit={{ x: '100%' }} 
               transition={{ type: 'tween', duration: 0.3 }} 
-              className="fixed top-0 right-0 w-4/5 h-full bg-navy-dark/98 backdrop-blur-lg p-8 pt-24 md:hidden z-40 shadow-2xl"
+              className="fixed top-0 right-0 w-64 h-full bg-navy-dark/98 backdrop-blur-lg p-6 pt-24 md:hidden z-40 shadow-2xl"
             >
               <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
                 <X size={32} />
               </button>
               
-              <ul className="flex flex-col gap-8">
+              {/* CAMBIO REALIZADO: gap-6 en lugar de gap-8 para que los enlaces queden más juntos y proporcionados */}
+              <ul className="flex flex-col gap-6">
                 {navItems.map((item, index) => (
                   <motion.li 
                     key={item.href} 
@@ -138,10 +138,11 @@ export const Header = () => {
                     animate={{ opacity: 1, x: 0 }} 
                     transition={{ delay: index * 0.1 }}
                   >
+                    {/* CAMBIO REALIZADO: text-xl en lugar de text-2xl para que el tamaño de letra encaje mejor en el panel más angosto */}
                     <a 
                       href={item.href} 
                       onClick={(e) => handleNavClick(e, item.href)} 
-                      className={`text-2xl font-medium transition-all duration-300 inline-block ${
+                      className={`text-xl font-medium transition-all duration-300 inline-block ${
                         activeSection === item.href.substring(1) ? 'gradient-text-gold' : 'text-white'
                       }`}
                     >
