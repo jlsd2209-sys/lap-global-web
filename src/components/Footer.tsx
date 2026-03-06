@@ -42,7 +42,8 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:text-gold transition-colors"
+              // CAMBIO REALIZADO: hover ahora aplica gradient-text-gold
+              className="flex items-center gap-3 font-serif text-xl font-bold text-white mb-4 hover:gradient-text-gold transition-all"
             >
               {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
               <div className="w-12 h-12 flex items-center justify-center">
@@ -79,7 +80,8 @@ export const Footer = () => {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-cream-light/80 hover:text-gold hover:translate-x-1 transition-all inline-block"
+                    // CAMBIO REALIZADO: hover ahora aplica gradient-text-gold
+                    className="text-cream-light/80 hover:gradient-text-gold hover:translate-x-1 transition-all inline-block"
                   >
                     {link.label}
                   </a>
@@ -96,7 +98,11 @@ export const Footer = () => {
                 <li key={index} className="flex items-start gap-3 text-cream-light/80">
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
                   {info.href ? (
-                    <a href={info.href} className="hover:text-gold transition-colors text-left md:text-right">
+                    <a 
+                      href={info.href} 
+                      // CAMBIO REALIZADO: hover ahora aplica gradient-text-gold
+                      className="hover:gradient-text-gold transition-all text-left md:text-right"
+                    >
                       {info.text}
                     </a>
                   ) : (
