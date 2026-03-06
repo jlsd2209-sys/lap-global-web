@@ -74,9 +74,9 @@ export const Header = () => {
               src={logoShield} 
             />
           </div>
-          {/* CAMBIO REALIZADO: text-base en lugar de text-sm para igualar la legibilidad con el Footer */}
+          {/* CAMBIO REALIZADO: text-lg para aumentar exactamente un nivel la medida en celular */}
           <span 
-            className={`inline-block font-serif text-base sm:text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
+            className={`inline-block font-serif text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
             }`}
           >
