@@ -1,5 +1,5 @@
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png'; // Importamos el logo
+import logoShield from '@/assets/logo-shield.png';
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
@@ -37,7 +37,6 @@ export const Footer = () => {
       <div className="container pb-0 pt-0">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
           
-          {/* Logo & Description */}
           <div className="flex flex-col items-start">
             <a
               href="#home"
@@ -76,8 +75,6 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Navigation */}
-          {/* CAMBIO REALIZADO: Restaurado md:mx-auto para centrar en su columna */}
           <div className="flex flex-col items-start md:mx-auto">
             <h3 className="text-lg font-serif mb-6 relative group inline-block cursor-default">
               <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
@@ -107,8 +104,6 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
-          {/* CAMBIO REALIZADO: Restaurado md:ml-auto para empujar a la derecha */}
           <div className="flex flex-col items-start md:ml-auto">
             <h3 className="text-lg font-serif mb-6 relative group inline-block cursor-default">
               <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
@@ -143,7 +138,6 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="text-center pt-8 border-t border-gold/10">
           <p className="text-cream-light/60 text-sm">
             © 2026 Unidad de Asuntos Transnacionales & IA. Todos los derechos reservados.
