@@ -48,14 +48,7 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
 );
 
 export const ServicesSection = () => {
-  // Estilo compartido para asegurar que el gradiente sea idéntico al CTA
-  const titleGradientStyle = {
-    display: 'table',
-    margin: '0 auto',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text'
-  };
+  // CAMBIO REALIZADO: Se eliminó la constante titleGradientStyle que interfería con la clase nativa
 
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
@@ -84,7 +77,8 @@ export const ServicesSection = () => {
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`} style={titleGradientStyle}>
+          {/* CAMBIO REALIZADO: Se dejó únicamente la clase gradient-text-gold, idéntico al CTA */}
+          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
             Centro de Inteligencia Transnacional
           </h2>
         </motion.div>
@@ -103,7 +97,8 @@ export const ServicesSection = () => {
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`} style={titleGradientStyle}>
+          {/* CAMBIO REALIZADO: Se dejó únicamente la clase gradient-text-gold, idéntico al CTA */}
+          <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
             Módulos de Alianza Estratégica
           </h2>
         </motion.div>
