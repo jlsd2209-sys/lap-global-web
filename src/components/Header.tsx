@@ -58,7 +58,6 @@ export const Header = () => {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
-        {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -82,7 +81,6 @@ export const Header = () => {
           </span>
         </a>
 
-        {/* Desktop Navigation con Efectos de Texto Degradado */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
@@ -109,15 +107,12 @@ export const Header = () => {
           })}
         </ul>
 
-        {/* Mobile Menu Toggle */}
         <button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
 
-        {/* Mobile Navigation */}
         <AnimatePresence>
           {isMenuOpen && (
-            {/* CAMBIO REALIZADO: w-64 en lugar de w-4/5 para que el panel no ocupe toda la pantalla, y p-6 para ajustarlo */}
             <motion.div 
               initial={{ x: '100%' }} 
               animate={{ x: 0 }} 
@@ -129,7 +124,6 @@ export const Header = () => {
                 <X size={32} />
               </button>
               
-              {/* CAMBIO REALIZADO: gap-6 en lugar de gap-8 para que los enlaces queden más juntos y proporcionados */}
               <ul className="flex flex-col gap-6">
                 {navItems.map((item, index) => (
                   <motion.li 
@@ -138,7 +132,6 @@ export const Header = () => {
                     animate={{ opacity: 1, x: 0 }} 
                     transition={{ delay: index * 0.1 }}
                   >
-                    {/* CAMBIO REALIZADO: text-xl en lugar de text-2xl para que el tamaño de letra encaje mejor en el panel más angosto */}
                     <a 
                       href={item.href} 
                       onClick={(e) => handleNavClick(e, item.href)} 
