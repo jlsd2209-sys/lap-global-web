@@ -42,15 +42,13 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              // CAMBIO REALIZADO: Se agregó 'group' al contenedor padre
               className="flex items-center gap-3 font-serif text-xl font-bold mb-4 group"
             >
-              {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
               <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              {/* CAMBIO REALIZADO: Sistema de doble capa para revelar tu clase gradient-text-gold al hacer hover */}
-              <div className="relative">
+              {/* CAMBIO REALIZADO: Agregado whitespace-nowrap para evitar salto de línea en & IA */}
+              <div className="relative whitespace-nowrap">
                 <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Unidad de Asuntos Transnacionales & IA
                 </span>
@@ -79,19 +77,27 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Navigation - COLUMNA CENTRADA */}
-          <div className="flex flex-col items-center">
-            <h3 className="text-lg font-serif text-white mb-6">Navegación</h3>
-            <ul className="flex flex-col gap-3 items-center">
+          {/* Navigation */}
+          {/* CAMBIO REALIZADO: Cambiado de items-center a items-start para alinear a la izquierda */}
+          <div className="flex flex-col items-start lg:pl-10">
+            {/* CAMBIO REALIZADO: Aplicado efecto degradado en hover al título */}
+            <h3 className="text-lg font-serif mb-6 relative group inline-block cursor-default">
+              <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                Navegación
+              </span>
+              <span className="relative text-white group-hover:opacity-0 transition-opacity duration-300 whitespace-nowrap">
+                Navegación
+              </span>
+            </h3>
+            {/* CAMBIO REALIZADO: Cambiado items-center a items-start */}
+            <ul className="flex flex-col gap-3 items-start">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    // CAMBIO REALIZADO: Contenedor group con transición de movimiento
                     className="relative group inline-block hover:translate-x-1 transition-transform"
                   >
-                    {/* CAMBIO REALIZADO: Capas superpuestas con tu clase gradient-text-gold */}
                     <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                       {link.label}
                     </span>
@@ -105,19 +111,28 @@ export const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col items-start md:items-end">
-            <h3 className="text-lg font-serif text-white mb-6">Contacto</h3>
-            <ul className="flex flex-col gap-4 items-start md:items-end">
+          {/* CAMBIO REALIZADO: Eliminado md:items-end, dejado items-start para alinear a la izquierda */}
+          <div className="flex flex-col items-start">
+            {/* CAMBIO REALIZADO: Aplicado efecto degradado en hover al título */}
+            <h3 className="text-lg font-serif mb-6 relative group inline-block cursor-default">
+              <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                Contacto
+              </span>
+              <span className="relative text-white group-hover:opacity-0 transition-opacity duration-300 whitespace-nowrap">
+                Contacto
+              </span>
+            </h3>
+            {/* CAMBIO REALIZADO: Eliminado md:items-end, dejado items-start */}
+            <ul className="flex flex-col gap-4 items-start">
               {contactInfo.map((info, index) => (
                 <li key={index} className="flex items-start gap-3 text-cream-light/80">
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
                   {info.href ? (
+                    {/* CAMBIO REALIZADO: Eliminado md:text-right para forzar alineación izquierda constante */}
                     <a 
                       href={info.href} 
-                      // CAMBIO REALIZADO: Contenedor group
-                      className="relative group inline-block text-left md:text-right"
+                      className="relative group inline-block text-left"
                     >
-                      {/* CAMBIO REALIZADO: Capas superpuestas con tu clase gradient-text-gold */}
                       <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                         {info.text}
                       </span>
@@ -126,7 +141,7 @@ export const Footer = () => {
                       </span>
                     </a>
                   ) : (
-                    <span className="text-left md:text-right">{info.text}</span>
+                    <span className="text-left">{info.text}</span>
                   )}
                 </li>
               ))}
