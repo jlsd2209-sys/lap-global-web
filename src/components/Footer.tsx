@@ -42,14 +42,22 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              // CAMBIO REALIZADO: Efecto degradado en hover usando background-clip para el título del logo
-              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-white hover:text-transparent transition-colors"
+              // CAMBIO REALIZADO: Se agregó 'group' al contenedor padre
+              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 group"
             >
               {/* SUSTITUCIÓN DE LA "L" POR EL LOGO */}
               <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <span>Unidad de Asuntos Transnacionales & IA</span>
+              {/* CAMBIO REALIZADO: Sistema de doble capa para revelar tu clase gradient-text-gold al hacer hover */}
+              <div className="relative">
+                <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Unidad de Asuntos Transnacionales & IA
+                </span>
+                <span className="relative text-white group-hover:opacity-0 transition-opacity duration-300">
+                  Unidad de Asuntos Transnacionales & IA
+                </span>
+              </div>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
               Innovación legal con inteligencia artificial para Sudamérica. 
@@ -80,10 +88,16 @@ export const Footer = () => {
                   <a
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    // CAMBIO REALIZADO: Efecto degradado en hover usando background-clip para enlaces de navegación
-                    className="bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-cream-light/80 hover:text-transparent hover:translate-x-1 transition-all inline-block"
+                    // CAMBIO REALIZADO: Contenedor group con transición de movimiento
+                    className="relative group inline-block hover:translate-x-1 transition-transform"
                   >
-                    {link.label}
+                    {/* CAMBIO REALIZADO: Capas superpuestas con tu clase gradient-text-gold */}
+                    <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                      {link.label}
+                    </span>
+                    <span className="relative text-cream-light/80 group-hover:opacity-0 transition-opacity duration-300 whitespace-nowrap">
+                      {link.label}
+                    </span>
                   </a>
                 </li>
               ))}
@@ -100,10 +114,16 @@ export const Footer = () => {
                   {info.href ? (
                     <a 
                       href={info.href} 
-                      // CAMBIO REALIZADO: Efecto degradado en hover usando background-clip para enlaces de contacto
-                      className="bg-gradient-to-r from-gold to-gold-bright bg-clip-text text-cream-light/80 hover:text-transparent transition-colors text-left md:text-right"
+                      // CAMBIO REALIZADO: Contenedor group
+                      className="relative group inline-block text-left md:text-right"
                     >
-                      {info.text}
+                      {/* CAMBIO REALIZADO: Capas superpuestas con tu clase gradient-text-gold */}
+                      <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                        {info.text}
+                      </span>
+                      <span className="relative text-cream-light/80 group-hover:opacity-0 transition-opacity duration-300 whitespace-nowrap">
+                        {info.text}
+                      </span>
                     </a>
                   ) : (
                     <span className="text-left md:text-right">{info.text}</span>
