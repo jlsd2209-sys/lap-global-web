@@ -5,9 +5,11 @@ import { Particles } from '@/components/Particles';
 
 export const MapSection = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
+    // Verificación segura de window para evitar error en Vercel
+    setWindowWidth(window.innerWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -16,31 +18,25 @@ export const MapSection = () => {
   const esMovil = windowWidth < 768;
 
   const handleToggleClick = () => {
-    if (esMovil) {
-      setIsHovered(!isHovered);
-    }
+    if (esMovil) setIsHovered(!isHovered);
   };
 
-  // ============================================================
-  // 🖥️ PANEL ESCRITORIO: AJUSTES ORIGINALES
-  // ============================================================
+  // Configuración de Escritorio
   const escritorio = {
     altura: '600px',
     titulo: { arriba: '22%', izquierda: '14%' },
-    mapa: { arriba: '2%', derecha: '13%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
+    mapa: { arriba: '2%', derecha: '13%', tamaño: '445px', opacidad: isHovered ? 0.90 : 0.70 },
     texto: { arriba: '73%', izquierda: '14%', anchoMax: '450px' },
     boton: { abajo: '4%', derecha: '15%', size: '10px' }
   };
 
-  // ============================================================
-  // 📱 PANEL MÓVIL: TUS AJUSTES PRECISOS
-  // ============================================================
+  // Configuración de Móvil
   const movil = {
     altura: '600px',
     titulo: { arriba: '20%', izquierda: '5%', size: '1.8rem', sizeItalic: '1.1rem' },
-    mapa:   { arriba: '9%', derecha: '4%', tamaño: '310px', opacidad: isHovered ? '0.85' : '0.55' },
-    texto:  { arriba: '72.4%', izquierda: '5%', ancho: '55%', size: '0.8rem' },
-    boton:  { abajo: '30%', izquierda: '5%', size: '9px' }
+    mapa: { arriba: '9%', derecha: '4%', tamaño: '310px', opacidad: isHovered ? 0.85 : 0.55 },
+    texto: { arriba: '72.4%', izquierda: '5%', ancho: '55%', size: '0.8rem' },
+    boton: { abajo: '30%', izquierda: '5%', size: '9px' }
   };
 
   const p = esMovil ? movil : escritorio;
@@ -54,7 +50,7 @@ export const MapSection = () => {
       <div className="absolute inset-0 z-0"
         style={{
           backgroundImage: 'url("/Fondo Mapa PNG.png")',
-          backgroundSize: '100% 100%',
+          backgroundSize: 'cover', // Cambiado a 'cover' para evitar espacios negros al alejar
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
@@ -65,7 +61,7 @@ export const MapSection = () => {
         <Particles count={esMovil ? 20 : 50} />
       </div>
 
-      {/* 3. MAPA CON DOBLE DISPARADOR (Trigger en Mapa + Trigger en Botón) */}
+      {/* 3. MAPA */}
       <motion.div
         className="absolute z-20 cursor-pointer pointer-events-auto"
         style={{ 
@@ -76,24 +72,9 @@ export const MapSection = () => {
         onMouseLeave={() => !esMovil && setIsHovered(false)}
         onClick={handleToggleClick}
         animate={{
-          filter: isHovered 
-            ? [
-                "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))", 
-                "drop-shadow(0 0 60px rgba(140, 230, 255, 1))",
-                "drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))"
-              ]
-            : [
-                "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))",
-                "drop-shadow(0 0 40px rgba(140, 230, 255, 0.75))",
-                "drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))"
-              ],
           scale: isHovered ? 1.05 : 1, 
         }}
-        transition={{
-          duration: isHovered ? 0.4 : 2.7,
-          ease: "easeInOut",
-          repeat: isHovered ? 0 : Infinity, 
-        }}
+        transition={{ duration: 0.4 }}
       >
         <img
           src="/Mapa con escudo.png"
@@ -101,7 +82,8 @@ export const MapSection = () => {
           style={{ 
             width: p.mapa.tamaño, 
             opacity: p.mapa.opacidad,
-            transition: 'opacity 0.4s ease'
+            filter: isHovered ? 'drop-shadow(0 0 20px rgba(100, 210, 255, 0.8))' : 'drop-shadow(0 0 10px rgba(100, 210, 255, 0.4))',
+            transition: 'all 0.4s ease'
           }}
           className="h-auto"
         />
@@ -112,43 +94,26 @@ export const MapSection = () => {
         
         {/* TÍTULO */}
         <div className="absolute" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
-          {/* AJUSTE "LA VISIÓN": Forzamos el renderizado del degradado */}
-          <span 
-            className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2"
-            style={{ 
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              display: 'table' // Ayuda a que el gradiente se limite al texto
-            }}
-          >
+          <span className="gradient-text-gold font-semibold tracking-widest uppercase text-sm block mb-2">
             La Visión
           </span>
           
           <h2 className="font-serif font-bold leading-tight">
-            <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
+            <span className="text-white text-3xl md:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
               Seguridad Jurídica
             </span>
             <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>
               en la Era de la
             </span>
-            <span 
-              className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl block" 
-              style={{ 
-                fontSize: esMovil ? p.titulo.size : '',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}
-            >
+            <span className="gradient-text-gold text-3xl md:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
               Inteligencia Artificial
             </span>
           </h2>
         </div>
 
         {/* PARRAFO */}
-        <motion.p
-          className="absolute text-navy-dark font-extrabold leading-relaxed"
+        <p
+          className="absolute text-white/90 font-medium leading-relaxed"
           style={{ 
             top: p.texto.arriba,
             left: p.texto.izquierda,
@@ -157,7 +122,7 @@ export const MapSection = () => {
           }} 
         >
           Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
-        </motion.p>
+        </p>
 
         {/* BOTÓN */}
         <div 
@@ -167,18 +132,15 @@ export const MapSection = () => {
             right: esMovil ? 'auto' : escritorio.boton.derecha,
             left: esMovil ? p.boton.izquierda : 'auto'
           }}
-          onMouseEnter={() => !esMovil && setIsHovered(true)}
-          onMouseLeave={() => !esMovil && setIsHovered(false)}
           onClick={handleToggleClick}
         >
           <motion.button
-            whileHover={{ scale: 1.1, backgroundColor: 'rgba(10, 25, 47, 0.9)' }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 text-white font-bold uppercase bg-navy-dark/60 px-6 py-3 rounded-full border border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.2)] backdrop-blur-sm transition-all whitespace-nowrap"
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center gap-2 text-white font-bold uppercase bg-navy-dark/60 px-6 py-3 rounded-full border border-gold/40 backdrop-blur-sm"
             style={{ fontSize: p.boton.size }}
           >
-            <Network size={16} className={`transition-colors ${isHovered ? 'text-cyan-400' : 'text-gold'}`} />
-            <span className={isHovered ? 'text-cyan-50' : 'text-white'}>Red de Inteligencia Legal</span>
+            <Network size={16} className={isHovered ? 'text-cyan-400' : 'text-gold'} />
+            <span>Red de Inteligencia Legal</span>
           </motion.button>
         </div>
       </div>
