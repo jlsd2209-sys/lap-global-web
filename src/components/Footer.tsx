@@ -47,7 +47,6 @@ export const Footer = () => {
               <div className="w-12 h-12 flex items-center justify-center">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain" />
               </div>
-              {/* CAMBIO REALIZADO: whitespace-nowrap para mantener el texto en una sola línea */}
               <div className="relative whitespace-nowrap">
                 <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Unidad de Asuntos Transnacionales & IA
@@ -78,9 +77,8 @@ export const Footer = () => {
           </div>
 
           {/* Navigation */}
-          {/* CAMBIO REALIZADO: items-start para alinear a la izquierda según tu imagen */}
-          <div className="flex flex-col items-start lg:pl-10">
-            {/* CAMBIO REALIZADO: Aplicado efecto degradado en hover al título */}
+          {/* CAMBIO REALIZADO: Agregado md:mx-auto para centrar el bloque en su columna */}
+          <div className="flex flex-col items-start md:mx-auto">
             <h3 className="text-lg font-serif mb-6 relative group inline-block cursor-default">
               <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Navegación
@@ -110,9 +108,8 @@ export const Footer = () => {
           </div>
 
           {/* Contact */}
-          {/* CAMBIO REALIZADO: items-start para alinear a la izquierda según tu imagen */}
-          <div className="flex flex-col items-start">
-            {/* CAMBIO REALIZADO: Aplicado efecto degradado en hover al título */}
+          {/* CAMBIO REALIZADO: Agregado md:ml-auto para empujar el bloque hacia la derecha */}
+          <div className="flex flex-col items-start md:ml-auto">
             <h3 className="text-lg font-serif mb-6 relative group inline-block cursor-default">
               <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Contacto
@@ -125,7 +122,6 @@ export const Footer = () => {
               {contactInfo.map((info, index) => (
                 <li key={index} className="flex items-start gap-3 text-cream-light/80">
                   <info.icon className="text-gold mt-0.5 flex-shrink-0" size={18} />
-                  {/* CAMBIO REALIZADO: Comentario movido fuera del operador ternario para evitar el error de compilación */}
                   {info.href ? (
                     <a 
                       href={info.href} 
