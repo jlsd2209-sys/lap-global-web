@@ -52,19 +52,21 @@ export const ResultsSection = () => {
   return (
     <section className="py-12 bg-charcoal-dark pt-[40px] pb-[40px]">
       <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-8"
-        >
-          {/* CAMBIO REALIZADO: inline-block fuerza al degradado a comprimirse y envolver exactamente las letras, logrando el brillo dinámico del CTA */}
-          <h2 className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold inline-block">
+        
+        {/* CAMBIO REALIZADO: Estructura y clases calcadas exactamente del CTASection */}
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold"
+          >
             Impacto Medible
-          </h2>
-        </motion.div>
+          </motion.h2>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Se agregó mt-8 para separar las cajas del nuevo contenedor del título */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           {results.map((result, index) => (
             <motion.div
               key={result.text}
