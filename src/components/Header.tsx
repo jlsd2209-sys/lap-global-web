@@ -74,8 +74,9 @@ export const Header = () => {
               src={logoShield} 
             />
           </div>
+          {/* CAMBIO REALIZADO: inline-block en lugar de block para concentrar el degradado */}
           <span 
-            className={`hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 ${
+            className={`hidden lg:inline-block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
             }`}
           >
@@ -99,10 +100,12 @@ export const Header = () => {
                   onMouseEnter={() => setHoveredLink(item.href)}
                   onMouseLeave={() => setHoveredLink(null)}
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
-                    ${applyGold ? 'gradient-text-gold' : 'text-white'}
                     ${isActive ? 'font-bold scale-105' : 'hover:scale-105'}`}
                 >
-                  {item.label}
+                  {/* CAMBIO REALIZADO: Span interno con inline-block para aislar el texto del padding y conservar el brillo */}
+                  <span className={applyGold ? 'gradient-text-gold inline-block' : 'text-white'}>
+                    {item.label}
+                  </span>
                   <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
                 </a>
               </li>
@@ -137,10 +140,11 @@ export const Header = () => {
                     animate={{ opacity: 1, x: 0 }} 
                     transition={{ delay: index * 0.1 }}
                   >
+                    {/* CAMBIO REALIZADO: inline-block agregado para evitar el estiramiento del color en el móvil */}
                     <a 
                       href={item.href} 
                       onClick={(e) => handleNavClick(e, item.href)} 
-                      className={`text-2xl font-medium transition-all duration-300 ${
+                      className={`text-2xl font-medium transition-all duration-300 inline-block ${
                         activeSection === item.href.substring(1) ? 'gradient-text-gold' : 'text-white'
                       }`}
                     >
