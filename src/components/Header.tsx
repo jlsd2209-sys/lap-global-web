@@ -59,15 +59,14 @@ export const Header = () => {
       <nav className="container flex justify-between items-center h-24">
         
         {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
+        {/* CAMBIO REALIZADO: Limitamos el ancho en móvil para no empujar el menú (Comentario movido para evitar error de JSX) */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
-          {/* CAMBIO REALIZADO: Limitamos el ancho en móvil para no empujar el menú */}
           className="flex items-center gap-3 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          {/* CAMBIO REALIZADO: flex-shrink-0 y ajustes de tamaño para móvil */}
           <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img 
               alt="LAP Global & IA Logo" 
@@ -75,7 +74,6 @@ export const Header = () => {
               src={logoShield} 
             />
           </div>
-          {/* CAMBIO REALIZADO: Eliminado el "hidden", ajustado el tamaño para móvil y agregado salto de línea prolijo */}
           <span 
             className={`inline-block font-serif text-sm md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
