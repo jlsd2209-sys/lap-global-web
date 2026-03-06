@@ -22,6 +22,8 @@ export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isLogoHovered, setIsLogoHovered] = useState(false);
+  // CAMBIO REALIZADO: Estado para controlar el hover de los enlaces de forma nativa
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,14 +74,12 @@ export const Header = () => {
               src={logoShield} 
             />
           </div>
-          {/* CAMBIO REALIZADO: Doble capa exacta para el Logo */}
-          <span className="hidden lg:block font-serif text-xl xl:text-2xl font-bold relative">
-            <span className={`absolute inset-0 gradient-text-gold transition-opacity duration-300 whitespace-nowrap ${isLogoHovered ? 'opacity-100' : 'opacity-0'}`}>
-              Unidad de Asuntos Transnacionales & IA
-            </span>
-            <span className={`relative transition-opacity duration-300 whitespace-nowrap ${isLogoHovered ? 'opacity-0' : 'text-white'}`}>
-              Unidad de Asuntos Transnacionales & IA
-            </span>
+          <span 
+            className={`hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 ${
+              isLogoHovered ? 'gradient-text-gold' : 'text-white'
+            }`}
+          >
+            Unidad de Asuntos Transnacionales & IA
           </span>
         </a>
 
@@ -87,23 +87,22 @@ export const Header = () => {
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
+            // CAMBIO REALIZADO: Lógica pura para aplicar gradient-text-gold idéntico al CTA
+            const isHovered = hoveredLink === item.href;
+            const applyGold = isActive || isHovered;
+
             return (
               <li key={item.href}>
                 <a 
                   href={item.href} 
                   onClick={(e) => handleNavClick(e, item.href)} 
-                  className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer group
+                  onMouseEnter={() => setHoveredLink(item.href)}
+                  onMouseLeave={() => setHoveredLink(null)}
+                  className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
+                    ${applyGold ? 'gradient-text-gold' : 'text-white'}
                     ${isActive ? 'font-bold scale-105' : 'hover:scale-105'}`}
                 >
-                  {/* CAMBIO REALIZADO: Contenedor 'relative block' para aislar el texto del padding (py-2) y lograr alineación milimétrica */}
-                  <span className="relative block">
-                    <span className={`absolute inset-0 gradient-text-gold transition-opacity duration-300 whitespace-nowrap ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                      {item.label}
-                    </span>
-                    <span className={`relative transition-opacity duration-300 whitespace-nowrap ${isActive ? 'opacity-0' : 'text-white group-hover:opacity-0'}`}>
-                      {item.label}
-                    </span>
-                  </span>
+                  {item.label}
                   <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
                 </a>
               </li>
