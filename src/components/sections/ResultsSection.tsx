@@ -52,21 +52,19 @@ export const ResultsSection = () => {
   return (
     <section className="py-12 bg-charcoal-dark pt-[40px] pb-[40px]">
       <div className="container mx-auto">
-        
-        {/* CAMBIO REALIZADO: Estructura y clases calcadas exactamente del CTASection */}
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold"
-          >
-            Impacto Medible
-          </motion.h2>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-8"
+        >
+          {/* CAMBIO REALIZADO: Se usa un span inline para forzar el degradado solo sobre el texto corto */}
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold">
+            <span className="gradient-text-gold inline-block">Impacto Medible</span>
+          </h2>
+        </motion.div>
 
-        {/* Se agregó mt-8 para separar las cajas del nuevo contenedor del título */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {results.map((result, index) => (
             <motion.div
               key={result.text}
@@ -76,12 +74,10 @@ export const ResultsSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group text-center p-5 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20"
             >
-              {/* Icon */}
               <div className="text-gold mb-4">
                 <result.icon className="w-12 h-12 mx-auto" />
               </div>
 
-              {/* Number */}
               <div className="flex items-baseline justify-center mb-2">
                 <span className="text-5xl md:text-6xl font-serif font-bold text-white">
                   <Counter target={result.target} />
@@ -91,7 +87,6 @@ export const ResultsSection = () => {
                 </span>
               </div>
 
-              {/* Text */}
               <p className="text-cream-light/80">
                 {result.text}
               </p>
