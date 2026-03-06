@@ -118,7 +118,7 @@ export const Header = () => {
               animate={{ x: 0 }} 
               exit={{ x: '100%' }} 
               transition={{ type: 'tween', duration: 0.3 }} 
-              className="fixed top-0 right-0 w-46 h-full bg-navy-dark/98 backdrop-blur-lg p-6 pt-24 md:hidden z-40 shadow-2xl"
+              className="fixed top-0 right-0 w-47 h-full bg-navy-dark/98 backdrop-blur-lg p-6 pt-24 md:hidden z-40 shadow-2xl"
             >
               <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
                 <X size={32} />
