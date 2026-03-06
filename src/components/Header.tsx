@@ -22,7 +22,6 @@ export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isLogoHovered, setIsLogoHovered] = useState(false);
-  // CAMBIO REALIZADO: Estado para controlar el hover de los enlaces de forma nativa
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
 
   useEffect(() => {
@@ -63,20 +62,22 @@ export const Header = () => {
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
-          className="flex items-center gap-4 group cursor-pointer"
+          {/* CAMBIO REALIZADO: Limitamos el ancho en móvil para no empujar el menú */}
+          className="flex items-center gap-3 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          <div className="relative w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          {/* CAMBIO REALIZADO: flex-shrink-0 y ajustes de tamaño para móvil */}
+          <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img 
               alt="LAP Global & IA Logo" 
               className="w-full h-full object-contain drop-shadow-2xl" 
               src={logoShield} 
             />
           </div>
-          {/* CAMBIO REALIZADO: inline-block en lugar de block para concentrar el degradado */}
+          {/* CAMBIO REALIZADO: Eliminado el "hidden", ajustado el tamaño para móvil y agregado salto de línea prolijo */}
           <span 
-            className={`hidden lg:inline-block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 ${
+            className={`inline-block font-serif text-sm md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
             }`}
           >
@@ -88,7 +89,6 @@ export const Header = () => {
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
-            // CAMBIO REALIZADO: Lógica pura para aplicar gradient-text-gold idéntico al CTA
             const isHovered = hoveredLink === item.href;
             const applyGold = isActive || isHovered;
 
@@ -102,7 +102,6 @@ export const Header = () => {
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
                     ${isActive ? 'font-bold scale-105' : 'hover:scale-105'}`}
                 >
-                  {/* CAMBIO REALIZADO: Span interno con inline-block para aislar el texto del padding y conservar el brillo */}
                   <span className={applyGold ? 'gradient-text-gold inline-block' : 'text-white'}>
                     {item.label}
                   </span>
@@ -140,7 +139,6 @@ export const Header = () => {
                     animate={{ opacity: 1, x: 0 }} 
                     transition={{ delay: index * 0.1 }}
                   >
-                    {/* CAMBIO REALIZADO: inline-block agregado para evitar el estiramiento del color en el móvil */}
                     <a 
                       href={item.href} 
                       onClick={(e) => handleNavClick(e, item.href)} 
