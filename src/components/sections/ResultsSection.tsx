@@ -58,8 +58,8 @@ export const ResultsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-8"
         >
-          {/* CAMBIO REALIZADO: Eliminados los estilos en línea para usar solo la clase gradient-text-gold pura */}
-          <h2 className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold mx-auto">
+          {/* CAMBIO REALIZADO: inline-block fuerza al degradado a comprimirse y envolver exactamente las letras, logrando el brillo dinámico del CTA */}
+          <h2 className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold inline-block">
             Impacto Medible
           </h2>
         </motion.div>
