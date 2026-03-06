@@ -59,10 +59,10 @@ export const Header = () => {
       <nav className="container flex justify-between items-center h-24">
         
         {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
+        {/* CAMBIO REALIZADO: gap-2 en lugar de gap-3 para ahorrar espacio horizontal en móviles. Comentario movido fuera de la etiqueta. */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
-          {/* CAMBIO REALIZADO: gap-2 en lugar de gap-3 para ahorrar espacio horizontal en móviles */}
           className="flex items-center gap-2 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
