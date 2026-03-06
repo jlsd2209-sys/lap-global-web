@@ -41,16 +41,11 @@ export const AdvantagesSection = () => {
           viewport={{ once: true }} 
           className="text-center mb-10"
         >
-          {/* TÍTULO CON AJUSTE DE RENDERIZADO PARA IGUALAR AL CTA */}
-          <h2 
-            className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold mx-auto"
-            style={{ 
-              display: 'table', // Concentra el gradiente solo en el texto
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}
-          >
-            ¿Por Qué la Unidad de Asuntos Transnacionales & IA?
+          {/* CAMBIO REALIZADO: Se usa un span inline para forzar el degradado solo sobre el texto y asegurar consistencia con el CTA */}
+          <h2 className="text-3xl md:text-4xl font-serif font-bold">
+            <span className="gradient-text-gold inline-block">
+              ¿Por Qué la Unidad de Asuntos Transnacionales & IA?
+            </span>
           </h2>
         </motion.div>
 
