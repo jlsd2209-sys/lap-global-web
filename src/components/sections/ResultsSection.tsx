@@ -58,15 +58,8 @@ export const ResultsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-8"
         >
-          {/* TÍTULO CON AJUSTE DE RENDERIZADO PARA IGUALAR AL CTA */}
-          <h2 
-            className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold mx-auto"
-            style={{ 
-              display: 'table', // Fuerza al degradado a ajustarse al texto y no al ancho total
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}
-          >
+          {/* CAMBIO REALIZADO: Eliminados los estilos en línea para usar solo la clase gradient-text-gold pura */}
+          <h2 className="text-3xl md:text-4xl font-serif font-bold gradient-text-gold mx-auto">
             Impacto Medible
           </h2>
         </motion.div>
