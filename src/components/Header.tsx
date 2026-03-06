@@ -59,11 +59,11 @@ export const Header = () => {
       <nav className="container flex justify-between items-center h-24">
         
         {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
-        {/* CAMBIO REALIZADO: Limitamos el ancho en móvil para no empujar el menú (Comentario movido para evitar error de JSX) */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
-          className="flex items-center gap-3 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
+          {/* CAMBIO REALIZADO: gap-2 en lugar de gap-3 para ahorrar espacio horizontal en móviles */}
+          className="flex items-center gap-2 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
@@ -74,8 +74,9 @@ export const Header = () => {
               src={logoShield} 
             />
           </div>
+          {/* CAMBIO REALIZADO: text-base en lugar de text-sm para igualar la legibilidad con el Footer */}
           <span 
-            className={`inline-block font-serif text-sm md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
+            className={`inline-block font-serif text-base sm:text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
             }`}
           >
