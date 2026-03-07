@@ -26,12 +26,11 @@ export default function AsistentePage() {
   const [moduloActivo, setModuloActivo] = useState(initialModule.name);
   const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
+  
+  // Estado para el hover del logo
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
-  // Estado para saber si mostrar el saludo inicial o el saludo de cambio de módulo
-  const [greetingType, setGreetingType] = useState<'initial' | 'changed'>('initial');
   const [messages, setMessages] = useState<Message[]>([]);
-  
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,7 +40,6 @@ export default function AsistentePage() {
   const cambiarModulo = (nombre: string, webhook: string) => {
     setModuloActivo(nombre);
     setWebhookActivo(webhook);
-    setGreetingType('changed'); // Cambia al saludo corto de tu HTML
     setMessages([]); // Limpia el chat
   };
 
@@ -61,7 +59,7 @@ export default function AsistentePage() {
     const loadingId = (Date.now() + 1).toString();
     setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: 'Analizando la jurisdicción...' }]);
 
-    // Simulación IA (Burbuja limpia, sin iconos al lado - Exacto al HTML)
+    // Simulación IA (Burbuja limpia, idéntica al HTML)
     setTimeout(() => {
       setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
       setMessages(prev => [...prev, {
@@ -76,17 +74,17 @@ export default function AsistentePage() {
     <div className="flex h-screen w-screen overflow-hidden bg-[#060b1a] text-gray-200 font-sans">
       
       {/* ========================================== */}
-      {/* SIDEBAR (Con Fondo idéntico a Servicios) */}
+      {/* SIDEBAR */}
       {/* ========================================== */}
       <aside className="w-64 flex flex-col border-r border-gray-800 hidden md:flex relative overflow-hidden">
         
-        {/* EL FONDO EXACTO DE LA SECCIÓN SERVICIOS */}
+        {/* FONDO DE LA SECCIÓN SERVICIOS */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
         </div>
 
-        {/* PARTÍCULAS SOLICITADAS */}
+        {/* PARTÍCULAS */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Particles count={25} />
         </div>
@@ -96,19 +94,20 @@ export default function AsistentePage() {
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          {/* Logo con el tamaño idéntico a tu HTML (h-24) */}
+          {/* Logo animado */}
           <div className="relative w-20 h-24 mb-3 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img src={logoShield} alt="LAP Global Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" />
           </div>
+          {/* Texto blanco por defecto, se vuelve dorado al hacer hover */}
           <h2 className={`text-center text-[11px] uppercase tracking-widest font-bold transition-all duration-300 ${
-              isLogoHovered ? 'gradient-text-gold' : 'text-[#c5a059]'
+              isLogoHovered ? 'gradient-text-gold' : 'text-white'
             }`}
           >
             Unidad de Asuntos Transnacionales & IA
           </h2>
         </div>
 
-        {/* Menú con colores de hover originales (.nav-item:hover) */}
+        {/* MENÚ DE NAVEGACIÓN */}
         <nav className="flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
           
@@ -143,7 +142,8 @@ export default function AsistentePage() {
       <main className="flex-1 flex flex-col bg-[#060b1a] relative">
         <header className="h-16 border-b border-gray-800 flex items-center justify-between px-6 bg-[#060b1a]/80 backdrop-blur-md sticky top-0 z-10">
           <div className="flex items-center gap-4">
-            <h2 className="font-medium text-gray-100">{moduloActivo}</h2>
+            {/* CORRECCIÓN: Forzamos font-sans y text-lg para evitar que el CSS global de tu Landing lo haga pequeño y con otra fuente */}
+            <h2 className="text-lg font-sans font-medium text-gray-100 tracking-wide">{moduloActivo}</h2>
           </div>
           <div className="flex gap-2 items-center">
             <span className="text-xs text-gray-500">Esperando consulta...</span>
@@ -156,27 +156,18 @@ export default function AsistentePage() {
 
         <section className="flex-1 overflow-y-auto p-4 md:p-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
-          {/* SALUDO INICIAL (100% IDÉNTICO A TU HTML) */}
+          {/* ÚNICO SALUDO: Sin importar cómo entres, siempre dirá esto */}
           {messages.length === 0 && (
             <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
               <img src={logoShield} className="w-10 h-12 object-contain" alt="Logo" />
               <div className="space-y-4 mt-1">
-                {greetingType === 'initial' ? (
-                  <>
-                    <p className="text-xl font-light text-gray-300">Inteligencia Artificial <strong>LAP Global</strong>.</p>
-                    <p className="text-gray-400 leading-relaxed">Módulo <span className="text-[#c5a059]">{moduloActivo}</span> activo. ¿Cuál es su consulta transnacional?</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-xl font-light text-gray-300">Conectado a la red de <strong>{moduloActivo}</strong>.</p>
-                    <p className="text-gray-400 leading-relaxed">¿En qué asunto legal específico puedo ayudarle?</p>
-                  </>
-                )}
+                <p className="text-xl font-light text-gray-300">Conectado a la red de <strong>{moduloActivo}</strong>.</p>
+                <p className="text-gray-400 leading-relaxed">¿En qué asunto legal específico puedo ayudarle?</p>
               </div>
             </div>
           )}
 
-          {/* BURBUJAS DE CHAT (100% IDÉNTICAS A TU HTML) */}
+          {/* BURBUJAS DE CHAT */}
           {messages.map((msg) => (
             <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
               
@@ -202,7 +193,7 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* INPUT DE TEXTO (SVG ORIGINAL RESTAURADO) */}
+        {/* INPUT DE TEXTO */}
         <footer className="p-4 md:pb-8">
           <div className="max-w-3xl mx-auto relative group">
             <div className="bg-[#1e2330] rounded-3xl border border-gray-700 p-2 pl-4 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl">
@@ -229,7 +220,6 @@ export default function AsistentePage() {
                 onClick={handleSend}
                 className="bg-[#c5a059] text-black p-3 rounded-2xl mb-1 hover:bg-yellow-600 transition-all active:scale-95"
               >
-                {/* TU SVG ORIGINAL DEL HTML */}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                 </svg>
