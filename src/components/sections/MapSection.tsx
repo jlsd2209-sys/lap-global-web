@@ -23,18 +23,18 @@ export const MapSection = () => {
   };
 
   // ============================================================
-  // 🖥️ PANEL ESCRITORIO: TUS PORCENTAJES ORIGINALES INTACTOS
+  // 🖥️ PANEL ESCRITORIO: 2% y 0% para alinear perfecto con el Header (Líneas amarillas)
   // ============================================================
   const escritorio = {
     altura: '600px',
-    titulo: { arriba: '22%', izquierda: '14%' },
-    mapa: { arriba: '2%', derecha: '13%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
-    texto: { arriba: '73%', izquierda: '14%', anchoMax: '450px' },
-    boton: { abajo: '4%', derecha: '15%', size: '10px' }
+    titulo: { arriba: '22%', izquierda: '2%' }, 
+    mapa: { arriba: '2%', derecha: '0%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
+    texto: { arriba: '73%', izquierda: '2%', anchoMax: '450px' },
+    boton: { abajo: '4%', derecha: '2%', size: '10px' }
   };
 
   // ============================================================
-  // 📱 PANEL MÓVIL: TUS PORCENTAJES ORIGINALES INTACTOS
+  // 📱 PANEL MÓVIL: Tus ajustes originales EXACTOS e intactos
   // ============================================================
   const movil = {
     altura: '600px',
@@ -48,28 +48,28 @@ export const MapSection = () => {
 
   return (
     <section 
-      className="relative w-full bg-navy-dark flex justify-center" 
+      className="relative w-full overflow-hidden bg-navy-dark" 
       style={{ height: p.altura }}
     >
-      {/* EL CONTENEDOR MAESTRO: Bloquea el estiramiento a 1920px máximo (El ajuste que te funcionó) */}
-      <div className="relative w-full max-w-[1920px] h-full overflow-hidden">
-        
-        {/* 1. FONDO */}
-        <div className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: 'url("/Fondo Mapa PNG.png")',
-            backgroundSize: '100% 100%',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
+      {/* 1. FONDO LIBRE: Abarca el 100% de la pantalla (Z-0) */}
+      <div className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url("/Fondo Mapa PNG.png")',
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
 
-        {/* 2. PARTÍCULAS */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
-          <Particles count={esMovil ? 20 : 50} />
-        </div>
+      {/* 2. PARTÍCULAS (Z-10) */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <Particles count={esMovil ? 20 : 50} />
+      </div>
 
-        {/* 3. MAPA (z-20) */}
+      {/* 3. CONTENEDOR ALINEADOR: Usa 'container' en PC y es libre en móvil */}
+      <div className={`relative h-full w-full pointer-events-none mx-auto ${esMovil ? '' : 'container'}`}>
+
+        {/* 4. MAPA (Z-20): Queda por detrás del texto */}
         <motion.div
           className="absolute z-20 cursor-pointer pointer-events-auto"
           style={{ 
@@ -111,8 +111,8 @@ export const MapSection = () => {
           />
         </motion.div>
         
-        {/* 4. CONTENIDO (Restaurado a z-30 para que el mapa JAMÁS lo tape) */}
-        <div className="relative z-30 h-full w-full pointer-events-none">
+        {/* 5. CAPA DE TEXTOS (Z-30): Estrictamente por encima de todo */}
+        <div className="absolute inset-0 z-30 pointer-events-none">
           
           {/* TÍTULO */}
           <div className="absolute pointer-events-auto" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
@@ -154,7 +154,8 @@ export const MapSection = () => {
             style={{ 
               top: p.texto.arriba,
               left: p.texto.izquierda,
-              maxWidth: esMovil ? p.texto.ancho : escritorio.texto.anchoMax,
+              width: esMovil ? p.texto.ancho : 'auto',
+              maxWidth: esMovil ? 'none' : p.texto.anchoMax,
               fontSize: esMovil ? p.texto.size : '1.125rem' 
             }} 
           >
@@ -183,6 +184,7 @@ export const MapSection = () => {
               <span className={isHovered ? 'text-cyan-50' : 'text-white'}>Red de Inteligencia Legal</span>
             </motion.button>
           </div>
+
         </div>
       </div>
     </section>
