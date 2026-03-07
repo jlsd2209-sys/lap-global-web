@@ -77,24 +77,24 @@ export default function AsistentePage() {
   };
 
   const palettes = {
+    // MODO NOCHE: Restaurado 100% a la versión que te gustó
     dark: {
-      // AJUSTE 1: Azul marino real (#0f1d35) para que no se vea negro, igualando visualmente al panel
-      appBG: 'bg-[#0f1d35]',
-      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]', // Panel intacto
+      appBG: 'bg-[#060b1a]',
+      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]', 
       sidebarBtnText: 'text-gray-200',
       sidebarBtnHover: 'hover:bg-[#111827]',
       sidebarBtnActive: 'bg-[#1f2937] border-[#c5a059]',
-      mainHeaderBG: 'bg-[#0f1d35]/90', // Header unificado al nuevo fondo
-      mainHeaderBorder: 'border-[#1e2d45]', // Borde azul sutil
+      mainHeaderBG: 'bg-[#060b1a]/80', 
+      mainHeaderBorder: 'border-gray-800',
       mainTitle: 'text-gray-100',
       greetingP: 'text-gray-300',
       botBubble: 'bg-gray-800 text-gray-200 border-[#c5a059]',
       userBubble: 'bg-[#2a303c] text-gray-100 border-gray-700',
-      footerBG: 'bg-[#16243d]', // Caja de texto ligeramente diferenciada del fondo
+      footerBG: 'bg-[#1e2330]', 
       textArea: 'text-gray-100',
-      // AJUSTE 2: Botón de enviar elegante (Borde dorado, icono dorado, sin fondo amarillo)
-      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20'
+      sendBtn: 'bg-[#c5a059] text-black border-none hover:bg-yellow-600' // Botón amarillo original
     },
+    // MODO DÍA: Ajustado a tu petición con las flechas
     light: {
       appBG: 'bg-[#fdfcf5]', 
       sidebarOverlay: 'bg-[#0a1526]/95', 
@@ -106,11 +106,12 @@ export default function AsistentePage() {
       mainTitle: 'text-[#0a1526]', 
       greetingP: 'text-[#2a303c]', 
       botBubble: 'bg-[#eee7d5] text-[#2a303c] border-[#c5a059]', 
+      // Burbuja de usuario = Color exacto del panel izquierdo (#0a1526)
       userBubble: 'bg-[#0a1526] text-white border-none', 
       footerBG: 'bg-[#eee7d5]', 
       textArea: 'text-[#2a303c]',
-      // Botón en modo día: Azul corporativo
-      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
+      // Botón de enviar = Color exacto del panel izquierdo (#0a1526) con icono dorado
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] hover:bg-[#030712] border-none'
     }
   };
 
@@ -213,7 +214,7 @@ export default function AsistentePage() {
           <div className="flex gap-2 md:gap-4 items-center">
             <button 
                 onClick={toggleTheme}
-                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#16243d]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
+                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2330]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
                 title={theme === 'dark' ? 'Cambiar a Modo Día' : 'Cambiar a Modo Noche'}
             >
                 {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
@@ -286,7 +287,6 @@ export default function AsistentePage() {
                 style={{ minHeight: '44px' }}
               />
               
-              {/* BOTÓN ACTUALIZADO CON ESTILO PREMIUM */}
               <button 
                 onClick={handleSend}
                 className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 transition-all active:scale-95 flex-shrink-0`}
