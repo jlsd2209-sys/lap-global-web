@@ -3,7 +3,6 @@ import logoShield from '@/assets/logo-shield.png';
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
 
-// Importamos los iconos de Menú (Hamburguesa) y X para cerrar
 import { Sun, Moon, Send, Menu, X } from 'lucide-react'; 
 
 type Message = {
@@ -30,13 +29,10 @@ export default function AsistentePage() {
   const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
   
-  // 1. SOLICITUD: Iniciar en Modo Día (light) por defecto
   const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
-
-  // Estado para el menú de celulares
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
+
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +44,6 @@ export default function AsistentePage() {
     setModuloActivo(nombre);
     setWebhookActivo(webhook);
     setMessages([]); 
-    // Al seleccionar una opción en móvil, se cierra automáticamente el menú
     setIsMobileMenuOpen(false); 
   };
 
@@ -83,19 +78,22 @@ export default function AsistentePage() {
 
   const palettes = {
     dark: {
-      appBG: 'bg-[#060b1a]',
+      // AJUSTE 1: El fondo de la app ahora es el azul corporativo (#0a1526) en lugar de casi negro
+      appBG: 'bg-[#0a1526]',
       sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]',
       sidebarBtnText: 'text-gray-200',
       sidebarBtnHover: 'hover:bg-[#111827]',
       sidebarBtnActive: 'bg-[#1f2937] border-[#c5a059]',
-      mainHeaderBG: 'bg-[#060b1a]/80',
+      mainHeaderBG: 'bg-[#0a1526]/80', // Header sincronizado al nuevo azul
       mainHeaderBorder: 'border-gray-800',
       mainTitle: 'text-gray-100',
       greetingP: 'text-gray-300',
       botBubble: 'bg-gray-800 text-gray-200 border-[#c5a059]',
       userBubble: 'bg-[#2a303c] text-gray-100 border-gray-700',
       footerBG: 'bg-[#1e2330]',
-      textArea: 'text-gray-100'
+      textArea: 'text-gray-100',
+      // AJUSTE 2: Botón Premium oscuro con icono y borde dorado (Eliminado el amarillo chillón)
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/10' 
     },
     light: {
       appBG: 'bg-[#fdfcf5]', 
@@ -110,7 +108,9 @@ export default function AsistentePage() {
       botBubble: 'bg-[#eee7d5] text-[#2a303c] border-[#c5a059]', 
       userBubble: 'bg-[#0a1526] text-white border-none', 
       footerBG: 'bg-[#eee7d5]', 
-      textArea: 'text-[#2a303c]'
+      textArea: 'text-[#2a303c]',
+      // Botón en Modo Día
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-transparent hover:bg-[#111827]'
     }
   };
 
@@ -119,9 +119,7 @@ export default function AsistentePage() {
   return (
     <div className={`flex h-screen w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
       
-      {/* ========================================== */}
-      {/* CAPA OSCURA PARA MÓVILES (Al abrir menú) */}
-      {/* ========================================== */}
+      {/* CAPA OSCURA PARA MÓVILES */}
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
@@ -130,12 +128,10 @@ export default function AsistentePage() {
       )}
 
       {/* ========================================== */}
-      {/* SIDEBAR (Con diseño intacto y responsivo) */}
+      {/* SIDEBAR */}
       {/* ========================================== */}
-      {/* CLAVES AÑADIDAS: fixed para móvil, translate-x para deslizar, md:relative para escritorio */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full w-64 flex flex-col border-r border-gray-800 overflow-hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         
-        {/* BOTÓN CERRAR (Solo Móvil) */}
         <button 
           className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -143,13 +139,11 @@ export default function AsistentePage() {
           <X size={24} />
         </button>
 
-        {/* FONDO DE LA SECCIÓN SERVICIOS */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
           <div className={`absolute inset-0 ${currentColors.sidebarOverlay} transition-colors duration-300`}></div>
         </div>
 
-        {/* PARTÍCULAS DORADAS */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Particles count={25} />
         </div>
@@ -170,7 +164,6 @@ export default function AsistentePage() {
           </h2>
         </div>
 
-        {/* MENÚ DE NAVEGACIÓN */}
         <nav className={`flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.sidebarBtnText}`}>
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
           
@@ -206,7 +199,6 @@ export default function AsistentePage() {
         <header className={`h-16 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
           <div className="flex items-center gap-3">
-            {/* BOTÓN HAMBURGUESA (Solo visible en móviles) */}
             <button 
               className={`md:hidden p-2 -ml-2 rounded-full transition-all ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-200'}`}
               onClick={() => setIsMobileMenuOpen(true)}
@@ -220,10 +212,9 @@ export default function AsistentePage() {
           </div>
 
           <div className="flex gap-2 md:gap-4 items-center">
-            {/* BOTÓN MODO DÍA/NOCHE */}
             <button 
                 onClick={toggleTheme}
-                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
+                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2330]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
                 title={theme === 'dark' ? 'Cambiar a Modo Día' : 'Cambiar a Modo Noche'}
             >
                 {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
@@ -242,7 +233,6 @@ export default function AsistentePage() {
         {/* MENSAJES DEL CHAT */}
         <section className={`flex-1 overflow-y-auto px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           
-          {/* SALUDO INICIAL */}
           {messages.length === 0 && (
             <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
               <img src={logoShield} className="w-8 h-10 md:w-10 md:h-12 object-contain" alt="Logo" />
@@ -253,21 +243,17 @@ export default function AsistentePage() {
             </div>
           )}
 
-          {/* BURBUJAS DE CHAT */}
           {messages.map((msg) => (
             <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
               
-              {/* Usuario */}
               {msg.sender === 'user' && (
                 <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none max-w-[90%] shadow-md`}>
                   <p className="text-sm md:text-base whitespace-pre-wrap break-words">{msg.text}</p>
                 </div>
               )}
               
-              {/* Cargando */}
               {msg.sender === 'loading' && <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">Analizando la jurisdicción...</div>}
               
-              {/* Bot */}
               {msg.sender === 'bot' && (
                 <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none max-w-[90%] border-l-4 shadow-md`}>
                   <p className="text-sm md:text-base whitespace-pre-wrap">{msg.text}</p>
@@ -302,14 +288,17 @@ export default function AsistentePage() {
                 className={`w-full bg-transparent outline-none text-sm md:text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden ${currentColors.textArea}`}
                 style={{ minHeight: '44px' }}
               />
+              
+              {/* BOTÓN CON NUEVO COLOR PREMIUM */}
               <button 
                 onClick={handleSend}
-                className="bg-[#c5a059] text-black p-3 rounded-2xl mb-1 hover:bg-yellow-600 transition-all active:scale-95 flex-shrink-0"
+                className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 transition-all active:scale-95 flex-shrink-0`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-5 md:w-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                 </svg>
               </button>
+
             </div>
           </div>
         </footer>
