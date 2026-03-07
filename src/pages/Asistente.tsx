@@ -77,24 +77,23 @@ export default function AsistentePage() {
   };
 
   const palettes = {
-    // MODO NOCHE: Restaurado 100% a la versión que te gustó
     dark: {
-      appBG: 'bg-[#060b1a]',
-      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]', 
+      // AJUSTE SUGERIDO: "Midnight Slate" (#151f32). Mucho más suave para leer de noche
+      appBG: 'bg-[#151f32]',
+      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]', // El panel izquierdo se mantiene intacto
       sidebarBtnText: 'text-gray-200',
       sidebarBtnHover: 'hover:bg-[#111827]',
       sidebarBtnActive: 'bg-[#1f2937] border-[#c5a059]',
-      mainHeaderBG: 'bg-[#060b1a]/80', 
-      mainHeaderBorder: 'border-gray-800',
+      mainHeaderBG: 'bg-[#151f32]/90', 
+      mainHeaderBorder: 'border-[#1e2a40]', 
       mainTitle: 'text-gray-100',
       greetingP: 'text-gray-300',
-      botBubble: 'bg-gray-800 text-gray-200 border-[#c5a059]',
+      botBubble: 'bg-[#1e2a40] text-gray-200 border-[#c5a059]', // Burbuja IA a juego con el nuevo fondo
       userBubble: 'bg-[#2a303c] text-gray-100 border-gray-700',
-      footerBG: 'bg-[#1e2330]', 
+      footerBG: 'bg-[#1e2a40]', // Caja de texto a juego
       textArea: 'text-gray-100',
-      sendBtn: 'bg-[#c5a059] text-black border-none hover:bg-yellow-600' // Botón amarillo original
+      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20'
     },
-    // MODO DÍA: Ajustado a tu petición con las flechas
     light: {
       appBG: 'bg-[#fdfcf5]', 
       sidebarOverlay: 'bg-[#0a1526]/95', 
@@ -106,12 +105,10 @@ export default function AsistentePage() {
       mainTitle: 'text-[#0a1526]', 
       greetingP: 'text-[#2a303c]', 
       botBubble: 'bg-[#eee7d5] text-[#2a303c] border-[#c5a059]', 
-      // Burbuja de usuario = Color exacto del panel izquierdo (#0a1526)
       userBubble: 'bg-[#0a1526] text-white border-none', 
       footerBG: 'bg-[#eee7d5]', 
       textArea: 'text-[#2a303c]',
-      // Botón de enviar = Color exacto del panel izquierdo (#0a1526) con icono dorado
-      sendBtn: 'bg-[#0a1526] text-[#c5a059] hover:bg-[#030712] border-none'
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
     }
   };
 
@@ -128,9 +125,9 @@ export default function AsistentePage() {
       )}
 
       {/* ========================================== */}
-      {/* SIDEBAR (Intacto) */}
+      {/* SIDEBAR - ANCHO AUMENTADO A 280px (w-[280px]) */}
       {/* ========================================== */}
-      <aside className={`fixed md:relative top-0 left-0 z-50 h-full w-64 flex flex-col border-r border-gray-800 overflow-hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+      <aside className={`fixed md:relative top-0 left-0 z-50 h-full w-[280px] flex flex-col border-r border-gray-800 overflow-hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         
         <button 
           className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white"
@@ -167,13 +164,14 @@ export default function AsistentePage() {
         <nav className={`flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.sidebarBtnText}`}>
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
           
+          {/* AHORA MUESTRA EL NOMBRE COMPLETO CON (Arg-Ven) SIN CORTARSE */}
           {MODULES_DB.slice(0, 3).map((mod) => (
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
               className={`w-full flex items-center p-3 rounded-lg text-sm transition-all ${currentColors.sidebarBtnHover} border-l-4 ${moduloActivo === mod.name ? currentColors.sidebarBtnActive : 'border-transparent hover:border-[#c5a059]'}`}
             >
-              <span>{mod.icon} {mod.name.replace(' (Arg-Ven)', '')}</span>
+              <span>{mod.icon} {mod.name}</span>
             </button>
           ))}
 
@@ -200,7 +198,7 @@ export default function AsistentePage() {
           
           <div className="flex items-center gap-3">
             <button 
-              className={`md:hidden p-2 -ml-2 rounded-full transition-all ${theme === 'dark' ? 'text-gray-300 hover:bg-[#16243d]' : 'text-gray-600 hover:bg-gray-200'}`}
+              className={`md:hidden p-2 -ml-2 rounded-full transition-all ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu size={22} />
@@ -214,7 +212,7 @@ export default function AsistentePage() {
           <div className="flex gap-2 md:gap-4 items-center">
             <button 
                 onClick={toggleTheme}
-                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2330]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
+                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
                 title={theme === 'dark' ? 'Cambiar a Modo Día' : 'Cambiar a Modo Noche'}
             >
                 {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
