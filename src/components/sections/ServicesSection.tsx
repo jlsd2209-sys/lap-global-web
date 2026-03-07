@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
 import { Particles } from '../Particles';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // IMPORTANTE: Importamos Link
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
 const SECTION_PADDING = 'py-14'; 
@@ -9,7 +9,6 @@ const GAP = 'gap-6';
 const TITLE_SIZE = 'text-3xl md:text-4xl'; 
 /* ───────────────────────────── */
 
-// AGREGAMOS LA PROPIEDAD "hook" A CADA SERVICIO PARA ENVIARLA EN LA URL
 const row1 = [
   { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', hook: 'webhook-riesgo', desc: 'Vigilancia continua de indicadores de riesgo preventivo.' },
   { icon: Scale, title: 'Análisis Penal (Arg-Ven)', hook: 'webhook-penal', desc: 'Evaluación jurisdiccional transnacional asistida por IA.' },
@@ -23,7 +22,7 @@ const row2 = [
 ];
 
 const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
-  // target="_blank" ABRE EN NUEVA PESTAÑA, ENVIANDO EL HOOK EN LA URL
+  // AQUÍ ESTÁ LA MAGIA: target="_blank" abre nueva pestaña y le enviamos el hook
   <Link to={`/asistente?modulo=${item.hook}`} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -56,30 +55,18 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
       
-      {/* ── FONDO ORIGINAL ── */}
+      {/* ── FONDO ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <img 
-          src="/fondo-servicios.jpg.png" 
-          alt="" 
-          className="w-full h-full object-cover" 
-        />
+        <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
       </div>
 
-      {/* ── PARTÍCULAS ── */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <Particles count={50} />
       </div>
 
       <div className="relative z-20 container mx-auto px-4 md:px-8">
-        
-        {/* Título Fila 1 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-10"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
           <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
             Centro de Inteligencia Transnacional
           </h2>
@@ -89,16 +76,9 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        {/* Separador */}
         <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
 
-        {/* Título Fila 2 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-10"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
           <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
             Módulos de Alianza Estratégica
           </h2>
