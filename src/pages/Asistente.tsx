@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo-shield.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-// 1. IMPORTAMOS LOS ICONOS DEL OJO (Eye, EyeOff)
 import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff } from 'lucide-react'; 
 
 type Message = {
@@ -29,7 +28,6 @@ export default function AsistentePage() {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
   
-  // NUEVOS ESTADOS: Para mostrar contraseña y hover del logo de login
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginHovered, setIsLoginHovered] = useState(false);
 
@@ -148,21 +146,17 @@ export default function AsistentePage() {
     return (
       <div className="relative flex h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
         
-        {/* FONDO EXACTO AL DE LA SECCIÓN SERVICIOS (Ajuste #4) */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
         </div>
 
-        {/* Partículas */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <Particles count={40} />
         </div>
 
-        {/* Tarjeta de Login */}
         <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-[#030712]/70 backdrop-blur-xl border border-gray-800 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)]">
           
-          {/* LOGO ANIMADO CON HOVER (Ajuste #2) */}
           <div 
             className="flex flex-col items-center mb-8 group cursor-pointer"
             onMouseEnter={() => setIsLoginHovered(true)}
@@ -188,7 +182,6 @@ export default function AsistentePage() {
               />
             </div>
             
-            {/* INPUT DE CONTRASEÑA CON OJO (Ajuste #1) */}
             <div className="relative">
               <input 
                 type={showPassword ? "text" : "password"} 
@@ -210,10 +203,10 @@ export default function AsistentePage() {
               <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
             )}
 
-            {/* BOTÓN CON DEGRADADO DORADO PREMIUM (Ajuste #3) */}
+            {/* BOTÓN CON NUEVO DEGRADADO CREMA/DORADO LUMINOSO */}
             <button 
               type="submit" 
-              className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#8B6914] via-[#C5A059] to-[#8B6914] text-black font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.3)] transition-all active:scale-95 mt-2"
+              className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95 mt-2"
             >
               <Lock size={18} /> Ingresar a la red
             </button>
