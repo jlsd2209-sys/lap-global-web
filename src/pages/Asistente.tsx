@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo-shield.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-import { Sun, Moon, Send, Menu, X, Lock } from 'lucide-react'; 
+// 1. IMPORTAMOS LOS ICONOS DEL OJO (Eye, EyeOff)
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff } from 'lucide-react'; 
 
 type Message = {
   id: string;
@@ -21,15 +22,19 @@ const MODULES_DB = [
 
 export default function AsistentePage() {
   // ==========================================
-  // 1. NUEVOS ESTADOS PARA LA AUTENTICACIÓN
+  // ESTADOS PARA LA AUTENTICACIÓN
   // ==========================================
   const [accessMode, setAccessMode] = useState<'none' | 'client' | 'guest'>('none');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
+  
+  // NUEVOS ESTADOS: Para mostrar contraseña y hover del logo de login
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoginHovered, setIsLoginHovered] = useState(false);
 
   // ==========================================
-  // ESTADOS DEL CHAT (Intactos de ayer)
+  // ESTADOS DEL CHAT
   // ==========================================
   const [searchParams] = useSearchParams();
   const urlParam = searchParams.get('modulo') || 'webhook-riesgo';
@@ -51,7 +56,7 @@ export default function AsistentePage() {
   }, [messages]);
 
   // ==========================================
-  // FUNCIÓN DE LOGIN
+  // LÓGICA
   // ==========================================
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +90,6 @@ export default function AsistentePage() {
     const loadingId = (Date.now() + 1).toString();
     setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: 'Analizando la jurisdicción...' }]);
 
-    // SIMULACIÓN TEMPORAL (Aquí cambiaremos la lógica mañana según si es cliente o invitado)
     setTimeout(() => {
       setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
       setMessages(prev => [...prev, {
@@ -139,25 +143,37 @@ export default function AsistentePage() {
 
   // ==========================================
   // LA "PUERTA": PANTALLA DE LOGIN
-  // Si el usuario no ha ingresado, se muestra esto y el código se detiene aquí.
   // ==========================================
   if (accessMode === 'none') {
     return (
       <div className="relative flex h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
-        {/* Fondo sutil */}
-        <div className="absolute inset-0 z-0 overflow-hidden opacity-30">
-          <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover grayscale" />
+        
+        {/* FONDO EXACTO AL DE LA SECCIÓN SERVICIOS (Ajuste #4) */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
         </div>
+
         {/* Partículas */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <Particles count={40} />
         </div>
 
-        {/* Tarjeta de Login (Glassmorphism) */}
+        {/* Tarjeta de Login */}
         <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-[#030712]/70 backdrop-blur-xl border border-gray-800 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-          <div className="flex flex-col items-center mb-8">
-            <img src={logoShield} alt="LAP Global" className="w-20 h-24 object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)] mb-4" />
-            <h2 className="text-xl font-serif text-white tracking-wide">Acceso Seguro</h2>
+          
+          {/* LOGO ANIMADO CON HOVER (Ajuste #2) */}
+          <div 
+            className="flex flex-col items-center mb-8 group cursor-pointer"
+            onMouseEnter={() => setIsLoginHovered(true)}
+            onMouseLeave={() => setIsLoginHovered(false)}
+          >
+            <div className="relative w-20 h-24 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
+            </div>
+            <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
+              Acceso Seguro
+            </h2>
             <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Sistemas de IA Transnacional</p>
           </div>
 
@@ -171,23 +187,33 @@ export default function AsistentePage() {
                 className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
               />
             </div>
-            <div>
+            
+            {/* INPUT DE CONTRASEÑA CON OJO (Ajuste #1) */}
+            <div className="relative">
               <input 
-                type="password" 
+                type={showPassword ? "text" : "password"} 
                 placeholder="Contraseña" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
+                className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 pr-12 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
               />
+              <button 
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#c5a059] transition-colors focus:outline-none"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
             
             {loginError && (
               <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
             )}
 
+            {/* BOTÓN CON DEGRADADO DORADO PREMIUM (Ajuste #3) */}
             <button 
               type="submit" 
-              className="w-full flex justify-center items-center gap-2 bg-[#c5a059] text-black font-bold uppercase tracking-wider py-4 rounded-xl hover:bg-yellow-600 transition-all active:scale-95 shadow-[0_0_15px_rgba(197,160,89,0.2)] mt-2"
+              className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#8B6914] via-[#C5A059] to-[#8B6914] text-black font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.3)] transition-all active:scale-95 mt-2"
             >
               <Lock size={18} /> Ingresar a la red
             </button>
@@ -208,7 +234,7 @@ export default function AsistentePage() {
   }
 
   // ==========================================
-  // EL CHAT (Se muestra solo si accessMode no es 'none')
+  // EL CHAT 
   // ==========================================
   return (
     <div className={`flex h-screen w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
@@ -220,9 +246,7 @@ export default function AsistentePage() {
         />
       )}
 
-      {/* ========================================== */}
-      {/* SIDEBAR - ANCHO AUMENTADO A 280px (w-[280px]) */}
-      {/* ========================================== */}
+      {/* SIDEBAR */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full w-[280px] flex flex-col border-r border-gray-800 overflow-hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         
         <button 
@@ -285,9 +309,7 @@ export default function AsistentePage() {
         </nav>
       </aside>
 
-      {/* ========================================== */}
-      {/* ÁREA PRINCIPAL DE CHAT */}
-      {/* ========================================== */}
+      {/* MAIN CHAT AREA */}
       <main className="flex-1 flex flex-col relative w-full">
         <header className={`h-16 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
@@ -306,7 +328,6 @@ export default function AsistentePage() {
 
           <div className="flex gap-2 md:gap-4 items-center">
             
-            {/* BADGE VISUAL PARA SABER CÓMO ENTRASTE (Opcional, muy útil) */}
             <span className={`hidden md:inline-block px-3 py-1 rounded-full text-xs font-medium border ${accessMode === 'client' ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10'}`}>
               {accessMode === 'client' ? 'Verificado' : 'Modo Demo'}
             </span>
