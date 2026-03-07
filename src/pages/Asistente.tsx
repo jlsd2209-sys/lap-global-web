@@ -78,22 +78,22 @@ export default function AsistentePage() {
 
   const palettes = {
     dark: {
-      // AJUSTE 1: El fondo de la app ahora es el azul corporativo (#0a1526) en lugar de casi negro
-      appBG: 'bg-[#0a1526]',
-      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]',
+      // AJUSTE 1: Azul marino real (#0f1d35) para que no se vea negro, igualando visualmente al panel
+      appBG: 'bg-[#0f1d35]',
+      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]', // Panel intacto
       sidebarBtnText: 'text-gray-200',
       sidebarBtnHover: 'hover:bg-[#111827]',
       sidebarBtnActive: 'bg-[#1f2937] border-[#c5a059]',
-      mainHeaderBG: 'bg-[#0a1526]/80', // Header sincronizado al nuevo azul
-      mainHeaderBorder: 'border-gray-800',
+      mainHeaderBG: 'bg-[#0f1d35]/90', // Header unificado al nuevo fondo
+      mainHeaderBorder: 'border-[#1e2d45]', // Borde azul sutil
       mainTitle: 'text-gray-100',
       greetingP: 'text-gray-300',
       botBubble: 'bg-gray-800 text-gray-200 border-[#c5a059]',
       userBubble: 'bg-[#2a303c] text-gray-100 border-gray-700',
-      footerBG: 'bg-[#1e2330]',
+      footerBG: 'bg-[#16243d]', // Caja de texto ligeramente diferenciada del fondo
       textArea: 'text-gray-100',
-      // AJUSTE 2: Botón Premium oscuro con icono y borde dorado (Eliminado el amarillo chillón)
-      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/10' 
+      // AJUSTE 2: Botón de enviar elegante (Borde dorado, icono dorado, sin fondo amarillo)
+      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20'
     },
     light: {
       appBG: 'bg-[#fdfcf5]', 
@@ -109,8 +109,8 @@ export default function AsistentePage() {
       userBubble: 'bg-[#0a1526] text-white border-none', 
       footerBG: 'bg-[#eee7d5]', 
       textArea: 'text-[#2a303c]',
-      // Botón en Modo Día
-      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-transparent hover:bg-[#111827]'
+      // Botón en modo día: Azul corporativo
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
     }
   };
 
@@ -119,7 +119,6 @@ export default function AsistentePage() {
   return (
     <div className={`flex h-screen w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
       
-      {/* CAPA OSCURA PARA MÓVILES */}
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
@@ -128,7 +127,7 @@ export default function AsistentePage() {
       )}
 
       {/* ========================================== */}
-      {/* SIDEBAR */}
+      {/* SIDEBAR (Intacto) */}
       {/* ========================================== */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full w-64 flex flex-col border-r border-gray-800 overflow-hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         
@@ -200,7 +199,7 @@ export default function AsistentePage() {
           
           <div className="flex items-center gap-3">
             <button 
-              className={`md:hidden p-2 -ml-2 rounded-full transition-all ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-200'}`}
+              className={`md:hidden p-2 -ml-2 rounded-full transition-all ${theme === 'dark' ? 'text-gray-300 hover:bg-[#16243d]' : 'text-gray-600 hover:bg-gray-200'}`}
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu size={22} />
@@ -214,7 +213,7 @@ export default function AsistentePage() {
           <div className="flex gap-2 md:gap-4 items-center">
             <button 
                 onClick={toggleTheme}
-                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2330]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
+                className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#16243d]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
                 title={theme === 'dark' ? 'Cambiar a Modo Día' : 'Cambiar a Modo Noche'}
             >
                 {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
@@ -230,7 +229,6 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        {/* MENSAJES DEL CHAT */}
         <section className={`flex-1 overflow-y-auto px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           
           {messages.length === 0 && (
@@ -265,7 +263,6 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* INPUT DE TEXTO */}
         <footer className="p-4 md:pb-8">
           <div className="max-w-3xl mx-auto relative group">
             <div className={`${currentColors.footerBG} rounded-3xl border border-gray-700 p-2 pl-4 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl transition-colors duration-300`}>
@@ -289,7 +286,7 @@ export default function AsistentePage() {
                 style={{ minHeight: '44px' }}
               />
               
-              {/* BOTÓN CON NUEVO COLOR PREMIUM */}
+              {/* BOTÓN ACTUALIZADO CON ESTILO PREMIUM */}
               <button 
                 onClick={handleSend}
                 className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 transition-all active:scale-95 flex-shrink-0`}
