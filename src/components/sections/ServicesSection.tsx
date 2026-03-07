@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
 import { Particles } from '../Particles';
-// 1. IMPORTAMOS EL COMPONENTE LINK PARA LA NAVEGACIÓN
 import { Link } from 'react-router-dom';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
@@ -10,21 +9,22 @@ const GAP = 'gap-6';
 const TITLE_SIZE = 'text-3xl md:text-4xl'; 
 /* ───────────────────────────── */
 
+// AGREGAMOS LA PROPIEDAD "hook" A CADA SERVICIO PARA ENVIARLA EN LA URL
 const row1 = [
-  { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', desc: 'Vigilancia continua de indicadores de riesgo preventivo.' },
-  { icon: Scale, title: 'Análisis Penal (Arg-Ven)', desc: 'Evaluación jurisdiccional transnacional asistida por IA.' },
-  { icon: FileSearch, title: 'Auditoría Documental', desc: 'Análisis exhaustivo e inteligente de documentación legal.' }
+  { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', hook: 'webhook-riesgo', desc: 'Vigilancia continua de indicadores de riesgo preventivo.' },
+  { icon: Scale, title: 'Análisis Penal (Arg-Ven)', hook: 'webhook-penal', desc: 'Evaluación jurisdiccional transnacional asistida por IA.' },
+  { icon: FileSearch, title: 'Auditoría Documental', hook: 'webhook-auditoria', desc: 'Análisis exhaustivo e inteligente de documentación legal.' }
 ];
 
 const row2 = [
-  { icon: Landmark, title: 'Memoria Documental', desc: 'Repositorio de precedentes y jurisprudencia corporativa.' },
-  { icon: FileBarChart, title: 'Informes Automáticos', desc: 'Reportes y dictámenes generados en tiempo real.' },
-  { icon: Newspaper, title: 'Boletín Jurídico', desc: 'Actualizaciones normativas periódicas y alertas.' }
+  { icon: Landmark, title: 'Memoria Institucional', hook: 'webhook-memoria', desc: 'Repositorio de precedentes y jurisprudencia corporativa.' },
+  { icon: FileBarChart, title: 'Informes Automáticos', hook: 'webhook-informes', desc: 'Reportes y dictámenes generados en tiempo real.' },
+  { icon: Newspaper, title: 'Boletín Jurídico', hook: 'webhook-boletin', desc: 'Actualizaciones normativas periódicas y alertas.' }
 ];
 
 const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
-  // 2. ENVOLVEMOS LA TARJETA EN UN LINK HACIA LA RUTA DEL ASISTENTE
-  <Link to="/asistente" className="block w-full h-full">
+  // target="_blank" ABRE EN NUEVA PESTAÑA, ENVIANDO EL HOOK EN LA URL
+  <Link to={`/asistente?modulo=${item.hook}`} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
