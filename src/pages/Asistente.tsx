@@ -11,44 +11,50 @@ type Message = {
 };
 
 // ==========================================
-// BASE DE DATOS DE MÓDULOS CON LOS TEXTOS DEMO INYECTADOS
+// BASE DE DATOS DE MÓDULOS CON TEXTOS DEMO Y DE CARGA INYECTADOS
 // ==========================================
 const MODULES_DB = [
   { 
     name: 'Monitor de Riesgo (Arg-Ven)', 
     hook: 'webhook-riesgo', 
     icon: '🌐',
-    demoText: "He procesado su parámetro de búsqueda. En la versión verificada para clientes, nuestro módulo cruza esta información en tiempo real para anticipar vulnerabilidades corporativas antes de que ocurran. Nuestro sistema es capaz de predecir contingencias binacionales evaluando miles de indicadores diarios. Este módulo será adaptado a sus necesidades corporativas. Para obtener un reporte completo, blindar sus operaciones y desbloquear la matriz predictiva aplicada a su caso, contacte a nuestros especialistas para habilitar su cuenta."
+    demoText: "He procesado su parámetro de búsqueda. En la versión verificada para clientes, nuestro módulo cruza esta información en tiempo real para anticipar vulnerabilidades corporativas antes de que ocurran. Nuestro sistema es capaz de predecir contingencias binacionales evaluando miles de indicadores diarios. Este módulo será adaptado a sus necesidades corporativas. Para obtener un reporte completo, blindar sus operaciones y desbloquear la matriz predictiva aplicada a su caso, contacte a nuestros especialistas para habilitar su cuenta.",
+    loadingText: "Cruzando indicadores de riesgo corporativo en tiempo real..."
   },
   { 
     name: 'Análisis Penal (Arg-Ven)', 
     hook: 'webhook-penal', 
     icon: '⚖️',
-    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente."
+    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
+    loadingText: "Analizando marcos normativos y tratados vigentes..."
   },
   { 
     name: 'Auditoría Documental', 
     hook: 'webhook-auditoria', 
     icon: '📄',
-    demoText: "Parámetros de auditoría recibidos. En la red verificada, este servicio es capaz de procesar cientos de folios en segundos, detectando cláusulas abusivas, contingencias ocultas y vacíos normativos que el ojo humano podría pasar por alto. Este módulo será adaptado a sus necesidades corporativas. Si desea someter su documentación a nuestro ecosistema legal bajo estricto secreto profesional, contacte a nuestro equipo."
+    demoText: "Parámetros de auditoría recibidos. En la red verificada, este servicio es capaz de procesar cientos de folios en segundos, detectando cláusulas abusivas, contingencias ocultas y vacíos normativos que el ojo humano podría pasar por alto. Este módulo será adaptado a sus necesidades corporativas. Si desea someter su documentación a nuestro ecosistema legal bajo estricto secreto profesional, contacte a nuestro equipo.",
+    loadingText: "Detectando contingencias y vacíos normativos..."
   },
   { 
     name: 'Memoria Institucional', 
     hook: 'webhook-memoria', 
     icon: '🏛️',
-    demoText: "Búsqueda en el archivo simulada. Este módulo exclusivo permite a nuestros clientes interactuar con el 'Cerebro Histórico' de sus casos, encontrando precedentes exactos, respuestas estratégicas en tiempo real y estandarizando sus decisiones legales victoriosas en el pasado. Este módulo será adaptado a sus necesidades corporativas. Su historial legal es su mayor activo; contáctenos para digitalizar y blindar su memoria corporativa."
+    demoText: "Búsqueda en el archivo simulada. Este módulo exclusivo permite a nuestros clientes interactuar con el 'Cerebro Histórico' de sus casos, encontrando precedentes exactos, respuestas estratégicas en tiempo real y estandarizando sus decisiones legales victoriosas en el pasado. Este módulo será adaptado a sus necesidades corporativas. Su historial legal es su mayor activo; contáctenos para digitalizar y blindar su memoria corporativa.",
+    loadingText: "Procesando archivos del repositorio corporativo..."
   },
   { 
     name: 'Informes Automáticos', 
     hook: 'webhook-informes', 
     icon: '📊',
-    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción."
+    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
+    loadingText: "Estructurando reporte para la generación del dictamen..."
   },
   { 
     name: 'Boletín Jurídico', 
     hook: 'webhook-boletin', 
     icon: '📖',
-    demoText: "Tema registrado en nuestro radar. A diferencia de un boletín tradicional, este modelo monitorea gacetas oficiales y despachos legislativos 24/7, filtrando únicamente los cambios normativos que impactan directamente en el sector de cada cliente. Este módulo será adaptado a sus necesidades corporativas. No sufra sorpresas legales; contáctenos para configurar su radar personalizado."
+    demoText: "Tema registrado en nuestro radar. A diferencia de un boletín tradicional, este modelo monitorea gacetas oficiales y despachos legislativos 24/7, filtrando únicamente los cambios normativos que impactan directamente en el sector de cada cliente. Este módulo será adaptado a sus necesidades corporativas. No sufra sorpresas legales; contáctenos para configurar su radar personalizado.",
+    loadingText: "Filtrando impactos legislativos en tiempo real..."
   }
 ];
 
@@ -97,9 +103,6 @@ export default function AsistentePage() {
     setIsMobileMenuOpen(false); 
   };
 
-  // ==========================================
-  // CEREBRO DEL BOT: Diferencia entre Cliente e Invitado
-  // ==========================================
   const handleSend = () => {
     if (!inputText.trim()) return;
 
@@ -113,25 +116,25 @@ export default function AsistentePage() {
     }
 
     const loadingId = (Date.now() + 1).toString();
-    setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: 'Analizando la jurisdicción...' }]);
+    
+    // ENCONTRAR EL MÓDULO ACTUAL PARA EXTRAER SU TEXTO DE CARGA
+    const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
+    const dynamicLoadingText = activeModuleData?.loadingText || "Analizando datos...";
+
+    // INYECTAR EL TEXTO DE CARGA DINÁMICO
+    setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: dynamicLoadingText }]);
 
     setTimeout(() => {
       setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
       
-      // LOGICA CONDICIONAL DE RESPUESTA
       if (accessMode === 'guest') {
-        // Busca el texto exacto del módulo en el que estamos parados
-        const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
         const botResponse = activeModuleData?.demoText || "Esta es una función de demostración.";
-        
         setMessages(prev => [...prev, {
           id: (Date.now() + 2).toString(),
           sender: 'bot',
           text: botResponse
         }]);
-
       } else {
-        // Respuesta temporal para "cliente123" mientras conectamos n8n
         setMessages(prev => [...prev, {
           id: (Date.now() + 2).toString(),
           sender: 'bot',
@@ -407,7 +410,7 @@ export default function AsistentePage() {
                 </div>
               )}
               
-              {msg.sender === 'loading' && <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">Analizando la jurisdicción...</div>}
+              {msg.sender === 'loading' && <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">{msg.text}</div>}
               
               {msg.sender === 'bot' && (
                 <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none max-w-[90%] border-l-4 shadow-md`}>
