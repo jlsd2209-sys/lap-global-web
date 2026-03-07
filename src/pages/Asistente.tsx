@@ -1,29 +1,44 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png'; // Asegúrate de que esta ruta sea la misma que usas en el Header
+import logoShield from '@/assets/logo-shield.png'; 
+import { useSearchParams } from 'react-router-dom'; // Para leer la URL
 
-// Definimos la estructura de los mensajes
 type Message = {
   id: string;
   sender: 'system' | 'user' | 'bot' | 'loading';
   text: string;
 };
 
+// BASE DE DATOS DE LOS MÓDULOS (Con textos de formulario dinámicos)
+const MODULES_DB = [
+  { name: 'Monitor de Riesgo (Arg-Ven)', hook: 'webhook-riesgo', icon: '🌐', placeholder: 'Ingrese la entidad, empresa o riesgo a monitorear...' },
+  { name: 'Análisis Penal (Arg-Ven)', hook: 'webhook-penal', icon: '⚖️', placeholder: 'Describa los detalles del caso o expediente penal...' },
+  { name: 'Auditoría Documental', hook: 'webhook-auditoria', icon: '📄', placeholder: 'Especifique qué tipo de documentos desea auditar...' },
+  { name: 'Memoria Institucional', hook: 'webhook-memoria', icon: '🏛️', placeholder: '¿Qué precedente o normativa interna desea consultar?' },
+  { name: 'Informes Automáticos', hook: 'webhook-informes', icon: '📊', placeholder: 'Indique los parámetros para generar su informe...' },
+  { name: 'Boletín Jurídico', hook: 'webhook-boletin', icon: '📖', placeholder: '¿Sobre qué tema transnacional desea consultar hoy?' }
+];
+
 export default function AsistentePage() {
-  const [moduloActivo, setModuloActivo] = useState('Monitor de Riesgo (Arg-Ven)');
-  const [webhookActivo, setWebhookActivo] = useState('webhook-riesgo');
+  const [searchParams] = useSearchParams();
+  
+  // LEEMOS QUÉ BOTÓN SE PRESIONÓ EN LA PÁGINA ANTERIOR
+  const urlParam = searchParams.get('modulo') || 'webhook-riesgo';
+  const initialModule = MODULES_DB.find(m => m.hook === urlParam) || MODULES_DB[0];
+
+  const [moduloActivo, setModuloActivo] = useState(initialModule.name);
+  const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init',
       sender: 'system',
-      text: 'Módulo Monitor de Riesgo (Arg-Ven) activo. ¿Cuál es su consulta transnacional?'
+      text: `Módulo de ${initialModule.name} activo. ¿Cuál es su consulta transnacional?`
     }
   ]);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll hacia el último mensaje
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -41,18 +56,16 @@ export default function AsistentePage() {
   const handleSend = () => {
     if (!inputText.trim()) return;
 
-    // 1. Agregar mensaje del usuario
     const newUserMsg: Message = { id: Date.now().toString(), sender: 'user', text: inputText };
     setMessages(prev => [...prev, newUserMsg]);
     setInputText('');
 
-    // 2. Agregar estado de carga
     const loadingId = (Date.now() + 1).toString();
     setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: 'Analizando la jurisdicción...' }]);
 
-    // 3. Simular respuesta de la IA (Aquí luego conectaremos tu N8N real)
+    // Simulador de IA temporal
     setTimeout(() => {
-      setMessages(prev => prev.filter(msg => msg.id !== loadingId)); // Quitamos el 'loading'
+      setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
       setMessages(prev => [...prev, {
         id: (Date.now() + 2).toString(),
         sender: 'bot',
@@ -61,10 +74,13 @@ export default function AsistentePage() {
     }, 1500);
   };
 
+  // Buscamos los datos actuales para poner el placeholder dinámico
+  const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo) || MODULES_DB[0];
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#060b1a] text-gray-200 font-sans">
       
-      {/* SIDEBAR (Escritorio) */}
+      {/* SIDEBAR */}
       <aside className="w-64 bg-[#030712] flex-col border-r border-gray-800 hidden md:flex">
         <div className="p-6">
           <img src={logoShield} alt="LAP Global Logo" className="w-20 h-20 mx-auto mb-3 object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" />
@@ -74,11 +90,7 @@ export default function AsistentePage() {
         <nav className="flex-1 overflow-y-auto px-3 space-y-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
           
-          {[
-            { name: 'Monitor de Riesgo (Arg-Ven)', hook: 'webhook-riesgo', icon: '🌐' },
-            { name: 'Análisis Penal', hook: 'webhook-penal', icon: '⚖️' },
-            { name: 'Auditoría Documental', hook: 'webhook-auditoria', icon: '📄' }
-          ].map((mod) => (
+          {MODULES_DB.slice(0, 3).map((mod) => (
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
@@ -91,11 +103,7 @@ export default function AsistentePage() {
           <div className="my-6 border-t border-gray-800"></div>
 
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Alianza Estratégica</p>
-          {[
-            { name: 'Memoria Institucional', hook: 'webhook-memoria', icon: '🏛️' },
-            { name: 'Informes Automáticos', hook: 'webhook-informes', icon: '📊' },
-            { name: 'Boletín Jurídico', hook: 'webhook-boletin', icon: '📖' }
-          ].map((mod) => (
+          {MODULES_DB.slice(3, 6).map((mod) => (
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
@@ -131,23 +139,13 @@ export default function AsistentePage() {
 
           {messages.map((msg) => (
             <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              
-              {msg.sender === 'system' && (
-                 <p className="text-gray-400 leading-relaxed text-sm">{msg.text}</p>
-              )}
-
+              {msg.sender === 'system' && <p className="text-gray-400 leading-relaxed text-sm">{msg.text}</p>}
               {msg.sender === 'user' && (
                 <div className="bg-[#2a303c] text-gray-100 p-4 rounded-3xl rounded-tr-none max-w-[90%] border border-gray-700 shadow-md">
                   <p className="text-base">{msg.text}</p>
                 </div>
               )}
-
-              {msg.sender === 'loading' && (
-                <div className="text-[#c5a059] text-sm font-medium animate-pulse ml-2">
-                  {msg.text}
-                </div>
-              )}
-
+              {msg.sender === 'loading' && <div className="text-[#c5a059] text-sm font-medium animate-pulse ml-2">{msg.text}</div>}
               {msg.sender === 'bot' && (
                 <div className="bg-gray-800 text-gray-200 p-4 rounded-3xl rounded-tl-none max-w-[90%] border-l-4 border-[#c5a059] shadow-md">
                   <p className="text-base whitespace-pre-wrap">{msg.text}</p>
@@ -158,7 +156,7 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* FORMULARIO INPUT */}
+        {/* FORMULARIO INPUT CON TEXTO DINÁMICO */}
         <footer className="p-4 md:pb-8">
           <div className="max-w-3xl mx-auto relative group">
             <div className="bg-[#1e2330] rounded-3xl border border-gray-700 p-2 pl-4 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl">
@@ -166,7 +164,7 @@ export default function AsistentePage() {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-                placeholder="Escriba aquí los detalles del caso..." 
+                placeholder={activeModuleData.placeholder} // AQUÍ SE PONE EL TEXTO ESPECÍFICO DEL FORMULARIO
                 rows={1}
                 className="w-full bg-transparent text-gray-100 py-3 outline-none text-base resize-none max-h-32 [&::-webkit-scrollbar]:hidden"
               />
