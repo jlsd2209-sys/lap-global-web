@@ -10,19 +10,49 @@ type Message = {
   text: string;
 };
 
+// ==========================================
+// BASE DE DATOS DE MÓDULOS CON LOS TEXTOS DEMO INYECTADOS
+// ==========================================
 const MODULES_DB = [
-  { name: 'Monitor de Riesgo (Arg-Ven)', hook: 'webhook-riesgo', icon: '🌐' },
-  { name: 'Análisis Penal (Arg-Ven)', hook: 'webhook-penal', icon: '⚖️' },
-  { name: 'Auditoría Documental', hook: 'webhook-auditoria', icon: '📄' },
-  { name: 'Memoria Institucional', hook: 'webhook-memoria', icon: '🏛️' },
-  { name: 'Informes Automáticos', hook: 'webhook-informes', icon: '📊' },
-  { name: 'Boletín Jurídico', hook: 'webhook-boletin', icon: '📖' }
+  { 
+    name: 'Monitor de Riesgo (Arg-Ven)', 
+    hook: 'webhook-riesgo', 
+    icon: '🌐',
+    demoText: "He procesado su parámetro de búsqueda. En la versión verificada para clientes, nuestro módulo cruza esta información en tiempo real para anticipar vulnerabilidades corporativas antes de que ocurran. Nuestro sistema es capaz de predecir contingencias binacionales evaluando miles de indicadores diarios. Este módulo será adaptado a sus necesidades corporativas. Para obtener un reporte completo, blindar sus operaciones y desbloquear la matriz predictiva aplicada a su caso, contacte a nuestros especialistas para habilitar su cuenta."
+  },
+  { 
+    name: 'Análisis Penal (Arg-Ven)', 
+    hook: 'webhook-penal', 
+    icon: '⚖️',
+    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente."
+  },
+  { 
+    name: 'Auditoría Documental', 
+    hook: 'webhook-auditoria', 
+    icon: '📄',
+    demoText: "Parámetros de auditoría recibidos. En la red verificada, este servicio es capaz de procesar cientos de folios en segundos, detectando cláusulas abusivas, contingencias ocultas y vacíos normativos que el ojo humano podría pasar por alto. Este módulo será adaptado a sus necesidades corporativas. Si desea someter su documentación a nuestro ecosistema legal bajo estricto secreto profesional, contacte a nuestro equipo."
+  },
+  { 
+    name: 'Memoria Institucional', 
+    hook: 'webhook-memoria', 
+    icon: '🏛️',
+    demoText: "Búsqueda en el archivo simulada. Este módulo exclusivo permite a nuestros clientes interactuar con el 'Cerebro Histórico' de sus casos, encontrando precedentes exactos, respuestas estratégicas en tiempo real y estandarizando sus decisiones legales victoriosas en el pasado. Este módulo será adaptado a sus necesidades corporativas. Su historial legal es su mayor activo; contáctenos para digitalizar y blindar su memoria corporativa."
+  },
+  { 
+    name: 'Informes Automáticos', 
+    hook: 'webhook-informes', 
+    icon: '📊',
+    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción."
+  },
+  { 
+    name: 'Boletín Jurídico', 
+    hook: 'webhook-boletin', 
+    icon: '📖',
+    demoText: "Tema registrado en nuestro radar. A diferencia de un boletín tradicional, este modelo monitorea gacetas oficiales y despachos legislativos 24/7, filtrando únicamente los cambios normativos que impactan directamente en el sector de cada cliente. Este módulo será adaptado a sus necesidades corporativas. No sufra sorpresas legales; contáctenos para configurar su radar personalizado."
+  }
 ];
 
 export default function AsistentePage() {
-  // ==========================================
-  // ESTADOS PARA LA AUTENTICACIÓN
-  // ==========================================
   const [accessMode, setAccessMode] = useState<'none' | 'client' | 'guest'>('none');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -31,9 +61,6 @@ export default function AsistentePage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginHovered, setIsLoginHovered] = useState(false);
 
-  // ==========================================
-  // ESTADOS DEL CHAT
-  // ==========================================
   const [searchParams] = useSearchParams();
   const urlParam = searchParams.get('modulo') || 'webhook-riesgo';
   const initialModule = MODULES_DB.find(m => m.hook === urlParam) || MODULES_DB[0];
@@ -53,9 +80,6 @@ export default function AsistentePage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // ==========================================
-  // LÓGICA
-  // ==========================================
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (username === 'cliente123' && password === 'cliente123') {
@@ -73,6 +97,9 @@ export default function AsistentePage() {
     setIsMobileMenuOpen(false); 
   };
 
+  // ==========================================
+  // CEREBRO DEL BOT: Diferencia entre Cliente e Invitado
+  // ==========================================
   const handleSend = () => {
     if (!inputText.trim()) return;
 
@@ -90,11 +117,28 @@ export default function AsistentePage() {
 
     setTimeout(() => {
       setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
-      setMessages(prev => [...prev, {
-        id: (Date.now() + 2).toString(),
-        sender: 'bot',
-        text: `Recibí sus datos en el departamento de ${moduloActivo}. La interfaz ahora es completamente limpia y enfocada en el texto.`
-      }]);
+      
+      // LOGICA CONDICIONAL DE RESPUESTA
+      if (accessMode === 'guest') {
+        // Busca el texto exacto del módulo en el que estamos parados
+        const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
+        const botResponse = activeModuleData?.demoText || "Esta es una función de demostración.";
+        
+        setMessages(prev => [...prev, {
+          id: (Date.now() + 2).toString(),
+          sender: 'bot',
+          text: botResponse
+        }]);
+
+      } else {
+        // Respuesta temporal para "cliente123" mientras conectamos n8n
+        setMessages(prev => [...prev, {
+          id: (Date.now() + 2).toString(),
+          sender: 'bot',
+          text: `[SISTEMA VERIFICADO]: Recibí sus datos en el departamento de ${moduloActivo}. Evaluando conexión segura con su panel corporativo...`
+        }]);
+      }
+
     }, 1500);
   };
 
@@ -203,7 +247,6 @@ export default function AsistentePage() {
               <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
             )}
 
-            {/* BOTÓN CON NUEVO DEGRADADO CREMA/DORADO LUMINOSO */}
             <button 
               type="submit" 
               className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95 mt-2"
@@ -368,7 +411,7 @@ export default function AsistentePage() {
               
               {msg.sender === 'bot' && (
                 <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none max-w-[90%] border-l-4 shadow-md`}>
-                  <p className="text-sm md:text-base whitespace-pre-wrap">{msg.text}</p>
+                  <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
                 </div>
               )}
 
