@@ -2,8 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo-shield.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-
-import { Sun, Moon, Send, Menu, X } from 'lucide-react'; 
+import { Sun, Moon, Send, Menu, X, Lock } from 'lucide-react'; 
 
 type Message = {
   id: string;
@@ -21,6 +20,17 @@ const MODULES_DB = [
 ];
 
 export default function AsistentePage() {
+  // ==========================================
+  // 1. NUEVOS ESTADOS PARA LA AUTENTICACIÓN
+  // ==========================================
+  const [accessMode, setAccessMode] = useState<'none' | 'client' | 'guest'>('none');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
+
+  // ==========================================
+  // ESTADOS DEL CHAT (Intactos de ayer)
+  // ==========================================
   const [searchParams] = useSearchParams();
   const urlParam = searchParams.get('modulo') || 'webhook-riesgo';
   const initialModule = MODULES_DB.find(m => m.hook === urlParam) || MODULES_DB[0];
@@ -39,6 +49,19 @@ export default function AsistentePage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // ==========================================
+  // FUNCIÓN DE LOGIN
+  // ==========================================
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === 'cliente123' && password === 'cliente123') {
+      setLoginError(false);
+      setAccessMode('client');
+    } else {
+      setLoginError(true);
+    }
+  };
 
   const cambiarModulo = (nombre: string, webhook: string) => {
     setModuloActivo(nombre);
@@ -62,6 +85,7 @@ export default function AsistentePage() {
     const loadingId = (Date.now() + 1).toString();
     setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: 'Analizando la jurisdicción...' }]);
 
+    // SIMULACIÓN TEMPORAL (Aquí cambiaremos la lógica mañana según si es cliente o invitado)
     setTimeout(() => {
       setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
       setMessages(prev => [...prev, {
@@ -78,9 +102,8 @@ export default function AsistentePage() {
 
   const palettes = {
     dark: {
-      // AJUSTE SUGERIDO: "Midnight Slate" (#151f32). Mucho más suave para leer de noche
       appBG: 'bg-[#151f32]',
-      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]', // El panel izquierdo se mantiene intacto
+      sidebarOverlay: 'bg-[#0a1526]/85 backdrop-blur-[2px]', 
       sidebarBtnText: 'text-gray-200',
       sidebarBtnHover: 'hover:bg-[#111827]',
       sidebarBtnActive: 'bg-[#1f2937] border-[#c5a059]',
@@ -88,9 +111,9 @@ export default function AsistentePage() {
       mainHeaderBorder: 'border-[#1e2a40]', 
       mainTitle: 'text-gray-100',
       greetingP: 'text-gray-300',
-      botBubble: 'bg-[#1e2a40] text-gray-200 border-[#c5a059]', // Burbuja IA a juego con el nuevo fondo
+      botBubble: 'bg-[#1e2a40] text-gray-200 border-[#c5a059]', 
       userBubble: 'bg-[#2a303c] text-gray-100 border-gray-700',
-      footerBG: 'bg-[#1e2a40]', // Caja de texto a juego
+      footerBG: 'bg-[#1e2a40]', 
       textArea: 'text-gray-100',
       sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20'
     },
@@ -114,6 +137,79 @@ export default function AsistentePage() {
 
   const currentColors = palettes[theme];
 
+  // ==========================================
+  // LA "PUERTA": PANTALLA DE LOGIN
+  // Si el usuario no ha ingresado, se muestra esto y el código se detiene aquí.
+  // ==========================================
+  if (accessMode === 'none') {
+    return (
+      <div className="relative flex h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
+        {/* Fondo sutil */}
+        <div className="absolute inset-0 z-0 overflow-hidden opacity-30">
+          <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover grayscale" />
+        </div>
+        {/* Partículas */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
+          <Particles count={40} />
+        </div>
+
+        {/* Tarjeta de Login (Glassmorphism) */}
+        <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-[#030712]/70 backdrop-blur-xl border border-gray-800 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+          <div className="flex flex-col items-center mb-8">
+            <img src={logoShield} alt="LAP Global" className="w-20 h-24 object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)] mb-4" />
+            <h2 className="text-xl font-serif text-white tracking-wide">Acceso Seguro</h2>
+            <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Sistemas de IA Transnacional</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <input 
+                type="text" 
+                placeholder="Usuario" 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
+              />
+            </div>
+            <div>
+              <input 
+                type="password" 
+                placeholder="Contraseña" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
+              />
+            </div>
+            
+            {loginError && (
+              <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
+            )}
+
+            <button 
+              type="submit" 
+              className="w-full flex justify-center items-center gap-2 bg-[#c5a059] text-black font-bold uppercase tracking-wider py-4 rounded-xl hover:bg-yellow-600 transition-all active:scale-95 shadow-[0_0_15px_rgba(197,160,89,0.2)] mt-2"
+            >
+              <Lock size={18} /> Ingresar a la red
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-gray-800 text-center">
+            <p className="text-gray-400 text-sm mb-3">¿Desea conocer la plataforma?</p>
+            <button 
+              onClick={() => setAccessMode('guest')}
+              className="text-[#c5a059] hover:text-white text-sm font-medium transition-colors border border-[#c5a059]/30 px-6 py-2 rounded-full hover:bg-[#c5a059]/10"
+            >
+              Entrar a la versión Demo (Invitado)
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // EL CHAT (Se muestra solo si accessMode no es 'none')
+  // ==========================================
   return (
     <div className={`flex h-screen w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
       
@@ -164,7 +260,6 @@ export default function AsistentePage() {
         <nav className={`flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.sidebarBtnText}`}>
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
           
-          {/* AHORA MUESTRA EL NOMBRE COMPLETO CON (Arg-Ven) SIN CORTARSE */}
           {MODULES_DB.slice(0, 3).map((mod) => (
             <button 
               key={mod.hook}
@@ -210,6 +305,12 @@ export default function AsistentePage() {
           </div>
 
           <div className="flex gap-2 md:gap-4 items-center">
+            
+            {/* BADGE VISUAL PARA SABER CÓMO ENTRASTE (Opcional, muy útil) */}
+            <span className={`hidden md:inline-block px-3 py-1 rounded-full text-xs font-medium border ${accessMode === 'client' ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10'}`}>
+              {accessMode === 'client' ? 'Verificado' : 'Modo Demo'}
+            </span>
+
             <button 
                 onClick={toggleTheme}
                 className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
