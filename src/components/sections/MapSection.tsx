@@ -23,18 +23,18 @@ export const MapSection = () => {
   };
 
   // ============================================================
-  // 🖥️ PANEL ESCRITORIO: 0% para alinear perfecto con el Header
+  // 🖥️ PANEL ESCRITORIO: TUS PORCENTAJES ORIGINALES INTACTOS
   // ============================================================
   const escritorio = {
     altura: '600px',
-    titulo: { arriba: '22%', izquierda: '0%' }, 
-    mapa: { arriba: '2%', derecha: '0%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
-    texto: { arriba: '73%', izquierda: '0%', anchoMax: '450px' },
-    boton: { abajo: '4%', derecha: '0%', size: '10px' }
+    titulo: { arriba: '22%', izquierda: '14%' },
+    mapa: { arriba: '2%', derecha: '13%', tamaño: '445px', opacidad: isHovered ? '0.90' : '0.70' },
+    texto: { arriba: '73%', izquierda: '14%', anchoMax: '450px' },
+    boton: { abajo: '4%', derecha: '15%', size: '10px' }
   };
 
   // ============================================================
-  // 📱 PANEL MÓVIL: Tus ajustes originales EXACTOS
+  // 📱 PANEL MÓVIL: TUS PORCENTAJES ORIGINALES INTACTOS
   // ============================================================
   const movil = {
     altura: '600px',
@@ -48,28 +48,28 @@ export const MapSection = () => {
 
   return (
     <section 
-      className="relative w-full overflow-hidden bg-navy-dark flex justify-center" 
+      className="relative w-full bg-navy-dark flex justify-center" 
       style={{ height: p.altura }}
     >
-      {/* 1. FONDO LIBRE: Se estira con la pantalla */}
-      <div className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url("/Fondo Mapa PNG.png")',
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
+      {/* EL CONTENEDOR MAESTRO: Bloquea el estiramiento a 1920px máximo (El ajuste que te funcionó) */}
+      <div className="relative w-full max-w-[1920px] h-full overflow-hidden">
+        
+        {/* 1. FONDO */}
+        <div className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url("/Fondo Mapa PNG.png")',
+            backgroundSize: '100% 100%',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
 
-      {/* 2. PARTÍCULAS */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        <Particles count={esMovil ? 20 : 50} />
-      </div>
+        {/* 2. PARTÍCULAS */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
+          <Particles count={esMovil ? 20 : 50} />
+        </div>
 
-      {/* 3. CAJA MAESTRA BIPOLAR: container en PC (para alinear y frenar zoom) / w-full en Móvil (para respetar tus medidas sin padding) */}
-      <div className="relative w-full h-full pointer-events-none z-20 md:container md:mx-auto">
-
-        {/* MAPA */}
+        {/* 3. MAPA (z-20) */}
         <motion.div
           className="absolute z-20 cursor-pointer pointer-events-auto"
           style={{ 
@@ -111,74 +111,78 @@ export const MapSection = () => {
           />
         </motion.div>
         
-        {/* TÍTULO */}
-        <div className="absolute pointer-events-auto" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
-          <span 
-            className="gradient-text-gold font-semibold tracking-widest uppercase text-sm inline-block mb-2 pr-1"
-            style={{ 
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
-            La Visión
-          </span>
+        {/* 4. CONTENIDO (Restaurado a z-30 para que el mapa JAMÁS lo tape) */}
+        <div className="relative z-30 h-full w-full pointer-events-none">
           
-          <h2 className="font-serif font-bold leading-tight">
-            <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
-              Seguridad Jurídica
-            </span>
-            <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>
-              en la Era de la
-            </span>
+          {/* TÍTULO */}
+          <div className="absolute pointer-events-auto" style={{ top: p.titulo.arriba, left: p.titulo.izquierda }}>
             <span 
-              className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl inline-block pr-1" 
+              className="gradient-text-gold font-semibold tracking-widest uppercase text-sm inline-block mb-2 pr-1"
               style={{ 
-                fontSize: esMovil ? p.titulo.size : '',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
               }}
             >
-              Inteligencia Artificial
+              La Visión
             </span>
-          </h2>
-        </div>
+            
+            <h2 className="font-serif font-bold leading-tight">
+              <span className="text-white text-3xl md:text-4xl lg:text-5xl block" style={{ fontSize: esMovil ? p.titulo.size : '' }}>
+                Seguridad Jurídica
+              </span>
+              <span className="text-white/80 text-xl md:text-2xl italic block my-1" style={{ fontSize: esMovil ? p.titulo.sizeItalic : '' }}>
+                en la Era de la
+              </span>
+              <span 
+                className="gradient-text-gold text-3xl md:text-4xl lg:text-5xl inline-block pr-1" 
+                style={{ 
+                  fontSize: esMovil ? p.titulo.size : '',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
+                Inteligencia Artificial
+              </span>
+            </h2>
+          </div>
 
-        {/* PARRAFO */}
-        <motion.p
-          className="absolute text-navy-dark font-extrabold leading-relaxed pointer-events-auto"
-          style={{ 
-            top: p.texto.arriba,
-            left: p.texto.izquierda,
-            maxWidth: esMovil ? p.texto.ancho : escritorio.texto.anchoMax,
-            fontSize: esMovil ? p.texto.size : '1.125rem' 
-          }} 
-        >
-          Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
-        </motion.p>
-
-        {/* BOTÓN */}
-        <div 
-          className="absolute pointer-events-auto"
-          style={{ 
-            bottom: p.boton.abajo, 
-            right: esMovil ? 'auto' : p.boton.derecha,
-            left: esMovil ? p.boton.izquierda : 'auto'
-          }}
-          onMouseEnter={() => !esMovil && setIsHovered(true)}
-          onMouseLeave={() => !esMovil && setIsHovered(false)}
-          onClick={handleToggleClick}
-        >
-          <motion.button
-            whileHover={{ scale: 1.1, backgroundColor: 'rgba(10, 25, 47, 0.9)' }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 text-white font-bold uppercase bg-navy-dark/60 px-6 py-3 rounded-full border border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.2)] backdrop-blur-sm transition-all whitespace-nowrap"
-            style={{ fontSize: p.boton.size }}
+          {/* PARRAFO */}
+          <motion.p
+            className="absolute text-navy-dark font-extrabold leading-relaxed pointer-events-auto"
+            style={{ 
+              top: p.texto.arriba,
+              left: p.texto.izquierda,
+              maxWidth: esMovil ? p.texto.ancho : escritorio.texto.anchoMax,
+              fontSize: esMovil ? p.texto.size : '1.125rem' 
+            }} 
           >
-            <Network size={16} className={`transition-colors ${isHovered ? 'text-cyan-400' : 'text-gold'}`} />
-            <span className={isHovered ? 'text-cyan-50' : 'text-white'}>Red de Inteligencia Legal</span>
-          </motion.button>
+            Bienvenido a nuestro ecosistema de defensa legal de vanguardia, donde la trayectoria histórica de nuestra firma se fusiona con Sistemas de Inteligencia Jurídica de Propiedad Exclusiva.
+          </motion.p>
+
+          {/* BOTÓN */}
+          <div 
+            className="absolute pointer-events-auto"
+            style={{ 
+              bottom: p.boton.abajo, 
+              right: esMovil ? 'auto' : p.boton.derecha,
+              left: esMovil ? p.boton.izquierda : 'auto'
+            }}
+            onMouseEnter={() => !esMovil && setIsHovered(true)}
+            onMouseLeave={() => !esMovil && setIsHovered(false)}
+            onClick={handleToggleClick}
+          >
+            <motion.button
+              whileHover={{ scale: 1.1, backgroundColor: 'rgba(10, 25, 47, 0.9)' }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 text-white font-bold uppercase bg-navy-dark/60 px-6 py-3 rounded-full border border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.2)] backdrop-blur-sm transition-all whitespace-nowrap"
+              style={{ fontSize: p.boton.size }}
+            >
+              <Network size={16} className={`transition-colors ${isHovered ? 'text-cyan-400' : 'text-gold'}`} />
+              <span className={isHovered ? 'text-cyan-50' : 'text-white'}>Red de Inteligencia Legal</span>
+            </motion.button>
+          </div>
         </div>
       </div>
     </section>
