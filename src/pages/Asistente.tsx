@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import logoShield from '@/assets/logo-shield.png'; 
-import { useSearchParams } from 'react-router-dom'; // Para leer la URL
+import { useSearchParams } from 'react-router-dom';
+import { Particles } from '@/components/Particles'; // IMPORTAMOS LAS PARTÍCULAS
 
 type Message = {
   id: string;
@@ -9,7 +10,6 @@ type Message = {
   text: string;
 };
 
-// BASE DE DATOS DE LOS MÓDULOS (Con textos de formulario dinámicos)
 const MODULES_DB = [
   { name: 'Monitor de Riesgo (Arg-Ven)', hook: 'webhook-riesgo', icon: '🌐', placeholder: 'Ingrese la entidad, empresa o riesgo a monitorear...' },
   { name: 'Análisis Penal (Arg-Ven)', hook: 'webhook-penal', icon: '⚖️', placeholder: 'Describa los detalles del caso o expediente penal...' },
@@ -21,14 +21,14 @@ const MODULES_DB = [
 
 export default function AsistentePage() {
   const [searchParams] = useSearchParams();
-  
-  // LEEMOS QUÉ BOTÓN SE PRESIONÓ EN LA PÁGINA ANTERIOR
   const urlParam = searchParams.get('modulo') || 'webhook-riesgo';
   const initialModule = MODULES_DB.find(m => m.hook === urlParam) || MODULES_DB[0];
 
   const [moduloActivo, setModuloActivo] = useState(initialModule.name);
   const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
+  const [isLogoHovered, setIsLogoHovered] = useState(false); // ESTADO PARA EL HOVER DEL LOGO
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init',
@@ -59,11 +59,16 @@ export default function AsistentePage() {
     const newUserMsg: Message = { id: Date.now().toString(), sender: 'user', text: inputText };
     setMessages(prev => [...prev, newUserMsg]);
     setInputText('');
+    
+    // RESTAURAR TAMAÑO DEL TEXTAREA AL ENVIAR
+    const textarea = document.getElementById('userInput');
+    if (textarea) {
+      textarea.style.height = '44px';
+    }
 
     const loadingId = (Date.now() + 1).toString();
     setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: 'Analizando la jurisdicción...' }]);
 
-    // Simulador de IA temporal
     setTimeout(() => {
       setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
       setMessages(prev => [...prev, {
@@ -74,20 +79,38 @@ export default function AsistentePage() {
     }, 1500);
   };
 
-  // Buscamos los datos actuales para poner el placeholder dinámico
   const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo) || MODULES_DB[0];
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#060b1a] text-gray-200 font-sans">
       
-      {/* SIDEBAR */}
-      <aside className="w-64 bg-[#030712] flex-col border-r border-gray-800 hidden md:flex">
-        <div className="p-6">
-          <img src={logoShield} alt="LAP Global Logo" className="w-20 h-20 mx-auto mb-3 object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" />
-          <h2 className="text-center text-[11px] uppercase tracking-widest text-[#c5a059] font-bold">Unidad de Asuntos Transnacionales & IA</h2>
+      {/* SIDEBAR - Ahora con relative y overflow-hidden para contener las partículas */}
+      <aside className="w-64 bg-[#030712] flex-col border-r border-gray-800 hidden md:flex relative overflow-hidden">
+        
+        {/* FONDO DE PARTÍCULAS SOLO EN EL SIDEBAR */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
+          <Particles count={25} />
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 space-y-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {/* LOGO Y TÍTULO CON EFECTO HOVER */}
+        <div 
+          className="p-6 relative z-10 flex flex-col items-center group cursor-pointer"
+          onMouseEnter={() => setIsLogoHovered(true)}
+          onMouseLeave={() => setIsLogoHovered(false)}
+        >
+          <div className="relative w-20 h-20 mb-3 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+            <img src={logoShield} alt="LAP Global Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" />
+          </div>
+          <h2 className={`text-center text-[11px] uppercase tracking-widest font-bold transition-all duration-300 ${
+              isLogoHovered ? 'gradient-text-gold' : 'text-white'
+            }`}
+          >
+            Unidad de Asuntos Transnacionales & IA
+          </h2>
+        </div>
+
+        {/* NAVEGACIÓN - Z-10 para estar por encima de las partículas */}
+        <nav className="flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
           
           {MODULES_DB.slice(0, 3).map((mod) => (
@@ -142,7 +165,7 @@ export default function AsistentePage() {
               {msg.sender === 'system' && <p className="text-gray-400 leading-relaxed text-sm">{msg.text}</p>}
               {msg.sender === 'user' && (
                 <div className="bg-[#2a303c] text-gray-100 p-4 rounded-3xl rounded-tr-none max-w-[90%] border border-gray-700 shadow-md">
-                  <p className="text-base">{msg.text}</p>
+                  <p className="text-base whitespace-pre-wrap">{msg.text}</p>
                 </div>
               )}
               {msg.sender === 'loading' && <div className="text-[#c5a059] text-sm font-medium animate-pulse ml-2">{msg.text}</div>}
@@ -156,17 +179,30 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* FORMULARIO INPUT CON TEXTO DINÁMICO */}
+        {/* FORMULARIO INPUT CON AUTO-GROW */}
         <footer className="p-4 md:pb-8">
           <div className="max-w-3xl mx-auto relative group">
             <div className="bg-[#1e2330] rounded-3xl border border-gray-700 p-2 pl-4 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl">
               <textarea 
+                id="userInput"
                 value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-                placeholder={activeModuleData.placeholder} // AQUÍ SE PONE EL TEXTO ESPECÍFICO DEL FORMULARIO
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                  // Lógica AutoGrow idéntica a tu HTML
+                  e.target.style.height = "5px";
+                  e.target.style.height = e.target.scrollHeight + "px";
+                }}
+                onKeyDown={(e) => { 
+                  // Permite salto de línea con Shift+Enter, envía con Enter solo
+                  if (e.key === 'Enter' && !e.shiftKey) { 
+                    e.preventDefault(); 
+                    handleSend(); 
+                  } 
+                }}
+                placeholder={activeModuleData.placeholder} 
                 rows={1}
-                className="w-full bg-transparent text-gray-100 py-3 outline-none text-base resize-none max-h-32 [&::-webkit-scrollbar]:hidden"
+                className="w-full bg-transparent text-gray-100 py-3 outline-none text-base resize-none max-h-48 [&::-webkit-scrollbar]:hidden"
+                style={{ minHeight: '44px' }}
               />
               <button 
                 onClick={handleSend}
