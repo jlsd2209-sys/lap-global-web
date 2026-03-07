@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send } from 'lucide-react';
 import logoShield from '@/assets/logo-shield.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
@@ -29,6 +28,8 @@ export default function AsistentePage() {
   const [inputText, setInputText] = useState('');
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
+  // Estado para saber si mostrar el saludo inicial o el saludo de cambio de módulo
+  const [greetingType, setGreetingType] = useState<'initial' | 'changed'>('initial');
   const [messages, setMessages] = useState<Message[]>([]);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -40,7 +41,8 @@ export default function AsistentePage() {
   const cambiarModulo = (nombre: string, webhook: string) => {
     setModuloActivo(nombre);
     setWebhookActivo(webhook);
-    setMessages([]); 
+    setGreetingType('changed'); // Cambia al saludo corto de tu HTML
+    setMessages([]); // Limpia el chat
   };
 
   const handleSend = () => {
@@ -50,6 +52,7 @@ export default function AsistentePage() {
     setMessages(prev => [...prev, newUserMsg]);
     setInputText('');
     
+    // Restaurar tamaño del textarea
     const textarea = document.getElementById('userInput');
     if (textarea) {
       textarea.style.height = '44px';
@@ -58,6 +61,7 @@ export default function AsistentePage() {
     const loadingId = (Date.now() + 1).toString();
     setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: 'Analizando la jurisdicción...' }]);
 
+    // Simulación IA (Burbuja limpia, sin iconos al lado - Exacto al HTML)
     setTimeout(() => {
       setMessages(prev => prev.filter(msg => msg.id !== loadingId)); 
       setMessages(prev => [...prev, {
@@ -71,42 +75,40 @@ export default function AsistentePage() {
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#060b1a] text-gray-200 font-sans">
       
-      {/* SIDEBAR CON IMAGEN DE FONDO + PARTÍCULAS */}
+      {/* ========================================== */}
+      {/* SIDEBAR (Con Fondo idéntico a Servicios) */}
+      {/* ========================================== */}
       <aside className="w-64 flex flex-col border-r border-gray-800 hidden md:flex relative overflow-hidden">
         
-        {/* IMAGEN DEL MAPA (Misteriosa y sutil) */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="/fondo-servicios.jpg.png" 
-            alt="Fondo de mapa" 
-            className="w-full h-full object-cover opacity-30 grayscale mix-blend-screen"
-          />
-          {/* CAPA DE OSCURECIMIENTO PARA QUE SE LEAN LOS BOTONES */}
-          <div className="absolute inset-0 bg-[#030712]/85 backdrop-blur-[1px]"></div>
+        {/* EL FONDO EXACTO DE LA SECCIÓN SERVICIOS */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
         </div>
 
-        {/* PARTÍCULAS */}
+        {/* PARTÍCULAS SOLICITADAS */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Particles count={25} />
         </div>
 
-        {/* CONTENIDO DEL SIDEBAR */}
         <div 
           className="p-6 relative z-10 flex flex-col items-center group cursor-pointer"
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          <div className="relative w-20 h-20 mb-3 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          {/* Logo con el tamaño idéntico a tu HTML (h-24) */}
+          <div className="relative w-20 h-24 mb-3 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img src={logoShield} alt="LAP Global Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" />
           </div>
           <h2 className={`text-center text-[11px] uppercase tracking-widest font-bold transition-all duration-300 ${
-              isLogoHovered ? 'gradient-text-gold' : 'text-white'
+              isLogoHovered ? 'gradient-text-gold' : 'text-[#c5a059]'
             }`}
           >
             Unidad de Asuntos Transnacionales & IA
           </h2>
         </div>
 
+        {/* Menú con colores de hover originales (.nav-item:hover) */}
         <nav className="flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
           
@@ -114,7 +116,7 @@ export default function AsistentePage() {
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
-              className={`w-full flex items-center p-3 rounded-lg text-sm transition-all hover:bg-gray-900/80 border-l-4 ${moduloActivo === mod.name ? 'bg-gray-800/80 border-[#c5a059]' : 'border-transparent hover:border-[#c5a059]'}`}
+              className={`w-full flex items-center p-3 rounded-lg text-sm transition-all hover:bg-[#111827] border-l-4 ${moduloActivo === mod.name ? 'bg-[#1f2937] border-[#c5a059]' : 'border-transparent hover:border-[#c5a059]'}`}
             >
               <span>{mod.icon} {mod.name.replace(' (Arg-Ven)', '')}</span>
             </button>
@@ -127,7 +129,7 @@ export default function AsistentePage() {
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
-              className={`w-full flex items-center p-3 rounded-lg text-sm transition-all hover:bg-gray-900/80 border-l-4 ${moduloActivo === mod.name ? 'bg-gray-800/80 border-[#c5a059]' : 'border-transparent hover:border-[#c5a059]'}`}
+              className={`w-full flex items-center p-3 rounded-lg text-sm transition-all hover:bg-[#111827] border-l-4 ${moduloActivo === mod.name ? 'bg-[#1f2937] border-[#c5a059]' : 'border-transparent hover:border-[#c5a059]'}`}
             >
               <span>{mod.icon} {mod.name}</span>
             </button>
@@ -135,10 +137,14 @@ export default function AsistentePage() {
         </nav>
       </aside>
 
+      {/* ========================================== */}
       {/* ÁREA PRINCIPAL DE CHAT */}
-      <main className="flex-1 flex flex-col relative">
+      {/* ========================================== */}
+      <main className="flex-1 flex flex-col bg-[#060b1a] relative">
         <header className="h-16 border-b border-gray-800 flex items-center justify-between px-6 bg-[#060b1a]/80 backdrop-blur-md sticky top-0 z-10">
-          <h2 className="font-medium text-gray-100">{moduloActivo}</h2>
+          <div className="flex items-center gap-4">
+            <h2 className="font-medium text-gray-100">{moduloActivo}</h2>
+          </div>
           <div className="flex gap-2 items-center">
             <span className="text-xs text-gray-500">Esperando consulta...</span>
             <span className="relative flex h-2 w-2">
@@ -150,41 +156,53 @@ export default function AsistentePage() {
 
         <section className="flex-1 overflow-y-auto p-4 md:p-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
-          {/* SALUDO INICIAL (RESTAURADO ESTRICTAMENTE IGUAL A TU HTML ORIGINAL) */}
+          {/* SALUDO INICIAL (100% IDÉNTICO A TU HTML) */}
           {messages.length === 0 && (
             <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
               <img src={logoShield} className="w-10 h-12 object-contain" alt="Logo" />
               <div className="space-y-4 mt-1">
-                <p className="text-xl font-light text-gray-300">
-                  Inteligencia Artificial <strong className="font-bold text-white">LAP Global</strong>.
-                </p>
-                <p className="text-gray-400 leading-relaxed">
-                  Módulo <span className="text-[#c5a059]">{moduloActivo}</span> activo. ¿Cuál es su consulta transnacional?
-                </p>
+                {greetingType === 'initial' ? (
+                  <>
+                    <p className="text-xl font-light text-gray-300">Inteligencia Artificial <strong>LAP Global</strong>.</p>
+                    <p className="text-gray-400 leading-relaxed">Módulo <span className="text-[#c5a059]">{moduloActivo}</span> activo. ¿Cuál es su consulta transnacional?</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xl font-light text-gray-300">Conectado a la red de <strong>{moduloActivo}</strong>.</p>
+                    <p className="text-gray-400 leading-relaxed">¿En qué asunto legal específico puedo ayudarle?</p>
+                  </>
+                )}
               </div>
             </div>
           )}
 
-          {/* MENSAJES DEL USUARIO E IA */}
+          {/* BURBUJAS DE CHAT (100% IDÉNTICAS A TU HTML) */}
           {messages.map((msg) => (
-            <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
+              
+              {/* Usuario */}
               {msg.sender === 'user' && (
                 <div className="bg-[#2a303c] text-gray-100 p-4 rounded-3xl rounded-tr-none max-w-[90%] border border-gray-700 shadow-md">
                   <p className="text-base whitespace-pre-wrap">{msg.text}</p>
                 </div>
               )}
-              {msg.sender === 'loading' && <div className="text-[#c5a059] text-sm font-medium animate-pulse ml-2">{msg.text}</div>}
+              
+              {/* Cargando */}
+              {msg.sender === 'loading' && <div className="text-[#c5a059] text-sm font-medium animate-pulse ml-2">Analizando la jurisdicción...</div>}
+              
+              {/* Bot */}
               {msg.sender === 'bot' && (
                 <div className="bg-gray-800 text-gray-200 p-4 rounded-3xl rounded-tl-none max-w-[90%] border-l-4 border-[#c5a059] shadow-md">
                   <p className="text-base whitespace-pre-wrap">{msg.text}</p>
                 </div>
               )}
+
             </div>
           ))}
           <div ref={messagesEndRef} />
         </section>
 
-        {/* FORMULARIO INPUT */}
+        {/* INPUT DE TEXTO (SVG ORIGINAL RESTAURADO) */}
         <footer className="p-4 md:pb-8">
           <div className="max-w-3xl mx-auto relative group">
             <div className="bg-[#1e2330] rounded-3xl border border-gray-700 p-2 pl-4 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl">
@@ -204,14 +222,17 @@ export default function AsistentePage() {
                 }}
                 placeholder="Escriba aquí los detalles del caso..." 
                 rows={1}
-                className="w-full bg-transparent text-gray-100 py-3 outline-none text-base resize-none max-h-48 [&::-webkit-scrollbar]:hidden"
+                className="w-full bg-transparent text-gray-100 py-3 outline-none text-base resize-none max-h-[200px] [&::-webkit-scrollbar]:hidden"
                 style={{ minHeight: '44px' }}
               />
               <button 
                 onClick={handleSend}
                 className="bg-[#c5a059] text-black p-3 rounded-2xl mb-1 hover:bg-yellow-600 transition-all active:scale-95"
               >
-                <Send size={20} />
+                {/* TU SVG ORIGINAL DEL HTML */}
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                </svg>
               </button>
             </div>
           </div>
