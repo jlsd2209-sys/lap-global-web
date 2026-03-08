@@ -2,12 +2,45 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo-shield.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2 } from 'lucide-react'; 
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown } from 'lucide-react'; 
 
 type Message = {
   id: string;
   sender: 'user' | 'bot' | 'loading';
   text: string;
+};
+
+// ==========================================
+// SUBCOMPONENTE: ACCIONES DEL MENSAJE (Copiar, Like, Dislike)
+// ==========================================
+const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const btnClass = `p-1.5 rounded-md transition-colors ${
+    theme === 'dark' 
+      ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#1e2a40]' 
+      : 'text-gray-500 hover:text-[#c5a059] hover:bg-[#eee7d5]'
+  }`;
+
+  return (
+    <div className="flex items-center gap-1 ml-2 mt-1">
+      <button onClick={handleCopy} className={btnClass} title="Copiar respuesta">
+        {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+      </button>
+      <button onClick={() => alert("La evaluación de respuestas se habilitará pronto para auditoría de calidad.")} className={btnClass} title="Buena respuesta">
+        <ThumbsUp size={14} />
+      </button>
+      <button onClick={() => alert("La evaluación de respuestas se habilitará pronto para auditoría de calidad.")} className={btnClass} title="Mala respuesta">
+        <ThumbsDown size={14} />
+      </button>
+    </div>
+  );
 };
 
 // ==========================================
@@ -351,9 +384,7 @@ export default function AsistentePage() {
           ))}
         </nav>
 
-        {/* ======================================================================= */}
-        {/* PANEL INFERIOR MEJORADO: Botón visible al colapsar y colores elegantes */}
-        {/* ======================================================================= */}
+        {/* PANEL INFERIOR */}
         <div className={`border-t border-gray-800 relative z-10 flex transition-all duration-300 ${isDesktopSidebarCollapsed ? 'p-4 flex-col items-center gap-4' : 'p-4 flex-row items-center justify-between'}`}>
           <div className="flex items-center gap-3 overflow-hidden" title={isDesktopSidebarCollapsed ? (accessMode === 'client' ? username : 'Invitado') : undefined}>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#c5a059]/20 to-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] flex items-center justify-center flex-shrink-0 font-bold shadow-lg">
@@ -433,17 +464,27 @@ export default function AsistentePage() {
 
           {currentMessages.map((msg) => (
             <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
+              
               {msg.sender === 'user' && (
                 <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none max-w-[90%] shadow-md`}>
                   <p className="text-sm md:text-base whitespace-pre-wrap break-words">{msg.text}</p>
                 </div>
               )}
-              {msg.sender === 'loading' && <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">{msg.text}</div>}
+              
+              {msg.sender === 'loading' && (
+                <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">{msg.text}</div>
+              )}
+              
               {msg.sender === 'bot' && (
-                <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none max-w-[90%] border-l-4 shadow-md`}>
-                  <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                <div className="flex flex-col gap-1 max-w-[90%]">
+                  <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
+                    <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                  </div>
+                  {/* NUEVO: Botones de Acción (Copiar, Like, Dislike) integrados debajo del mensaje del bot */}
+                  <BotMessageActions text={msg.text} theme={theme} />
                 </div>
               )}
+              
             </div>
           ))}
           <div ref={messagesEndRef} />
