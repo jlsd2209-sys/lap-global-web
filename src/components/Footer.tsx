@@ -44,11 +44,13 @@ export const Footer = () => {
               onClick={(e) => handleNavClick(e, '#home')}
               className="flex items-center gap-3 font-serif text-xl font-bold mb-4 group"
             >
-              {/* CAMBIO REALIZADO: Agregado flex-shrink-0 para que el escudo no se encoja en móviles */}
-              <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              {/* CAMBIO REALIZADO: Clases CSS de aceleración por hardware para evitar el blur */}
+              <div 
+                className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                style={{ transformOrigin: 'center', willChange: 'transform', backfaceVisibility: 'hidden', WebkitFontSmoothing: 'antialiased' }}
+              >
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain drop-shadow-2xl" />
               </div>
-              {/* CAMBIO REALIZADO: Comportamiento responsivo (salto de línea en móvil, recto en PC) */}
               <div className="relative whitespace-normal lg:whitespace-nowrap">
                 <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Unidad de Asuntos Transnacionales & IA
