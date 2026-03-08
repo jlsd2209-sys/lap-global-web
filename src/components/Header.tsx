@@ -66,7 +66,11 @@ export const Header = () => {
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          {/* CAMBIO REALIZADO: Clases CSS de aceleración por hardware para evitar el blur */}
+          <div 
+            className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+            style={{ transformOrigin: 'center', willChange: 'transform', backfaceVisibility: 'hidden', WebkitFontSmoothing: 'antialiased' }}
+          >
             <img 
               alt="LAP Global & IA Logo" 
               className="w-full h-full object-contain drop-shadow-2xl" 
