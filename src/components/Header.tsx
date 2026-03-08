@@ -65,15 +65,15 @@ export const Header = () => {
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          {/* EL CONTENEDOR SE QUEDA QUIETO */}
-          <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center">
-            {/* LA IMAGEN DIRECTAMENTE RECIBE EL ESCALADO: Esto evita el blur del navegador */}
+          {/* ESTRUCTURA IDÉNTICA AL ASISTENTE: Animación en el div y sombra dorada en la imagen */}
+          <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img 
               alt="LAP Global & IA Logo" 
-              className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)] transition-transform duration-300 group-hover:scale-110" 
+              className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" 
               src={logoShield} 
             />
           </div>
+          
           <span 
             className={`inline-block font-serif text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
