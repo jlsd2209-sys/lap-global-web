@@ -1,18 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
-// AQUÍ ESTÁ EL CAMBIO: Ahora apunta a tu imagen de alta calidad
 import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown } from 'lucide-react'; 
+// CAMBIO: Importamos Paperclip y FileText para el manejo de archivos
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText } from 'lucide-react'; 
 
 type Message = {
   id: string;
   sender: 'user' | 'bot' | 'loading';
   text: string;
+  hasAttachment?: boolean; // Para saber si el mensaje incluyó archivo
 };
 
 // ==========================================
-// SUBCOMPONENTE: ACCIONES DEL MENSAJE (Copiar, Like, Dislike)
+// SUBCOMPONENTE: ACCIONES DEL MENSAJE
 // ==========================================
 const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => {
   const [copied, setCopied] = useState(false);
@@ -52,42 +53,42 @@ const MODULES_DB = [
     name: 'Monitor de Riesgo (Arg-Ven)', 
     hook: 'webhook-riesgo', 
     icon: '🌐',
-    demoText: "He procesado su parámetro de búsqueda. En la versión verificada para clientes, nuestro módulo cruza esta información en tiempo real para anticipar vulnerabilidades corporativas antes de que ocurran. Nuestro sistema es capaz de predecir contingencias binacionales evaluando miles de indicadores diarios. Este módulo será adaptado a sus necesidades corporativas. Para obtener un reporte completo, blindar sus operaciones y desbloquear la matriz predictiva aplicada a su caso, contacte a nuestros especialistas para habilitar su cuenta.",
+    demoText: "He procesado su parámetro de búsqueda. En la versión verificada para clientes, nuestro módulo cruza esta información en tiempo real para anticipar vulnerabilidades corporativas antes de que ocurran...",
     loadingText: "Cruzando indicadores de riesgo corporativo en tiempo real..."
   },
   { 
     name: 'Análisis Penal (Arg-Ven)', 
     hook: 'webhook-penal', 
     icon: '⚖️',
-    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
+    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada...",
     loadingText: "Analizando marcos normativos y tratados vigentes..."
   },
   { 
     name: 'Auditoría Documental', 
     hook: 'webhook-auditoria', 
     icon: '📄',
-    demoText: "Parámetros de auditoría recibidos. En la red verificada, este servicio es capaz de procesar cientos de folios en segundos, detectando cláusulas abusivas, contingencias ocultas y vacíos normativos que el ojo humano podría pasar por alto. Este módulo será adaptado a sus necesidades corporativas. Si desea someter su documentación a nuestro ecosistema legal bajo estricto secreto profesional, contacte a nuestro equipo.",
-    loadingText: "Detectando contingencias y vacíos normativos..."
+    demoText: "Parámetros de auditoría recibidos. En la red verificada, este servicio es capaz de procesar cientos de folios en segundos...",
+    loadingText: "Detectando contingencias y vacíos normativos en el documento..."
   },
   { 
     name: 'Memoria Institucional', 
     hook: 'webhook-memoria', 
     icon: '🏛️',
-    demoText: "Búsqueda en el archivo simulada. Este módulo exclusivo permite a nuestros clientes interactuar con el 'Cerebro Histórico' de sus casos, encontrando precedentes exactos, respuestas estratégicas en tiempo real y estandarizando sus decisiones legales victoriosas en el pasado. Este módulo será adaptado a sus necesidades corporativas. Su historial legal es su mayor activo; contáctenos para digitalizar y blindar su memoria corporativa.",
+    demoText: "Búsqueda en el archivo simulada. Este módulo exclusivo permite a nuestros clientes interactuar con el 'Cerebro Histórico' de sus casos...",
     loadingText: "Procesando archivos del repositorio corporativo..."
   },
   { 
     name: 'Informes Automáticos', 
     hook: 'webhook-informes', 
     icon: '📊',
-    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
+    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado...",
     loadingText: "Estructurando reporte para la generación del dictamen..."
   },
   { 
     name: 'Boletín Jurídico', 
     hook: 'webhook-boletin', 
     icon: '📖',
-    demoText: "Tema registrado en nuestro radar. A diferencia de un boletín tradicional, este modelo monitorea gacetas oficiales y despachos legislativos 24/7, filtrando únicamente los cambios normativos que impactan directamente en el sector de cada cliente. Este módulo será adaptado a sus necesidades corporativas. No sufra sorpresas legales; contáctenos para configurar su radar personalizado.",
+    demoText: "Tema registrado en nuestro radar. A diferencia de un boletín tradicional, este modelo monitorea gacetas oficiales y despachos legislativos 24/7...",
     loadingText: "Filtrando impactos legislativos en tiempo real..."
   }
 ];
@@ -109,6 +110,10 @@ export default function AsistentePage() {
   const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
   
+  // NUEVOS ESTADOS PARA MANEJO DE ARCHIVOS
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
@@ -128,11 +133,8 @@ export default function AsistentePage() {
       const storageKey = `lap_history_${accessMode}_${username || 'guest'}`;
       try {
         const savedHistory = localStorage.getItem(storageKey);
-        if (savedHistory) {
-          setChatsHistory(JSON.parse(savedHistory));
-        } else {
-          setChatsHistory({});
-        }
+        if (savedHistory) setChatsHistory(JSON.parse(savedHistory));
+        else setChatsHistory({});
       } catch (error) {
         setChatsHistory({});
       }
@@ -170,6 +172,7 @@ export default function AsistentePage() {
       setPassword('');
       setModuloActivo(initialModule.name);
       setWebhookActivo(initialModule.hook);
+      setSelectedFile(null); // Limpiar archivo al salir
     }
   };
 
@@ -187,62 +190,125 @@ export default function AsistentePage() {
     setModuloActivo(nombre);
     setWebhookActivo(webhook);
     setIsMobileMenuOpen(false); 
+    setSelectedFile(null); // Limpiamos archivo si cambia de módulo
   };
 
-  const handleSend = () => {
-    if (!inputText.trim()) return;
+  // FUNCIÓN PARA CONVERTIR ARCHIVO A BASE64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
 
-    const newUserMsg: Message = { id: Date.now().toString(), sender: 'user', text: inputText };
+  // NÚCLEO DE CONEXIÓN CON N8N
+  const handleSend = async () => {
+    if (!inputText.trim() && !selectedFile) return;
+
+    // 1. Mostrar mensaje del usuario en pantalla
+    const userText = selectedFile ? `📎 [${selectedFile.name}]\n${inputText}` : inputText;
+    const newUserMsg: Message = { 
+      id: Date.now().toString(), 
+      sender: 'user', 
+      text: userText,
+      hasAttachment: !!selectedFile 
+    };
     
     setChatsHistory(prev => ({
       ...prev,
       [moduloActivo]: [...(prev[moduloActivo] || []), newUserMsg]
     }));
     
+    // Guardamos copias locales para enviarlas y limpiamos la UI
+    const payloadText = inputText;
+    const payloadFile = selectedFile;
+    
     setInputText('');
+    setSelectedFile(null);
     
     const textarea = document.getElementById('userInput');
-    if (textarea) {
-      textarea.style.height = '44px';
-    }
+    if (textarea) textarea.style.height = '44px';
 
+    // 2. Mostrar indicador de carga
     const loadingId = (Date.now() + 1).toString();
     const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
-    const dynamicLoadingText = activeModuleData?.loadingText || "Analizando datos...";
+    const dynamicLoadingText = payloadFile ? "Analizando documento adjunto de forma segura..." : (activeModuleData?.loadingText || "Analizando datos...");
 
     setChatsHistory(prev => ({
       ...prev,
       [moduloActivo]: [...(prev[moduloActivo] || []), { id: loadingId, sender: 'loading', text: dynamicLoadingText }]
     }));
 
-    setTimeout(() => {
-      setChatsHistory(prev => {
-        const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
-        
-        let botResponseText = "";
-        if (accessMode === 'guest') {
-          botResponseText = activeModuleData?.demoText || "Esta es una función de demostración.";
-        } else {
-          botResponseText = `[SISTEMA VERIFICADO]: Recibí sus datos en el departamento de ${moduloActivo}. Evaluando conexión segura con su panel corporativo...`;
+    // 3. SEPARACIÓN DE RUTAS: GUEST vs CLIENT
+    if (accessMode === 'guest') {
+      // Ruta Invitado: Solo simula respuesta (No gasta saldo de N8N ni expone datos)
+      setTimeout(() => {
+        setChatsHistory(prev => {
+          const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
+          return {
+            ...prev,
+            [moduloActivo]: [...filteredMessages, { id: (Date.now() + 2).toString(), sender: 'bot', text: activeModuleData?.demoText || "Modo Demo Activo." }]
+          };
+        });
+      }, 1500);
+
+    } else {
+      // Ruta Cliente Verificado: Conexión Real a N8N en DigitalOcean
+      try {
+        let base64Data = null;
+        if (payloadFile) {
+          base64Data = await fileToBase64(payloadFile);
         }
 
-        const newBotMsg: Message = {
-          id: (Date.now() + 2).toString(),
-          sender: 'bot',
-          text: botResponseText
+        // Armamos el paquete de datos para n8n
+        const requestBody = {
+          sessionId: username,
+          module: moduloActivo,
+          text: payloadText,
+          fileData: base64Data, // Base64 completo
+          fileName: payloadFile?.name || null,
+          mimeType: payloadFile?.type || null
         };
 
-        return {
-          ...prev,
-          [moduloActivo]: [...filteredMessages, newBotMsg]
-        };
-      });
-    }, 1500);
+        // LLAMADA HTTP A TU SERVIDOR N8N (Ajustado a tu dominio)
+        const response = await fetch(`http://unidaddeia.duckdns.org:5678/webhook/${webhookActivo}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          throw new Error('Error en el servidor de IA');
+        }
+
+        const data = await response.json();
+        // Esperamos que n8n devuelva un JSON con la llave "respuesta" o "text"
+        const botResponseText = data.respuesta || data.text || "Proceso completado. Documento auditado y guardado.";
+
+        setChatsHistory(prev => {
+          const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
+          return {
+            ...prev,
+            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: botResponseText }]
+          };
+        });
+
+      } catch (error) {
+        console.error("Error conectando a n8n:", error);
+        setChatsHistory(prev => {
+          const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
+          return {
+            ...prev,
+            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: "⚠️ Error de conexión con el núcleo de IA. Verifique que el entorno seguro de DigitalOcean (N8N) esté en línea." }]
+          };
+        });
+      }
+    }
   };
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
+  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
   const palettes = {
     dark: {
@@ -282,6 +348,7 @@ export default function AsistentePage() {
   const currentColors = palettes[theme];
 
   if (accessMode === 'none') {
+    // LOGIN PREVIAMENTE DEFINIDO (Sin cambios)
     return (
       <div className="relative flex h-[100dvh] w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -335,9 +402,8 @@ export default function AsistentePage() {
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR (Sin cambios estructurales) */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full flex flex-col border-r border-gray-800 overflow-x-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full md:translate-x-0'} ${isDesktopSidebarCollapsed ? 'md:w-[80px]' : 'md:w-[280px]'}`}>
-        
         <button className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
           <X size={24} />
         </button>
@@ -373,9 +439,7 @@ export default function AsistentePage() {
               <span className={`ml-3 whitespace-nowrap ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>{mod.name}</span>
             </button>
           ))}
-
           <div className="my-6 border-t border-gray-800"></div>
-
           <p className={`text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>Alianza Estratégica</p>
           {MODULES_DB.slice(3, 6).map((mod) => (
             <button key={mod.hook} onClick={() => cambiarModulo(mod.name, mod.hook)} title={isDesktopSidebarCollapsed ? mod.name : undefined} className={`w-full flex items-center p-3 rounded-lg text-sm transition-all ${currentColors.sidebarBtnHover} border-l-4 ${moduloActivo === mod.name ? currentColors.sidebarBtnActive : 'border-transparent hover:border-[#c5a059]'}`}>
@@ -385,27 +449,17 @@ export default function AsistentePage() {
           ))}
         </nav>
 
-        {/* PANEL INFERIOR */}
         <div className={`border-t border-gray-800 relative z-10 flex transition-all duration-300 ${isDesktopSidebarCollapsed ? 'p-4 flex-col items-center gap-4' : 'p-4 flex-row items-center justify-between'}`}>
           <div className="flex items-center gap-3 overflow-hidden" title={isDesktopSidebarCollapsed ? (accessMode === 'client' ? username : 'Invitado') : undefined}>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#c5a059]/20 to-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] flex items-center justify-center flex-shrink-0 font-bold shadow-lg">
               {accessMode === 'client' ? <User size={18} /> : 'G'}
             </div>
             <div className={`flex flex-col truncate transition-opacity duration-300 ${isDesktopSidebarCollapsed ? 'hidden' : 'block'}`}>
-              <span className="text-sm font-medium text-gray-200 truncate">
-                {accessMode === 'client' ? username : 'Invitado'}
-              </span>
-              <span className="text-[10px] text-[#c5a059] uppercase tracking-wider truncate">
-                {accessMode === 'client' ? 'Cuenta Verificada' : 'Modo Demo'}
-              </span>
+              <span className="text-sm font-medium text-gray-200 truncate">{accessMode === 'client' ? username : 'Invitado'}</span>
+              <span className="text-[10px] text-[#c5a059] uppercase tracking-wider truncate">{accessMode === 'client' ? 'Cuenta Verificada' : 'Modo Demo'}</span>
             </div>
           </div>
-          
-          <button 
-            onClick={handleLogout} 
-            className="flex items-center justify-center p-2.5 bg-gray-500/10 text-gray-400 hover:bg-[#c5a059]/10 hover:text-[#c5a059] rounded-xl transition-all" 
-            title="Cerrar sesión segura"
-          >
+          <button onClick={handleLogout} className="flex items-center justify-center p-2.5 bg-gray-500/10 text-gray-400 hover:bg-[#c5a059]/10 hover:text-[#c5a059] rounded-xl transition-all" title="Cerrar sesión segura">
             <LogOut size={18} />
           </button>
         </div>
@@ -429,19 +483,13 @@ export default function AsistentePage() {
           
           <div className="flex gap-2 md:gap-4 items-center flex-shrink-0">
             {currentMessages.length > 0 && (
-              <button 
-                  onClick={handleClearChat}
-                  className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-red-400 hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:text-red-500 hover:bg-[#eee7d5]'} transition-all`}
-                  title="Limpiar historial de este módulo"
-              >
+              <button onClick={handleClearChat} className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-red-400 hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:text-red-500 hover:bg-[#eee7d5]'} transition-all`} title="Limpiar historial de este módulo">
                   <Trash2 size={18} />
               </button>
             )}
-
             <button onClick={toggleTheme} className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`} title={theme === 'dark' ? 'Cambiar a Modo Día' : 'Cambiar a Modo Noche'}>
                 {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
-            
             <div className="flex gap-2 items-center">
                 <span className="hidden sm:inline text-xs text-gray-500">Esperando...</span>
                 <span className="relative flex h-2 w-2">
@@ -484,15 +532,48 @@ export default function AsistentePage() {
                   <BotMessageActions text={msg.text} theme={theme} />
                 </div>
               )}
-              
             </div>
           ))}
           <div ref={messagesEndRef} />
         </section>
 
+        {/* ÁREA DE INPUT DE TEXTO Y ARCHIVO */}
         <footer className="flex-shrink-0 p-4 md:pb-8">
           <div className="max-w-3xl mx-auto relative group">
-            <div className={`${currentColors.footerBG} rounded-3xl border border-gray-700 p-2 pl-4 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl transition-colors duration-300`}>
+            
+            {/* VISTA PREVIA DEL ARCHIVO ADJUNTO FLOTANTE */}
+            {selectedFile && (
+              <div className={`absolute -top-10 left-4 ${theme === 'dark' ? 'bg-[#1e2a40] border-gray-700' : 'bg-[#eee7d5] border-[#c5a059]/30'} text-[#c5a059] text-xs py-1.5 px-3 rounded-t-xl border border-b-0 flex items-center gap-2 shadow-lg`}>
+                <FileText size={14} />
+                <span className="truncate max-w-[200px] font-medium">{selectedFile.name}</span>
+                <button onClick={() => setSelectedFile(null)} className="hover:text-red-400 ml-1 transition-colors">
+                  <X size={14}/>
+                </button>
+              </div>
+            )}
+
+            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-3xl border border-gray-700 p-2 pl-3 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300`}>
+              
+              {/* BOTÓN DE ADJUNTAR ARCHIVO (Solo Cliente Verificado) */}
+              {accessMode === 'client' && (
+                <>
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    className="hidden" 
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                    accept=".pdf,.doc,.docx,.txt" // Extensiones permitidas de auditoría
+                  />
+                  <button 
+                    onClick={() => fileInputRef.current?.click()} 
+                    className={`p-2.5 rounded-full mb-1 transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
+                    title="Adjuntar Documento Legal"
+                  >
+                    <Paperclip size={20} />
+                  </button>
+                </>
+              )}
+
               <textarea 
                 id="userInput"
                 value={inputText}
@@ -507,14 +588,16 @@ export default function AsistentePage() {
                     handleSend(); 
                   } 
                 }}
-                placeholder="Escriba aquí..." 
+                placeholder={accessMode === 'client' ? "Escriba su consulta o adjunte un documento..." : "Escriba aquí (Modo Demo)..."} 
                 rows={1}
-                className={`w-full bg-transparent outline-none text-sm md:text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden ${currentColors.textArea}`}
+                className={`w-full bg-transparent outline-none text-sm md:text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden pb-1 ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                 style={{ minHeight: '44px' }}
               />
+              
               <button 
                 onClick={handleSend}
                 className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 transition-all active:scale-95 flex-shrink-0`}
+                title="Enviar mensaje"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-5 md:w-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
