@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import logoShield from '@/assets/logo-shield.png'; 
+// AQUÍ ESTÁ EL CAMBIO: Ahora apunta a tu imagen de alta calidad
+import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
 import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown } from 'lucide-react'; 
@@ -480,7 +481,6 @@ export default function AsistentePage() {
                   <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
                     <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
                   </div>
-                  {/* NUEVO: Botones de Acción (Copiar, Like, Dislike) integrados debajo del mensaje del bot */}
                   <BotMessageActions text={msg.text} theme={theme} />
                 </div>
               )}
