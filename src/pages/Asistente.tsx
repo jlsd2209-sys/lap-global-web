@@ -11,7 +11,7 @@ type Message = {
 };
 
 // ==========================================
-// BASE DE DATOS DE MÓDULOS CON TEXTOS DEMO Y DE CARGA INYECTADOS
+// BASE DE DATOS DE MÓDULOS 
 // ==========================================
 const MODULES_DB = [
   { 
@@ -46,7 +46,7 @@ const MODULES_DB = [
     name: 'Informes Automáticos', 
     hook: 'webhook-informes', 
     icon: '📊',
-    demoText: "Parámetros de generation recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
+    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
     loadingText: "Estructurando reporte para la generación del dictamen..."
   },
   { 
@@ -184,9 +184,10 @@ export default function AsistentePage() {
 
   const currentColors = palettes[theme];
 
+  // PANTALLA DE LOGIN (Ajustada con h-[100dvh] para evitar scrolls raros)
   if (accessMode === 'none') {
     return (
-      <div className="relative flex h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
+      <div className="relative flex h-[100dvh] w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
@@ -195,7 +196,6 @@ export default function AsistentePage() {
           <Particles count={40} />
         </div>
         
-        {/* === TARJETA DE LOGIN CON DEGRADADO AZUL DIAGONAL === */}
         <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)]">
           <div 
             className="flex flex-col items-center mb-8 group cursor-pointer"
@@ -271,8 +271,11 @@ export default function AsistentePage() {
     );
   }
 
+  // ==========================================
+  // EL CHAT INTERNO (Ajustado con h-[100dvh] y flex-shrink-0)
+  // ==========================================
   return (
-    <div className={`flex h-screen w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    <div className={`flex h-[100dvh] w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
@@ -280,12 +283,9 @@ export default function AsistentePage() {
         />
       )}
 
-      {/* ======================================================================= */}
-      {/* SIDEBAR: ICONO DE HAMBURGUESA INTEGRADO DENTRO DEL PANEL */}
-      {/* ======================================================================= */}
+      {/* SIDEBAR */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full flex flex-col border-r border-gray-800 overflow-x-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full md:translate-x-0'} ${isDesktopSidebarCollapsed ? 'md:w-[80px]' : 'md:w-[280px]'}`}>
         
-        {/* CERRAR EN MÓVIL */}
         <button 
           className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -293,7 +293,6 @@ export default function AsistentePage() {
           <X size={24} />
         </button>
 
-        {/* FONDOS DEL SIDEBAR */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
           <div className={`absolute inset-0 ${currentColors.sidebarOverlay} transition-colors duration-300`}></div>
@@ -302,9 +301,6 @@ export default function AsistentePage() {
           <Particles count={25} />
         </div>
 
-        {/* ============================================== */}
-        {/* BOTÓN DE COLAPSAR (ARRIBA DEL LOGO, SOLO PC) */}
-        {/* ============================================== */}
         <div className={`hidden md:flex relative z-20 w-full pt-5 px-5 transition-all duration-300 ${isDesktopSidebarCollapsed ? 'justify-center px-0' : 'justify-end'}`}>
           <button 
             onClick={() => setIsDesktopSidebarCollapsed(!isDesktopSidebarCollapsed)}
@@ -315,7 +311,6 @@ export default function AsistentePage() {
           </button>
         </div>
 
-        {/* LOGO */}
         <div 
           className={`pt-2 pb-6 px-6 relative z-10 flex flex-col items-center group cursor-pointer transition-all duration-300`}
           onMouseEnter={() => setIsLogoHovered(true)}
@@ -330,7 +325,6 @@ export default function AsistentePage() {
         </div>
 
         <nav className={`flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.sidebarBtnText}`}>
-          
           <p className={`text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>Centro de Inteligencia</p>
           {MODULES_DB.slice(0, 3).map((mod) => (
             <button 
@@ -358,17 +352,16 @@ export default function AsistentePage() {
               <span className={`ml-3 whitespace-nowrap ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>{mod.name}</span>
             </button>
           ))}
-
         </nav>
       </aside>
 
       {/* MAIN CHAT AREA */}
       <main className="flex-1 flex flex-col relative w-full min-w-0 transition-all duration-300">
         
-        <header className={`min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
+        {/* HEADER: flex-shrink-0 evita que se comprima, z-10 lo mantiene arriba */}
+        <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-10 transition-colors duration-300`}>
           
           <div className="flex items-center gap-3 md:gap-4 w-full">
-            {/* BOTÓN HAMBURGUESA: AHORA ESTÁ OCULTO EN PC (md:hidden) */}
             <button 
               className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
               onClick={() => setIsMobileMenuOpen(true)}
@@ -396,7 +389,7 @@ export default function AsistentePage() {
             </button>
 
             <div className="flex gap-2 items-center">
-                <span className="hidden sm:inline text-xs text-gray-500">Esperando consulta...</span>
+                <span className="hidden sm:inline text-xs text-gray-500">Esperando...</span>
                 <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -405,6 +398,7 @@ export default function AsistentePage() {
           </div>
         </header>
 
+        {/* ÁREA DE MENSAJES: La única parte que hace scroll (overflow-y-auto) */}
         <section className={`flex-1 overflow-y-auto px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           {messages.length === 0 && (
             <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
@@ -434,7 +428,8 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        <footer className="p-4 md:pb-8">
+        {/* FOOTER INPUT: flex-shrink-0 lo bloquea abajo */}
+        <footer className="flex-shrink-0 p-4 md:pb-8">
           <div className="max-w-3xl mx-auto relative group">
             <div className={`${currentColors.footerBG} rounded-3xl border border-gray-700 p-2 pl-4 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl transition-colors duration-300`}>
               <textarea 
@@ -451,7 +446,7 @@ export default function AsistentePage() {
                     handleSend(); 
                   } 
                 }}
-                placeholder="Escriba aquí los detalles del caso..." 
+                placeholder="Escriba aquí..." 
                 rows={1}
                 className={`w-full bg-transparent outline-none text-sm md:text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden ${currentColors.textArea}`}
                 style={{ minHeight: '44px' }}
