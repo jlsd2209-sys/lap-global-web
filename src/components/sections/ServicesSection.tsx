@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
-import { Particles } from '../Particles';
+import { Particles } from '../Particles'; // Ajusta la ruta si es diferente
 import { Link } from 'react-router-dom';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
@@ -29,24 +29,27 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ scale: 1.04 }}
-      // CAMBIO RADICAL: Fondo Crema sólido (bg-[#fdfcf5]) que pasa a Dorado sólido (hover:bg-[#c5a059])
-      className="relative flex flex-col text-center p-8 bg-[#fdfcf5] rounded-2xl border-2 border-[#c5a059]/20 transition-all duration-500 hover:border-[#c5a059] hover:bg-[#c5a059] hover:shadow-[0_0_40px_rgba(197,160,89,0.4)] overflow-hidden cursor-pointer h-full"
+      // FONDO DORADO: Usamos exactamente tus variables de degradado dorado
+      className="relative flex flex-col text-center p-8 bg-gradient-to-br from-gold to-gold-bright rounded-2xl shadow-lg transition-all duration-500 hover:shadow-[0_0_35px_rgba(197,160,89,0.5)] overflow-hidden cursor-pointer h-full"
     >
+      {/* Brillo extra al pasar el mouse (para que se sienta interactivo) */}
+      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+      
       <div className="relative z-10 flex flex-col h-full">
-        {/* ÍCONO: Empieza Dorado y pasa a Azul Oscuro al hacer hover */}
-        <div className="text-[#c5a059] group-hover:text-[#0a1526] mb-6 flex justify-center transform transition-all duration-500 group-hover:-translate-y-1">
+        {/* ÍCONO: Azul Oscuro para contrastar contra el oro */}
+        <div className="text-navy-dark mb-6 flex justify-center transform transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110">
           <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-3">
-          {/* TÍTULO: Azul oscuro puro, siempre legible y elegante */}
-          <span className="text-lg font-serif font-bold text-[#0a1526] transition-colors duration-300">
+          {/* TÍTULO: Azul Oscuro (Navy) */}
+          <span className="text-lg font-serif font-bold text-navy-dark transition-colors duration-300">
             {item.title}
           </span>
         </div>
 
-        {/* DESCRIPCIÓN: Gris oscuro que se vuelve Azul Oscuro intenso en hover */}
-        <p className="text-gray-600 group-hover:text-[#0a1526]/90 text-sm leading-relaxed mt-auto transition-colors duration-300 font-medium">
+        {/* DESCRIPCIÓN: Azul Oscuro con ligera transparencia */}
+        <p className="text-navy-dark/80 text-sm leading-relaxed mt-auto font-medium">
           {item.desc}
         </p>
       </div>
@@ -58,7 +61,7 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
       
-      {/* ── FONDO (Queda idéntico, azul corporativo oscuro) ── */}
+      {/* ── FONDO AZUL CON MAPA (Se mantiene igual para dar contraste a las tarjetas doradas) ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
@@ -79,7 +82,8 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
+        {/* Línea divisoria */}
+        <div className="my-14 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent max-w-4xl mx-auto" />
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
           <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
