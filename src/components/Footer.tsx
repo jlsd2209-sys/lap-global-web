@@ -1,5 +1,5 @@
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoShield from '@/assets/logo-shield.png';
+import logo from '@/assets/logo.png.png';
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
