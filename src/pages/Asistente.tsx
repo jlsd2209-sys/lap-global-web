@@ -80,22 +80,37 @@ export default function AsistentePage() {
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
-  // NUEVO: Inicializar el historial desde el localStorage del navegador
-  const [chatsHistory, setChatsHistory] = useState<Record<string, Message[]>>(() => {
-    try {
-      const savedHistory = localStorage.getItem('lap_chatsHistory');
-      return savedHistory ? JSON.parse(savedHistory) : {};
-    } catch (error) {
-      return {};
-    }
-  });
-
-  // NUEVO: Guardar en localStorage cada vez que el historial cambia
-  useEffect(() => {
-    localStorage.setItem('lap_chatsHistory', JSON.stringify(chatsHistory));
-  }, [chatsHistory]);
-  
+  // Historial vacío al inicio
+  const [chatsHistory, setChatsHistory] = useState<Record<string, Message[]>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // ========================================================
+  // NUEVO: SEPARACIÓN DE MEMORIA POR USUARIO
+  // ========================================================
+  useEffect(() => {
+    // Al iniciar sesión (guest o client), cargamos SU propio historial
+    if (accessMode !== 'none') {
+      const storageKey = `lap_history_${accessMode}_${username || 'guest'}`;
+      try {
+        const savedHistory = localStorage.getItem(storageKey);
+        if (savedHistory) {
+          setChatsHistory(JSON.parse(savedHistory));
+        } else {
+          setChatsHistory({}); // Si no hay historial previo, empieza vacío
+        }
+      } catch (error) {
+        setChatsHistory({});
+      }
+    }
+  }, [accessMode, username]);
+
+  useEffect(() => {
+    // Guardamos el historial cada vez que se actualiza, en la llave correspondiente al usuario
+    if (accessMode !== 'none') {
+      const storageKey = `lap_history_${accessMode}_${username || 'guest'}`;
+      localStorage.setItem(storageKey, JSON.stringify(chatsHistory));
+    }
+  }, [chatsHistory, accessMode, username]);
 
   const currentMessages = chatsHistory[moduloActivo] || [];
 
@@ -113,21 +128,25 @@ export default function AsistentePage() {
     }
   };
 
+  // ========================================================
+  // NUEVO: CIERRE DE SESIÓN CON CONFIRMACIÓN
+  // ========================================================
   const handleLogout = () => {
-    setAccessMode('none');
-    setUsername('');
-    setPassword('');
-    // YA NO BORRAMOS EL HISTORIAL: setChatsHistory({}) eliminado
-    setModuloActivo(initialModule.name);
-    setWebhookActivo(initialModule.hook);
+    if (window.confirm("¿Seguro que desea cerrar sesión de forma segura?")) {
+      setAccessMode('none');
+      setUsername('');
+      setPassword('');
+      setChatsHistory({}); // Limpiamos la pantalla (su caché queda guardada en el navegador)
+      setModuloActivo(initialModule.name);
+      setWebhookActivo(initialModule.hook);
+    }
   };
 
-  // NUEVO: Función para limpiar solo el chat activo a voluntad del usuario
   const handleClearChat = () => {
     if (window.confirm(`¿Seguro que desea eliminar el historial de ${moduloActivo}?`)) {
       setChatsHistory(prev => {
         const newState = { ...prev };
-        delete newState[moduloActivo]; // Borramos solo el módulo actual
+        delete newState[moduloActivo];
         return newState;
       });
     }
@@ -337,7 +356,9 @@ export default function AsistentePage() {
           ))}
         </nav>
 
-        {/* PANEL INFERIOR DE USUARIO Y CIERRE DE SESIÓN */}
+        {/* ======================================================================= */}
+        {/* PANEL INFERIOR CON EL NUEVO BOTÓN DE CERRAR SESIÓN DESTACADO */}
+        {/* ======================================================================= */}
         <div className={`border-t border-gray-800 relative z-10 flex items-center transition-all duration-300 ${isDesktopSidebarCollapsed ? 'p-4 justify-center' : 'p-4 justify-between'}`}>
           <div className="flex items-center gap-3 overflow-hidden" title={isDesktopSidebarCollapsed ? (accessMode === 'client' ? username : 'Invitado') : undefined}>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#c5a059]/20 to-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] flex items-center justify-center flex-shrink-0 font-bold shadow-lg">
@@ -352,7 +373,12 @@ export default function AsistentePage() {
               </span>
             </div>
           </div>
-          <button onClick={handleLogout} className={`text-gray-500 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-red-400/10 ${isDesktopSidebarCollapsed ? 'hidden' : 'block'}`} title="Cerrar sesión">
+          
+          <button 
+            onClick={handleLogout} 
+            className={`flex items-center justify-center p-2.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-xl transition-all ${isDesktopSidebarCollapsed ? 'hidden' : 'block'}`} 
+            title="Cerrar sesión segura"
+          >
             <LogOut size={18} />
           </button>
         </div>
@@ -375,7 +401,6 @@ export default function AsistentePage() {
           </div>
           
           <div className="flex gap-2 md:gap-4 items-center flex-shrink-0">
-            {/* NUEVO: Botón de Papelera (solo aparece si hay mensajes en este módulo) */}
             {currentMessages.length > 0 && (
               <button 
                   onClick={handleClearChat}
