@@ -11,7 +11,7 @@ type Message = {
 };
 
 // ==========================================
-// BASE DE DATOS DE MÓDULOS 
+// BASE DE DATOS DE MÓDULOS CON TEXTOS DEMO Y DE CARGA INYECTADOS
 // ==========================================
 const MODULES_DB = [
   { 
@@ -46,7 +46,7 @@ const MODULES_DB = [
     name: 'Informes Automáticos', 
     hook: 'webhook-informes', 
     icon: '📊',
-    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
+    demoText: "Parámetros de generation recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
     loadingText: "Estructurando reporte para la generación del dictamen..."
   },
   { 
@@ -184,27 +184,19 @@ export default function AsistentePage() {
 
   const currentColors = palettes[theme];
 
-  // ==========================================
-  // LA "PUERTA": PANTALLA DE LOGIN
-  // ==========================================
   if (accessMode === 'none') {
     return (
       <div className="relative flex h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
-        
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
         </div>
-
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <Particles count={40} />
         </div>
-
-        {/* ========================================================= */}
-        {/* TARJETA DE LOGIN CON EL DEGRADADO DIAGONAL ELEGANTE */}
-        {/* ========================================================= */}
-        <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 to-[#0a1526]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)]">
-          
+        
+        {/* === TARJETA DE LOGIN CON DEGRADADO AZUL DIAGONAL === */}
+        <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)]">
           <div 
             className="flex flex-col items-center mb-8 group cursor-pointer"
             onMouseEnter={() => setIsLoginHovered(true)}
@@ -216,9 +208,8 @@ export default function AsistentePage() {
             <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
               Acceso Seguro
             </h2>
-            <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Ecosistema de Inteligencia Legal</p>
+            <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Plataforma de Inteligencia Legal</p>
           </div>
-
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <input 
@@ -229,7 +220,6 @@ export default function AsistentePage() {
                 className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
               />
             </div>
-            
             <div className="space-y-1">
               <div className="relative">
                 <input 
@@ -247,7 +237,6 @@ export default function AsistentePage() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              
               <div className="flex justify-end pr-1 pt-1">
                 <button 
                   type="button"
@@ -258,11 +247,9 @@ export default function AsistentePage() {
                 </button>
               </div>
             </div>
-
             {loginError && (
               <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
             )}
-
             <button 
               type="submit" 
               className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95 mt-2"
@@ -270,7 +257,6 @@ export default function AsistentePage() {
               <Lock size={18} /> Ingresar a la red
             </button>
           </form>
-
           <div className="mt-8 pt-6 border-t border-gray-800 text-center">
             <p className="text-gray-400 text-sm mb-3">¿Desea conocer la plataforma?</p>
             <button 
@@ -285,12 +271,8 @@ export default function AsistentePage() {
     );
   }
 
-  // ==========================================
-  // EL CHAT INTERNO
-  // ==========================================
   return (
     <div className={`flex h-screen w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
-      
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
@@ -298,9 +280,12 @@ export default function AsistentePage() {
         />
       )}
 
-      {/* SIDEBAR */}
+      {/* ======================================================================= */}
+      {/* SIDEBAR: ICONO DE HAMBURGUESA INTEGRADO DENTRO DEL PANEL */}
+      {/* ======================================================================= */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full flex flex-col border-r border-gray-800 overflow-x-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full md:translate-x-0'} ${isDesktopSidebarCollapsed ? 'md:w-[80px]' : 'md:w-[280px]'}`}>
         
+        {/* CERRAR EN MÓVIL */}
         <button 
           className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -308,15 +293,18 @@ export default function AsistentePage() {
           <X size={24} />
         </button>
 
+        {/* FONDOS DEL SIDEBAR */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
           <div className={`absolute inset-0 ${currentColors.sidebarOverlay} transition-colors duration-300`}></div>
         </div>
-
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Particles count={25} />
         </div>
 
+        {/* ============================================== */}
+        {/* BOTÓN DE COLAPSAR (ARRIBA DEL LOGO, SOLO PC) */}
+        {/* ============================================== */}
         <div className={`hidden md:flex relative z-20 w-full pt-5 px-5 transition-all duration-300 ${isDesktopSidebarCollapsed ? 'justify-center px-0' : 'justify-end'}`}>
           <button 
             onClick={() => setIsDesktopSidebarCollapsed(!isDesktopSidebarCollapsed)}
@@ -327,6 +315,7 @@ export default function AsistentePage() {
           </button>
         </div>
 
+        {/* LOGO */}
         <div 
           className={`pt-2 pb-6 px-6 relative z-10 flex flex-col items-center group cursor-pointer transition-all duration-300`}
           onMouseEnter={() => setIsLogoHovered(true)}
@@ -379,6 +368,7 @@ export default function AsistentePage() {
         <header className={`min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
           <div className="flex items-center gap-3 md:gap-4 w-full">
+            {/* BOTÓN HAMBURGUESA: AHORA ESTÁ OCULTO EN PC (md:hidden) */}
             <button 
               className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
               onClick={() => setIsMobileMenuOpen(true)}
