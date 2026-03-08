@@ -58,6 +58,7 @@ export const Header = () => {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
+        {/* EL MISMO COMPORTAMIENTO QUE LA TARJETA DE LOGIN */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -65,17 +66,7 @@ export const Header = () => {
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          {/* CAMBIO REALIZADO: Quitamos el transform bloqueador, mantenemos la alta calidad y el hover */}
-          <div 
-            className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-            style={{ 
-              transformOrigin: 'center', 
-              willChange: 'transform', 
-              backfaceVisibility: 'hidden', 
-              WebkitFontSmoothing: 'antialiased',
-              imageRendering: 'high-quality'
-            }}
-          >
+          <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img 
               alt="LAP Global & IA Logo" 
               className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" 
