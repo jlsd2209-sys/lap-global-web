@@ -116,12 +116,9 @@ export default function AsistentePage() {
     }
 
     const loadingId = (Date.now() + 1).toString();
-    
-    // ENCONTRAR EL MÓDULO ACTUAL PARA EXTRAER SU TEXTO DE CARGA
     const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
     const dynamicLoadingText = activeModuleData?.loadingText || "Analizando datos...";
 
-    // INYECTAR EL TEXTO DE CARGA DINÁMICO
     setMessages(prev => [...prev, { id: loadingId, sender: 'loading', text: dynamicLoadingText }]);
 
     setTimeout(() => {
@@ -186,24 +183,17 @@ export default function AsistentePage() {
 
   const currentColors = palettes[theme];
 
-  // ==========================================
-  // LA "PUERTA": PANTALLA DE LOGIN
-  // ==========================================
   if (accessMode === 'none') {
     return (
       <div className="relative flex h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
-        
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
         </div>
-
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <Particles count={40} />
         </div>
-
         <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-[#030712]/70 backdrop-blur-xl border border-gray-800 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-          
           <div 
             className="flex flex-col items-center mb-8 group cursor-pointer"
             onMouseEnter={() => setIsLoginHovered(true)}
@@ -217,7 +207,6 @@ export default function AsistentePage() {
             </h2>
             <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Sistemas de IA Transnacional</p>
           </div>
-
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <input 
@@ -228,7 +217,6 @@ export default function AsistentePage() {
                 className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
               />
             </div>
-            
             <div className="relative">
               <input 
                 type={showPassword ? "text" : "password"} 
@@ -245,11 +233,9 @@ export default function AsistentePage() {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            
             {loginError && (
               <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
             )}
-
             <button 
               type="submit" 
               className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95 mt-2"
@@ -257,7 +243,6 @@ export default function AsistentePage() {
               <Lock size={18} /> Ingresar a la red
             </button>
           </form>
-
           <div className="mt-8 pt-6 border-t border-gray-800 text-center">
             <p className="text-gray-400 text-sm mb-3">¿Desea conocer la plataforma?</p>
             <button 
@@ -272,12 +257,8 @@ export default function AsistentePage() {
     );
   }
 
-  // ==========================================
-  // EL CHAT 
-  // ==========================================
   return (
     <div className={`flex h-screen w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
-      
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
@@ -287,23 +268,19 @@ export default function AsistentePage() {
 
       {/* SIDEBAR */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full w-[280px] flex flex-col border-r border-gray-800 overflow-hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-        
         <button 
           className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <X size={24} />
         </button>
-
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
           <div className={`absolute inset-0 ${currentColors.sidebarOverlay} transition-colors duration-300`}></div>
         </div>
-
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Particles count={25} />
         </div>
-
         <div 
           className="p-6 relative z-10 flex flex-col items-center group cursor-pointer mt-4 md:mt-0"
           onMouseEnter={() => setIsLogoHovered(true)}
@@ -322,7 +299,6 @@ export default function AsistentePage() {
 
         <nav className={`flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.sidebarBtnText}`}>
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
-          
           {MODULES_DB.slice(0, 3).map((mod) => (
             <button 
               key={mod.hook}
@@ -332,9 +308,7 @@ export default function AsistentePage() {
               <span>{mod.icon} {mod.name}</span>
             </button>
           ))}
-
           <div className="my-6 border-t border-gray-800"></div>
-
           <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Alianza Estratégica</p>
           {MODULES_DB.slice(3, 6).map((mod) => (
             <button 
@@ -349,28 +323,30 @@ export default function AsistentePage() {
       </aside>
 
       {/* MAIN CHAT AREA */}
-      <main className="flex-1 flex flex-col relative w-full">
-        <header className={`h-16 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
+      <main className="flex-1 flex flex-col relative w-full min-w-0">
+        <header className={`min-h-[4rem] py-2 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-3 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <button 
-              className={`md:hidden p-2 -ml-2 rounded-full transition-all ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
+              className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu size={22} />
             </button>
 
-            <h2 className={`font-medium ${currentColors.mainTitle} tracking-wide text-base md:text-lg truncate max-w-[180px] md:max-w-none`}>
-              {moduloActivo}
-            </h2>
+            {/* AQUI EL ARREGLO PARA CELULARES: Título y Etiqueta apilados */}
+            <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+              <h2 className={`font-medium ${currentColors.mainTitle} tracking-wide text-sm md:text-lg leading-tight`}>
+                {moduloActivo}
+              </h2>
+              {/* Etiqueta visible en móvil, tamaño compacto */}
+              <span className={`w-fit inline-block px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[9px] md:text-xs font-medium border ${accessMode === 'client' ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10'}`}>
+                {accessMode === 'client' ? 'Verificado' : 'Modo Demo'}
+              </span>
+            </div>
           </div>
 
-          <div className="flex gap-2 md:gap-4 items-center">
-            
-            <span className={`hidden md:inline-block px-3 py-1 rounded-full text-xs font-medium border ${accessMode === 'client' ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10'}`}>
-              {accessMode === 'client' ? 'Verificado' : 'Modo Demo'}
-            </span>
-
+          <div className="flex gap-2 md:gap-4 items-center flex-shrink-0">
             <button 
                 onClick={toggleTheme}
                 className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
@@ -390,7 +366,6 @@ export default function AsistentePage() {
         </header>
 
         <section className={`flex-1 overflow-y-auto px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
-          
           {messages.length === 0 && (
             <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
               <img src={logoShield} className="w-8 h-10 md:w-10 md:h-12 object-contain" alt="Logo" />
@@ -403,21 +378,17 @@ export default function AsistentePage() {
 
           {messages.map((msg) => (
             <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
-              
               {msg.sender === 'user' && (
                 <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none max-w-[90%] shadow-md`}>
                   <p className="text-sm md:text-base whitespace-pre-wrap break-words">{msg.text}</p>
                 </div>
               )}
-              
               {msg.sender === 'loading' && <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">{msg.text}</div>}
-              
               {msg.sender === 'bot' && (
                 <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none max-w-[90%] border-l-4 shadow-md`}>
                   <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
                 </div>
               )}
-
             </div>
           ))}
           <div ref={messagesEndRef} />
@@ -445,7 +416,6 @@ export default function AsistentePage() {
                 className={`w-full bg-transparent outline-none text-sm md:text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden ${currentColors.textArea}`}
                 style={{ minHeight: '44px' }}
               />
-              
               <button 
                 onClick={handleSend}
                 className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 transition-all active:scale-95 flex-shrink-0`}
@@ -454,7 +424,6 @@ export default function AsistentePage() {
                     <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                 </svg>
               </button>
-
             </div>
           </div>
         </footer>
