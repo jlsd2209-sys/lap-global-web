@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-// AQUÍ ESTÁ EL CAMBIO: Apuntando al nuevo logo de alta calidad
 import logoShield from '@/assets/logo.png.png';
 
 const navItems = [{
@@ -66,21 +65,20 @@ export const Header = () => {
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          {/* CAMBIO REALIZADO: Contenedor 'premium' con aceleración extra forzada (misma lógica que footer y login) */}
+          {/* CAMBIO REALIZADO: Quitamos el transform bloqueador, mantenemos la alta calidad y el hover */}
           <div 
             className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
             style={{ 
               transformOrigin: 'center', 
               willChange: 'transform', 
               backfaceVisibility: 'hidden', 
-              WebkitFontSmoothing: 'antialiased', 
-              transform: 'translate3d(0, 0, 0)', // <--- El truco mágico anti-blur
-              imageRendering: 'high-quality' // <--- Prioriza la calidad
+              WebkitFontSmoothing: 'antialiased',
+              imageRendering: 'high-quality'
             }}
           >
             <img 
               alt="LAP Global & IA Logo" 
-              className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" // <--- El drop-shadow brillante
+              className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" 
               src={logoShield} 
             />
           </div>
