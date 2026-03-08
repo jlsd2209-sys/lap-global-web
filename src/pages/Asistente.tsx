@@ -77,6 +77,10 @@ export default function AsistentePage() {
   
   const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // NUEVO ESTADO: Para controlar si el panel de PC está minimizado o expandido
+  const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
+  
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -101,6 +105,7 @@ export default function AsistentePage() {
     setWebhookActivo(webhook);
     setMessages([]); 
     setIsMobileMenuOpen(false); 
+    // Nota: Al hacer clic en un módulo en PC, NO lo colapsamos automáticamente por comodidad.
   };
 
   const handleSend = () => {
@@ -218,7 +223,6 @@ export default function AsistentePage() {
               />
             </div>
             
-            {/* CONTENEDOR DE CONTRASEÑA Y ENLACE DE RECUPERACIÓN */}
             <div className="space-y-1">
               <div className="relative">
                 <input 
@@ -236,8 +240,6 @@ export default function AsistentePage() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              
-              {/* NUEVO ENLACE: ¿Olvidó su contraseña? */}
               <div className="flex justify-end pr-1 pt-1">
                 <button 
                   type="button"
@@ -282,71 +284,89 @@ export default function AsistentePage() {
         />
       )}
 
-      {/* SIDEBAR */}
-      <aside className={`fixed md:relative top-0 left-0 z-50 h-full w-[280px] flex flex-col border-r border-gray-800 overflow-hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+      {/* ======================================================================= */}
+      {/* SIDEBAR: AHORA RESPONDE AL ESTADO COLLAPSED EN ESCRITORIO */}
+      {/* ======================================================================= */}
+      <aside className={`fixed md:relative top-0 left-0 z-50 h-full flex flex-col border-r border-gray-800 overflow-x-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full md:translate-x-0'} ${isDesktopSidebarCollapsed ? 'md:w-[80px]' : 'md:w-[280px]'}`}>
         <button 
           className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <X size={24} />
         </button>
+
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
           <div className={`absolute inset-0 ${currentColors.sidebarOverlay} transition-colors duration-300`}></div>
         </div>
+
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Particles count={25} />
         </div>
+
+        {/* LOGO: Se hace un poco más pequeño si el menú está colapsado */}
         <div 
-          className="p-6 relative z-10 flex flex-col items-center group cursor-pointer mt-4 md:mt-0"
+          className={`p-6 relative z-10 flex flex-col items-center group cursor-pointer mt-4 md:mt-0 transition-all duration-300`}
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          <div className="relative w-20 h-24 mb-3 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          <div className={`relative ${isDesktopSidebarCollapsed ? 'md:w-10 md:h-12 w-20 h-24' : 'w-20 h-24'} mb-3 flex-shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-110`}>
             <img src={logoShield} alt="LAP Global Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" />
           </div>
-          <h2 className={`text-center text-[11px] uppercase tracking-widest font-bold transition-all duration-300 ${
-              isLogoHovered ? 'gradient-text-gold' : 'text-white'
-            }`}
-          >
+          <h2 className={`text-center text-[11px] uppercase tracking-widest font-bold transition-all duration-300 ${isLogoHovered ? 'gradient-text-gold' : 'text-white'} ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>
             Unidad de Asuntos Transnacionales & IA
           </h2>
         </div>
 
         <nav className={`flex-1 overflow-y-auto px-3 space-y-1 relative z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.sidebarBtnText}`}>
-          <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Centro de Inteligencia</p>
+          
+          <p className={`text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>Centro de Inteligencia</p>
           {MODULES_DB.slice(0, 3).map((mod) => (
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
+              title={isDesktopSidebarCollapsed ? mod.name : undefined} // Tooltip inteligente
               className={`w-full flex items-center p-3 rounded-lg text-sm transition-all ${currentColors.sidebarBtnHover} border-l-4 ${moduloActivo === mod.name ? currentColors.sidebarBtnActive : 'border-transparent hover:border-[#c5a059]'}`}
             >
-              <span>{mod.icon} {mod.name}</span>
+              <div className="flex items-center justify-center w-5 h-5 text-lg flex-shrink-0">{mod.icon}</div>
+              <span className={`ml-3 whitespace-nowrap ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>{mod.name}</span>
             </button>
           ))}
+
           <div className="my-6 border-t border-gray-800"></div>
-          <p className="text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase">Alianza Estratégica</p>
+
+          <p className={`text-[10px] text-gray-500 font-bold px-3 mb-2 uppercase ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>Alianza Estratégica</p>
           {MODULES_DB.slice(3, 6).map((mod) => (
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
+              title={isDesktopSidebarCollapsed ? mod.name : undefined} // Tooltip inteligente
               className={`w-full flex items-center p-3 rounded-lg text-sm transition-all ${currentColors.sidebarBtnHover} border-l-4 ${moduloActivo === mod.name ? currentColors.sidebarBtnActive : 'border-transparent hover:border-[#c5a059]'}`}
             >
-              <span>{mod.icon} {mod.name}</span>
+              <div className="flex items-center justify-center w-5 h-5 text-lg flex-shrink-0">{mod.icon}</div>
+              <span className={`ml-3 whitespace-nowrap ${isDesktopSidebarCollapsed ? 'md:hidden' : ''}`}>{mod.name}</span>
             </button>
           ))}
+
         </nav>
       </aside>
 
       {/* MAIN CHAT AREA */}
-      <main className="flex-1 flex flex-col relative w-full min-w-0">
+      <main className="flex-1 flex flex-col relative w-full min-w-0 transition-all duration-300">
         
         <header className={`min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
           <div className="flex items-center gap-3 md:gap-4 w-full">
+            {/* BOTÓN HAMBURGUESA MEJORADO: Actúa en Móvil (Menú) y en PC (Expandir/Colapsar) */}
             <button 
-              className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
-              onClick={() => setIsMobileMenuOpen(true)}
+              className={`p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setIsMobileMenuOpen(true);
+                } else {
+                  setIsDesktopSidebarCollapsed(!isDesktopSidebarCollapsed);
+                }
+              }}
             >
               <Menu size={22} />
             </button>
