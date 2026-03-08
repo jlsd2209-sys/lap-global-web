@@ -65,8 +65,11 @@ export const Header = () => {
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          {/* ESTRUCTURA IDÉNTICA AL ASISTENTE: Animación en el div y sombra dorada en la imagen */}
-          <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          {/* EL TRUCO DEFINITIVO ANTI-BLUR: 
+            En lugar de usar 'scale-110', animamos los pixeles exactos.
+            Móvil: de 48px a 54px. PC: de 64px a 72px.
+          */}
+          <div className="relative flex-shrink-0 flex items-center justify-center transition-all duration-300 ease-out w-[48px] h-[48px] md:w-[64px] md:h-[64px] group-hover:w-[54px] group-hover:h-[54px] md:group-hover:w-[72px] md:group-hover:h-[72px]">
             <img 
               alt="LAP Global & IA Logo" 
               className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" 
