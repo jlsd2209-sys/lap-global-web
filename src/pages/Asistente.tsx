@@ -77,10 +77,7 @@ export default function AsistentePage() {
   
   const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  // NUEVO ESTADO: Para controlar si el panel de PC está minimizado o expandido
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
-  
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -105,7 +102,6 @@ export default function AsistentePage() {
     setWebhookActivo(webhook);
     setMessages([]); 
     setIsMobileMenuOpen(false); 
-    // Nota: Al hacer clic en un módulo en PC, NO lo colapsamos automáticamente por comodidad.
   };
 
   const handleSend = () => {
@@ -222,7 +218,6 @@ export default function AsistentePage() {
                 className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
               />
             </div>
-            
             <div className="space-y-1">
               <div className="relative">
                 <input 
@@ -250,7 +245,6 @@ export default function AsistentePage() {
                 </button>
               </div>
             </div>
-
             {loginError && (
               <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
             )}
@@ -285,9 +279,11 @@ export default function AsistentePage() {
       )}
 
       {/* ======================================================================= */}
-      {/* SIDEBAR: AHORA RESPONDE AL ESTADO COLLAPSED EN ESCRITORIO */}
+      {/* SIDEBAR: ICONO DE HAMBURGUESA INTEGRADO DENTRO DEL PANEL */}
       {/* ======================================================================= */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full flex flex-col border-r border-gray-800 overflow-x-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full md:translate-x-0'} ${isDesktopSidebarCollapsed ? 'md:w-[80px]' : 'md:w-[280px]'}`}>
+        
+        {/* CERRAR EN MÓVIL */}
         <button 
           className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -295,18 +291,31 @@ export default function AsistentePage() {
           <X size={24} />
         </button>
 
+        {/* FONDOS DEL SIDEBAR */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
           <div className={`absolute inset-0 ${currentColors.sidebarOverlay} transition-colors duration-300`}></div>
         </div>
-
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Particles count={25} />
         </div>
 
-        {/* LOGO: Se hace un poco más pequeño si el menú está colapsado */}
+        {/* ============================================== */}
+        {/* BOTÓN DE COLAPSAR (ARRIBA DEL LOGO, SOLO PC) */}
+        {/* ============================================== */}
+        <div className={`hidden md:flex relative z-20 w-full pt-5 px-5 transition-all duration-300 ${isDesktopSidebarCollapsed ? 'justify-center px-0' : 'justify-end'}`}>
+          <button 
+            onClick={() => setIsDesktopSidebarCollapsed(!isDesktopSidebarCollapsed)}
+            className={`p-2 rounded-lg transition-all text-gray-400 hover:text-[#c5a059] ${currentColors.sidebarBtnHover}`}
+            title={isDesktopSidebarCollapsed ? "Expandir panel" : "Minimizar panel"}
+          >
+            <Menu size={22} />
+          </button>
+        </div>
+
+        {/* LOGO */}
         <div 
-          className={`p-6 relative z-10 flex flex-col items-center group cursor-pointer mt-4 md:mt-0 transition-all duration-300`}
+          className={`pt-2 pb-6 px-6 relative z-10 flex flex-col items-center group cursor-pointer transition-all duration-300`}
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
@@ -325,7 +334,7 @@ export default function AsistentePage() {
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
-              title={isDesktopSidebarCollapsed ? mod.name : undefined} // Tooltip inteligente
+              title={isDesktopSidebarCollapsed ? mod.name : undefined}
               className={`w-full flex items-center p-3 rounded-lg text-sm transition-all ${currentColors.sidebarBtnHover} border-l-4 ${moduloActivo === mod.name ? currentColors.sidebarBtnActive : 'border-transparent hover:border-[#c5a059]'}`}
             >
               <div className="flex items-center justify-center w-5 h-5 text-lg flex-shrink-0">{mod.icon}</div>
@@ -340,7 +349,7 @@ export default function AsistentePage() {
             <button 
               key={mod.hook}
               onClick={() => cambiarModulo(mod.name, mod.hook)} 
-              title={isDesktopSidebarCollapsed ? mod.name : undefined} // Tooltip inteligente
+              title={isDesktopSidebarCollapsed ? mod.name : undefined}
               className={`w-full flex items-center p-3 rounded-lg text-sm transition-all ${currentColors.sidebarBtnHover} border-l-4 ${moduloActivo === mod.name ? currentColors.sidebarBtnActive : 'border-transparent hover:border-[#c5a059]'}`}
             >
               <div className="flex items-center justify-center w-5 h-5 text-lg flex-shrink-0">{mod.icon}</div>
@@ -357,16 +366,10 @@ export default function AsistentePage() {
         <header className={`min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
           <div className="flex items-center gap-3 md:gap-4 w-full">
-            {/* BOTÓN HAMBURGUESA MEJORADO: Actúa en Móvil (Menú) y en PC (Expandir/Colapsar) */}
+            {/* BOTÓN HAMBURGUESA: AHORA ESTÁ OCULTO EN PC (md:hidden) */}
             <button 
-              className={`p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
-              onClick={() => {
-                if (window.innerWidth < 768) {
-                  setIsMobileMenuOpen(true);
-                } else {
-                  setIsDesktopSidebarCollapsed(!isDesktopSidebarCollapsed);
-                }
-              }}
+              className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu size={22} />
             </button>
