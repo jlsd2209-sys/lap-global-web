@@ -206,7 +206,7 @@ export default function AsistentePage() {
             <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
               Acceso Seguro
             </h2>
-            <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Sistemas de IA Transnacional</p>
+            <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Plataforma de Inteligencia Legal</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
