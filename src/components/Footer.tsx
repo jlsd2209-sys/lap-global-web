@@ -1,5 +1,6 @@
 import { Linkedin, Twitter, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
-import logoshield from '@/assets/logo-shield.png';
+// AQUÍ ESTÁ EL CAMBIO: Apuntando al nuevo logo y usando la variable logoShield con mayúscula
+import logoShield from '@/assets/logo.png.png';
 
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
