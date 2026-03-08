@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
-import { Particles } from '../Particles'; // Ajusta la ruta si es diferente
+import { Particles } from '../Particles'; // Asegúrate de que la ruta coincida con tu proyecto
 import { Link } from 'react-router-dom';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
@@ -29,27 +29,27 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ scale: 1.04 }}
-      // FONDO DORADO: Usamos exactamente tus variables de degradado dorado
-      className="relative flex flex-col text-center p-8 bg-gradient-to-br from-gold to-gold-bright rounded-2xl shadow-lg transition-all duration-500 hover:shadow-[0_0_35px_rgba(197,160,89,0.5)] overflow-hidden cursor-pointer h-full"
+      // APLICAMOS TU DEGRADADO: Oscuro y elegante (navy-dark a charcoal) con un borde dorado muy sutil
+      className="relative flex flex-col text-center p-8 bg-gradient-to-br from-navy-dark to-charcoal rounded-2xl border border-gold/20 transition-all duration-500 hover:border-gold hover:shadow-[0_0_30px_rgba(197,160,89,0.15)] overflow-hidden cursor-pointer h-full"
     >
-      {/* Brillo extra al pasar el mouse (para que se sienta interactivo) */}
-      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+      {/* Resplandor interno sutil al pasar el mouse */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
       
       <div className="relative z-10 flex flex-col h-full">
-        {/* ÍCONO: Azul Oscuro para contrastar contra el oro */}
-        <div className="text-navy-dark mb-6 flex justify-center transform transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110">
+        {/* ÍCONO: Usando tu variable text-gold para que brille */}
+        <div className="text-gold mb-6 flex justify-center transform transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(197,160,89,0.5)]">
           <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-3">
-          {/* TÍTULO: Azul Oscuro (Navy) */}
-          <span className="text-lg font-serif font-bold text-navy-dark transition-colors duration-300">
+          {/* TÍTULO: Usando tu clase gradient-text-gold para que haga juego con el resto de la web */}
+          <span className="text-lg font-serif font-bold gradient-text-gold transition-colors duration-300">
             {item.title}
           </span>
         </div>
 
-        {/* DESCRIPCIÓN: Azul Oscuro con ligera transparencia */}
-        <p className="text-navy-dark/80 text-sm leading-relaxed mt-auto font-medium">
+        {/* DESCRIPCIÓN: Un tono crema claro que se lee perfecto sobre el fondo oscuro */}
+        <p className="text-cream-light/80 group-hover:text-cream-light text-sm leading-relaxed mt-auto transition-colors duration-300">
           {item.desc}
         </p>
       </div>
@@ -61,7 +61,7 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
       
-      {/* ── FONDO AZUL CON MAPA (Se mantiene igual para dar contraste a las tarjetas doradas) ── */}
+      {/* ── FONDO ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
@@ -82,7 +82,6 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        {/* Línea divisoria */}
         <div className="my-14 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent max-w-4xl mx-auto" />
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
