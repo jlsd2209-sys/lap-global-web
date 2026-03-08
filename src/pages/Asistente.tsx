@@ -146,7 +146,6 @@ export default function AsistentePage() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
-  // RESTAURADO A TU VERSIÓN APROBADA (Midnight Slate)
   const palettes = {
     dark: {
       appBG: 'bg-[#151f32]',
@@ -218,22 +217,38 @@ export default function AsistentePage() {
                 className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
               />
             </div>
-            <div className="relative">
-              <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder="Contraseña" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 pr-12 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
-              />
-              <button 
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#c5a059] transition-colors focus:outline-none"
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+            
+            {/* CONTENEDOR DE CONTRASEÑA Y ENLACE DE RECUPERACIÓN */}
+            <div className="space-y-1">
+              <div className="relative">
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="Contraseña" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 pr-12 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all"
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#c5a059] transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              
+              {/* NUEVO ENLACE: ¿Olvidó su contraseña? */}
+              <div className="flex justify-end pr-1 pt-1">
+                <button 
+                  type="button"
+                  onClick={() => alert("Por favor, contacte a su administrador de cuenta corporativa para restablecer sus credenciales.")}
+                  className="text-xs text-gray-400 hover:text-[#c5a059] transition-colors"
+                >
+                  ¿Olvidó su contraseña?
+                </button>
+              </div>
             </div>
+
             {loginError && (
               <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>
             )}
@@ -326,7 +341,6 @@ export default function AsistentePage() {
       {/* MAIN CHAT AREA */}
       <main className="flex-1 flex flex-col relative w-full min-w-0">
         
-        {/* ENCABEZADO CORREGIDO: Más amplio, texto tamaño base y no se corta */}
         <header className={`min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
           <div className="flex items-center gap-3 md:gap-4 w-full">
