@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Globe, Scale, FileSearch, Landmark, FileBarChart, Newspaper } from 'lucide-react';
-import { Particles } from '../Particles'; // Asegúrate de que la ruta coincida con tu proyecto
-import { Link } from 'react-router-dom';
+import { Particles } from '../Particles';
+import { Link } from 'react-router-dom'; // IMPORTANTE: Importamos Link
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
 const SECTION_PADDING = 'py-14'; 
@@ -22,36 +22,30 @@ const row2 = [
 ];
 
 const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
-  <Link to={`/asistente?modulo=${item.hook}`} target="_blank" rel="noopener noreferrer" className="block w-full h-full group">
+  // AQUÍ ESTÁ LA MAGIA: target="_blank" abre nueva pestaña y le enviamos el hook
+  <Link to={`/asistente?modulo=${item.hook}`} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ scale: 1.04 }}
-      // APLICAMOS TU DEGRADADO: Oscuro y elegante (navy-dark a charcoal) con un borde dorado muy sutil
-      className="relative flex flex-col text-center p-8 bg-gradient-to-br from-navy-dark to-charcoal rounded-2xl border border-gold/20 transition-all duration-500 hover:border-gold hover:shadow-[0_0_30px_rgba(197,160,89,0.15)] overflow-hidden cursor-pointer h-full"
+      className="group relative flex flex-col text-center p-8 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer h-full"
     >
-      {/* Resplandor interno sutil al pasar el mouse */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
       
-      <div className="relative z-10 flex flex-col h-full">
-        {/* ÍCONO: Usando tu variable text-gold para que brille */}
-        <div className="text-gold mb-6 flex justify-center transform transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(197,160,89,0.5)]">
+      <div className="relative z-10">
+        <div className="text-[#c5a059] mb-6 flex justify-center">
           <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-3">
-          {/* TÍTULO: Usando tu clase gradient-text-gold para que haga juego con el resto de la web */}
-          <span className="text-lg font-serif font-bold gradient-text-gold transition-colors duration-300">
+          <span className="text-lg font-serif font-bold text-white">
             {item.title}
           </span>
         </div>
 
-        {/* DESCRIPCIÓN: Un tono crema claro que se lee perfecto sobre el fondo oscuro */}
-        <p className="text-cream-light/80 group-hover:text-cream-light text-sm leading-relaxed mt-auto transition-colors duration-300">
-          {item.desc}
-        </p>
+        <p className="text-gray-300 text-sm leading-relaxed">{item.desc}</p>
       </div>
     </motion.div>
   </Link>
@@ -82,7 +76,7 @@ export const ServicesSection = () => {
           {row1.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
 
-        <div className="my-14 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent max-w-4xl mx-auto" />
+        <div className="my-14 h-px bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent max-w-4xl mx-auto" />
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
           <h2 className={`${TITLE_SIZE} font-serif font-bold gradient-text-gold`}>
