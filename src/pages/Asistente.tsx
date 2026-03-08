@@ -146,6 +146,7 @@ export default function AsistentePage() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
+  // RESTAURADO A TU VERSIÓN APROBADA (Midnight Slate)
   const palettes = {
     dark: {
       appBG: 'bg-[#151f32]',
@@ -324,9 +325,11 @@ export default function AsistentePage() {
 
       {/* MAIN CHAT AREA */}
       <main className="flex-1 flex flex-col relative w-full min-w-0">
-        <header className={`min-h-[4rem] py-2 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-3 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
+        
+        {/* ENCABEZADO CORREGIDO: Más amplio, texto tamaño base y no se corta */}
+        <header className={`min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md sticky top-0 z-10 transition-colors duration-300`}>
           
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-3 md:gap-4 w-full">
             <button 
               className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`}
               onClick={() => setIsMobileMenuOpen(true)}
@@ -334,19 +337,17 @@ export default function AsistentePage() {
               <Menu size={22} />
             </button>
 
-            {/* AQUI EL ARREGLO PARA CELULARES: Título y Etiqueta apilados */}
-            <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-              <h2 className={`font-medium ${currentColors.mainTitle} tracking-wide text-sm md:text-lg leading-tight`}>
+            <div className="flex flex-col items-start gap-1 md:flex-row md:items-center md:gap-3 flex-1">
+              <h2 className={`font-medium ${currentColors.mainTitle} tracking-wide text-base md:text-lg leading-tight`}>
                 {moduloActivo}
               </h2>
-              {/* Etiqueta visible en móvil, tamaño compacto */}
-              <span className={`w-fit inline-block px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[9px] md:text-xs font-medium border ${accessMode === 'client' ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10'}`}>
+              <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium border ${accessMode === 'client' ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10'}`}>
                 {accessMode === 'client' ? 'Verificado' : 'Modo Demo'}
               </span>
             </div>
           </div>
 
-          <div className="flex gap-2 md:gap-4 items-center flex-shrink-0">
+          <div className="flex gap-3 md:gap-4 items-center flex-shrink-0">
             <button 
                 onClick={toggleTheme}
                 className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`}
