@@ -22,7 +22,6 @@ const row2 = [
 ];
 
 const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
-  // El "group" en el Link nos permite controlar animaciones en cadena al pasar el mouse
   <Link to={`/asistente?modulo=${item.hook}`} target="_blank" rel="noopener noreferrer" className="block w-full h-full group">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -30,25 +29,26 @@ const Card = ({ item, index }: {item: typeof row1[0]; index: number;}) => (
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ scale: 1.04 }}
-      // AJUSTE FUERTE: bg-white/10 (Cristal blanco) y cambia a dorado (bg-[#c5a059]/15) en hover
-      className="relative flex flex-col text-center p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 transition-all duration-500 hover:border-[#c5a059] hover:bg-[#c5a059]/15 hover:shadow-[0_0_35px_rgba(197,160,89,0.3)] overflow-hidden cursor-pointer h-full"
+      // CAMBIO RADICAL: Fondo Crema sólido (bg-[#fdfcf5]) que pasa a Dorado sólido (hover:bg-[#c5a059])
+      className="relative flex flex-col text-center p-8 bg-[#fdfcf5] rounded-2xl border-2 border-[#c5a059]/20 transition-all duration-500 hover:border-[#c5a059] hover:bg-[#c5a059] hover:shadow-[0_0_40px_rgba(197,160,89,0.4)] overflow-hidden cursor-pointer h-full"
     >
-      {/* Destello interno dorado en Hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#c5a059]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
-      
       <div className="relative z-10 flex flex-col h-full">
-        {/* ÍCONO: Empieza Plata/Blanco y se enciende Dorado al pasar el mouse */}
-        <div className="text-gray-200 group-hover:text-[#c5a059] mb-6 flex justify-center transform transition-all duration-500 group-hover:-translate-y-1 group-hover:drop-shadow-[0_0_12px_rgba(197,160,89,0.8)]">
+        {/* ÍCONO: Empieza Dorado y pasa a Azul Oscuro al hacer hover */}
+        <div className="text-[#c5a059] group-hover:text-[#0a1526] mb-6 flex justify-center transform transition-all duration-500 group-hover:-translate-y-1">
           <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-3">
-          <span className="text-lg font-serif font-bold text-white transition-colors duration-300">
+          {/* TÍTULO: Azul oscuro puro, siempre legible y elegante */}
+          <span className="text-lg font-serif font-bold text-[#0a1526] transition-colors duration-300">
             {item.title}
           </span>
         </div>
 
-        <p className="text-gray-300 group-hover:text-white text-sm leading-relaxed transition-colors duration-300">{item.desc}</p>
+        {/* DESCRIPCIÓN: Gris oscuro que se vuelve Azul Oscuro intenso en hover */}
+        <p className="text-gray-600 group-hover:text-[#0a1526]/90 text-sm leading-relaxed mt-auto transition-colors duration-300 font-medium">
+          {item.desc}
+        </p>
       </div>
     </motion.div>
   </Link>
@@ -58,7 +58,7 @@ export const ServicesSection = () => {
   return (
     <section id="servicios" className={`${SECTION_PADDING} relative pt-[40px] pb-[40px]`}>
       
-      {/* ── FONDO ── */}
+      {/* ── FONDO (Queda idéntico, azul corporativo oscuro) ── */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
