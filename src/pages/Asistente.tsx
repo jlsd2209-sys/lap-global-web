@@ -80,15 +80,16 @@ export default function AsistentePage() {
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
-  // Historial vacío al inicio
-  const [chatsHistory, setChatsHistory] = useState<Record<string, Message[]>>({});
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [chatsHistory, setChatsHistory] = useState<Record<string, Message[]>>(() => {
+    try {
+      const savedHistory = localStorage.getItem('lap_chatsHistory');
+      return savedHistory ? JSON.parse(savedHistory) : {};
+    } catch (error) {
+      return {};
+    }
+  });
 
-  // ========================================================
-  // NUEVO: SEPARACIÓN DE MEMORIA POR USUARIO
-  // ========================================================
   useEffect(() => {
-    // Al iniciar sesión (guest o client), cargamos SU propio historial
     if (accessMode !== 'none') {
       const storageKey = `lap_history_${accessMode}_${username || 'guest'}`;
       try {
@@ -96,7 +97,7 @@ export default function AsistentePage() {
         if (savedHistory) {
           setChatsHistory(JSON.parse(savedHistory));
         } else {
-          setChatsHistory({}); // Si no hay historial previo, empieza vacío
+          setChatsHistory({});
         }
       } catch (error) {
         setChatsHistory({});
@@ -105,13 +106,13 @@ export default function AsistentePage() {
   }, [accessMode, username]);
 
   useEffect(() => {
-    // Guardamos el historial cada vez que se actualiza, en la llave correspondiente al usuario
     if (accessMode !== 'none') {
       const storageKey = `lap_history_${accessMode}_${username || 'guest'}`;
       localStorage.setItem(storageKey, JSON.stringify(chatsHistory));
     }
   }, [chatsHistory, accessMode, username]);
 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const currentMessages = chatsHistory[moduloActivo] || [];
 
   useEffect(() => {
@@ -128,15 +129,11 @@ export default function AsistentePage() {
     }
   };
 
-  // ========================================================
-  // NUEVO: CIERRE DE SESIÓN CON CONFIRMACIÓN
-  // ========================================================
   const handleLogout = () => {
     if (window.confirm("¿Seguro que desea cerrar sesión de forma segura?")) {
       setAccessMode('none');
       setUsername('');
       setPassword('');
-      setChatsHistory({}); // Limpiamos la pantalla (su caché queda guardada en el navegador)
       setModuloActivo(initialModule.name);
       setWebhookActivo(initialModule.hook);
     }
@@ -250,7 +247,6 @@ export default function AsistentePage() {
 
   const currentColors = palettes[theme];
 
-  // PANTALLA DE LOGIN
   if (accessMode === 'none') {
     return (
       <div className="relative flex h-[100dvh] w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
@@ -299,7 +295,6 @@ export default function AsistentePage() {
     );
   }
 
-  // CHAT INTERNO
   return (
     <div className={`flex h-[100dvh] w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
@@ -357,9 +352,9 @@ export default function AsistentePage() {
         </nav>
 
         {/* ======================================================================= */}
-        {/* PANEL INFERIOR CON EL NUEVO BOTÓN DE CERRAR SESIÓN DESTACADO */}
+        {/* PANEL INFERIOR MEJORADO: Botón visible al colapsar y colores elegantes */}
         {/* ======================================================================= */}
-        <div className={`border-t border-gray-800 relative z-10 flex items-center transition-all duration-300 ${isDesktopSidebarCollapsed ? 'p-4 justify-center' : 'p-4 justify-between'}`}>
+        <div className={`border-t border-gray-800 relative z-10 flex transition-all duration-300 ${isDesktopSidebarCollapsed ? 'p-4 flex-col items-center gap-4' : 'p-4 flex-row items-center justify-between'}`}>
           <div className="flex items-center gap-3 overflow-hidden" title={isDesktopSidebarCollapsed ? (accessMode === 'client' ? username : 'Invitado') : undefined}>
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#c5a059]/20 to-[#c5a059]/10 border border-[#c5a059]/30 text-[#c5a059] flex items-center justify-center flex-shrink-0 font-bold shadow-lg">
               {accessMode === 'client' ? <User size={18} /> : 'G'}
@@ -376,7 +371,7 @@ export default function AsistentePage() {
           
           <button 
             onClick={handleLogout} 
-            className={`flex items-center justify-center p-2.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-xl transition-all ${isDesktopSidebarCollapsed ? 'hidden' : 'block'}`} 
+            className="flex items-center justify-center p-2.5 bg-gray-500/10 text-gray-400 hover:bg-[#c5a059]/10 hover:text-[#c5a059] rounded-xl transition-all" 
             title="Cerrar sesión segura"
           >
             <LogOut size={18} />
