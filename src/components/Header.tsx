@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoShield from '@/assets/logo-shield.png';
+// AQUÍ ESTÁ EL CAMBIO: Apuntando al nuevo logo de alta calidad
+import logoShield from '@/assets/logo.png.png';
 
 const navItems = [{
   href: '#home',
