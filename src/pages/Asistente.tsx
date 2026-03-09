@@ -81,7 +81,7 @@ const MODULES_DB = [
     name: 'Informes Automáticos', 
     hook: 'webhook-informes', 
     icon: '📊',
-    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
+    demoText: "Parámetros de generation recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
     loadingText: "Estructurando reporte para la generación del dictamen..."
   },
   { 
@@ -110,6 +110,7 @@ export default function AsistentePage() {
   const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
   
+  // NUEVOS ESTADOS PARA MANEJO DE ARCHIVOS
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -196,6 +197,7 @@ export default function AsistentePage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  // FUNCIÓN PARA CONVERTIR ARCHIVO A BASE64
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -205,9 +207,11 @@ export default function AsistentePage() {
     });
   };
 
+  // NÚCLEO DE CONEXIÓN CON N8N
   const handleSend = async () => {
     if (!inputText.trim() && !selectedFile) return;
 
+    // 1. Mostrar mensaje del usuario en pantalla
     const userText = selectedFile ? `📎 [${selectedFile.name}]\n${inputText}` : inputText;
     const newUserMsg: Message = { 
       id: Date.now().toString(), 
@@ -221,6 +225,7 @@ export default function AsistentePage() {
       [moduloActivo]: [...(prev[moduloActivo] || []), newUserMsg]
     }));
     
+    // Guardamos copias locales para enviarlas y limpiamos la UI
     const payloadText = inputText;
     const payloadFile = selectedFile;
     
@@ -231,6 +236,7 @@ export default function AsistentePage() {
     const textarea = document.getElementById('userInput');
     if (textarea) textarea.style.height = '44px';
 
+    // 2. Mostrar indicador de carga
     const loadingId = (Date.now() + 1).toString();
     const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
     const dynamicLoadingText = payloadFile ? "Analizando documento adjunto de forma segura..." : (activeModuleData?.loadingText || "Analizando datos...");
@@ -240,6 +246,7 @@ export default function AsistentePage() {
       [moduloActivo]: [...(prev[moduloActivo] || []), { id: loadingId, sender: 'loading', text: dynamicLoadingText }]
     }));
 
+    // 3. SEPARACIÓN DE RUTAS: GUEST vs CLIENT
     if (accessMode === 'guest') {
       setTimeout(() => {
         setChatsHistory(prev => {
@@ -252,6 +259,7 @@ export default function AsistentePage() {
       }, 1500);
 
     } else {
+      // Ruta Cliente Verificado: Conexión Real a N8N en DigitalOcean
       try {
         let base64Data = null;
         if (payloadFile) {
@@ -389,8 +397,7 @@ export default function AsistentePage() {
   }
 
   return (
-    // FIX MAESTRO: Aquí cambiamos h-[100dvh] w-screen por "fixed inset-0 flex". Esto ancla la app a las esquinas y evita el salto por defecto del navegador en móviles.
-    <div className={`fixed inset-0 flex overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    <div className={`flex h-[100dvh] w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -457,8 +464,7 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* FIX MAESTRO: Le agregamos h-full y overscroll-none. Esto le dice a iOS/Android: "Limita el movimiento táctil SOLO a la cajita de texto, no subas la pantalla". */}
-      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
+      <main className="flex-1 flex flex-col relative w-full min-w-0 overflow-hidden transition-all duration-300">
         
         <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-10 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
@@ -492,41 +498,51 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        {/* FIX MAESTRO: La sección de mensajes está igual a tu diseño (sin empujar hacia abajo), pero con overscroll-none para atrapar rebotes táctiles. */}
-        <section className={`flex-1 overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
-          {currentMessages.length === 0 && (
-            <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
-              <img src={logoShield} className="w-8 h-10 md:w-10 md:h-12 object-contain" alt="Logo" />
-              <div className="space-y-4 mt-1">
-                <p className={`text-lg md:text-xl font-light ${currentColors.mainTitle}`}>Conectado a la red de <strong>{moduloActivo}</strong>.</p>
-                <p className={`${currentColors.greetingP} leading-relaxed text-sm md:text-base`}>¿En qué asunto legal específico puedo ayudarle?</p>
+        {/* ¡FIX MAESTRO DE DISEÑO Y REBOTE!:
+          Convertí el section en un 'flex-col' y agrupé tus mensajes en un wrapper que respeta tu 'max-w-3xl'.
+          Al final puse un div invisible que actúa como resorte para llenar el espacio vacío.
+        */}
+        <section className={`flex-1 flex flex-col overflow-y-auto px-4 md:px-12 py-4 md:py-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+          
+          <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
+            {currentMessages.length === 0 && (
+              <div className="flex gap-4 items-start mb-4">
+                <img src={logoShield} className="w-8 h-10 md:w-10 md:h-12 object-contain" alt="Logo" />
+                <div className="space-y-4 mt-1">
+                  <p className={`text-lg md:text-xl font-light ${currentColors.mainTitle}`}>Conectado a la red de <strong>{moduloActivo}</strong>.</p>
+                  <p className={`${currentColors.greetingP} leading-relaxed text-sm md:text-base`}>¿En qué asunto legal específico puedo ayudarle?</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {currentMessages.map((msg) => (
-            <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
-              
-              {msg.sender === 'user' && (
-                <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none max-w-[90%] shadow-md`}>
-                  <p className="text-sm md:text-base whitespace-pre-wrap break-words">{msg.text}</p>
-                </div>
-              )}
-              
-              {msg.sender === 'loading' && (
-                <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">{msg.text}</div>
-              )}
-              
-              {msg.sender === 'bot' && (
-                <div className="flex flex-col gap-1 max-w-[90%]">
-                  <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
-                    <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+            {currentMessages.map((msg) => (
+              <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
+                
+                {msg.sender === 'user' && (
+                  <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none max-w-[90%] shadow-md`}>
+                    <p className="text-sm md:text-base whitespace-pre-wrap break-words">{msg.text}</p>
                   </div>
-                  <BotMessageActions text={msg.text} theme={theme} />
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+                
+                {msg.sender === 'loading' && (
+                  <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">{msg.text}</div>
+                )}
+                
+                {msg.sender === 'bot' && (
+                  <div className="flex flex-col gap-1 max-w-[90%]">
+                    <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
+                      <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                    </div>
+                    <BotMessageActions text={msg.text} theme={theme} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          {/* El resorte mágico que engaña a iOS y Android */}
+          <div className="flex-1 min-h-[1px]"></div>
+          
           <div ref={messagesEndRef} />
         </section>
 
@@ -575,7 +591,8 @@ export default function AsistentePage() {
                 value={inputText}
                 onChange={(e) => {
                   setInputText(e.target.value);
-                  e.target.style.height = "5px";
+                  // FIX MAESTRO DE TECLADO MÓVIL: Evita que la caja colapse a 5px, lo cual provocaba el rebote violento.
+                  e.target.style.height = "44px"; 
                   e.target.style.height = e.target.scrollHeight + "px";
                 }}
                 onKeyDown={(e) => { 
