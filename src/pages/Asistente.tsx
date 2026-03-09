@@ -172,7 +172,8 @@ export default function AsistentePage() {
       setPassword('');
       setModuloActivo(initialModule.name);
       setWebhookActivo(initialModule.hook);
-      setSelectedFile(null); // Limpiar archivo al salir
+      setSelectedFile(null); 
+      if (fileInputRef.current) fileInputRef.current.value = ''; // FIX: Limpiar caché de archivo al salir
     }
   };
 
@@ -183,6 +184,9 @@ export default function AsistentePage() {
         delete newState[moduloActivo];
         return newState;
       });
+      // FIX: Resetear el archivo adjunto visual y técnicamente
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -190,7 +194,9 @@ export default function AsistentePage() {
     setModuloActivo(nombre);
     setWebhookActivo(webhook);
     setIsMobileMenuOpen(false); 
-    setSelectedFile(null); // Limpiamos archivo si cambia de módulo
+    // FIX: Limpiamos archivo y caché si cambia de módulo
+    setSelectedFile(null); 
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   // FUNCIÓN PARA CONVERTIR ARCHIVO A BASE64
@@ -226,7 +232,9 @@ export default function AsistentePage() {
     const payloadFile = selectedFile;
     
     setInputText('');
+    // FIX: Limpiar el archivo visualmente y vaciar la memoria del input HTML
     setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
     
     const textarea = document.getElementById('userInput');
     if (textarea) textarea.style.height = '44px';
@@ -243,7 +251,7 @@ export default function AsistentePage() {
 
     // 3. SEPARACIÓN DE RUTAS: GUEST vs CLIENT
     if (accessMode === 'guest') {
-      // Ruta Invitado: Solo simula respuesta (No gasta saldo de N8N ni expone datos)
+      // Ruta Invitado: Solo simula respuesta
       setTimeout(() => {
         setChatsHistory(prev => {
           const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
@@ -262,17 +270,15 @@ export default function AsistentePage() {
           base64Data = await fileToBase64(payloadFile);
         }
 
-        // Armamos el paquete de datos para n8n
         const requestBody = {
           sessionId: username,
           module: moduloActivo,
           text: payloadText,
-          fileData: base64Data, // Base64 completo
+          fileData: base64Data, 
           fileName: payloadFile?.name || null,
           mimeType: payloadFile?.type || null
         };
 
-        // LLAMADA HTTP A TU SERVIDOR N8N (Ajustado a tu dominio)
         const response = await fetch(`https://unidaddeia.duckdns.org/webhook-test/${webhookActivo}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -284,7 +290,6 @@ export default function AsistentePage() {
         }
 
         const data = await response.json();
-        // Esperamos que n8n devuelva un JSON con la llave "respuesta" o "text"
         const botResponseText = data.respuesta || data.text || "Proceso completado. Documento auditado y guardado.";
 
         setChatsHistory(prev => {
@@ -348,7 +353,6 @@ export default function AsistentePage() {
   const currentColors = palettes[theme];
 
   if (accessMode === 'none') {
-    // LOGIN PREVIAMENTE DEFINIDO (Sin cambios)
     return (
       <div className="relative flex h-[100dvh] w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -402,7 +406,6 @@ export default function AsistentePage() {
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
 
-      {/* SIDEBAR (Sin cambios estructurales) */}
       <aside className={`fixed md:relative top-0 left-0 z-50 h-full flex flex-col border-r border-gray-800 overflow-x-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full md:translate-x-0'} ${isDesktopSidebarCollapsed ? 'md:w-[80px]' : 'md:w-[280px]'}`}>
         <button className="absolute top-4 right-4 z-50 md:hidden text-gray-400 hover:text-white" onClick={() => setIsMobileMenuOpen(false)}>
           <X size={24} />
@@ -465,8 +468,8 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* MAIN CHAT AREA */}
-      <main className="flex-1 flex flex-col relative w-full min-w-0 transition-all duration-300">
+      {/* FIX: Se agregó "overflow-hidden" a la etiqueta <main> para prevenir el salto del teclado en móviles */}
+      <main className="flex-1 flex flex-col relative w-full min-w-0 overflow-hidden transition-all duration-300">
         
         <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-10 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
@@ -546,7 +549,11 @@ export default function AsistentePage() {
               <div className={`absolute -top-10 left-4 ${theme === 'dark' ? 'bg-[#1e2a40] border-gray-700' : 'bg-[#eee7d5] border-[#c5a059]/30'} text-[#c5a059] text-xs py-1.5 px-3 rounded-t-xl border border-b-0 flex items-center gap-2 shadow-lg`}>
                 <FileText size={14} />
                 <span className="truncate max-w-[200px] font-medium">{selectedFile.name}</span>
-                <button onClick={() => setSelectedFile(null)} className="hover:text-red-400 ml-1 transition-colors">
+                <button 
+                  // FIX: Al quitar el archivo con la X, también formateamos la memoria del botón input
+                  onClick={() => { setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} 
+                  className="hover:text-red-400 ml-1 transition-colors"
+                >
                   <X size={14}/>
                 </button>
               </div>
@@ -562,7 +569,7 @@ export default function AsistentePage() {
                     ref={fileInputRef} 
                     className="hidden" 
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    accept=".pdf,.doc,.docx,.txt" // Extensiones permitidas de auditoría
+                    accept=".pdf,.doc,.docx,.txt" 
                   />
                   <button 
                     onClick={() => fileInputRef.current?.click()} 
