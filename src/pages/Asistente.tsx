@@ -110,7 +110,6 @@ export default function AsistentePage() {
   const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
   
-  // NUEVOS ESTADOS PARA MANEJO DE ARCHIVOS
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -173,7 +172,7 @@ export default function AsistentePage() {
       setModuloActivo(initialModule.name);
       setWebhookActivo(initialModule.hook);
       setSelectedFile(null); 
-      if (fileInputRef.current) fileInputRef.current.value = ''; // FIX: Limpiar caché de archivo al salir
+      if (fileInputRef.current) fileInputRef.current.value = ''; 
     }
   };
 
@@ -184,7 +183,6 @@ export default function AsistentePage() {
         delete newState[moduloActivo];
         return newState;
       });
-      // FIX: Resetear el archivo adjunto visual y técnicamente
       setSelectedFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
@@ -194,12 +192,10 @@ export default function AsistentePage() {
     setModuloActivo(nombre);
     setWebhookActivo(webhook);
     setIsMobileMenuOpen(false); 
-    // FIX: Limpiamos archivo y caché si cambia de módulo
     setSelectedFile(null); 
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // FUNCIÓN PARA CONVERTIR ARCHIVO A BASE64
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -209,11 +205,9 @@ export default function AsistentePage() {
     });
   };
 
-  // NÚCLEO DE CONEXIÓN CON N8N
   const handleSend = async () => {
     if (!inputText.trim() && !selectedFile) return;
 
-    // 1. Mostrar mensaje del usuario en pantalla
     const userText = selectedFile ? `📎 [${selectedFile.name}]\n${inputText}` : inputText;
     const newUserMsg: Message = { 
       id: Date.now().toString(), 
@@ -227,19 +221,16 @@ export default function AsistentePage() {
       [moduloActivo]: [...(prev[moduloActivo] || []), newUserMsg]
     }));
     
-    // Guardamos copias locales para enviarlas y limpiamos la UI
     const payloadText = inputText;
     const payloadFile = selectedFile;
     
     setInputText('');
-    // FIX: Limpiar el archivo visualmente y vaciar la memoria del input HTML
     setSelectedFile(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     
     const textarea = document.getElementById('userInput');
     if (textarea) textarea.style.height = '44px';
 
-    // 2. Mostrar indicador de carga
     const loadingId = (Date.now() + 1).toString();
     const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
     const dynamicLoadingText = payloadFile ? "Analizando documento adjunto de forma segura..." : (activeModuleData?.loadingText || "Analizando datos...");
@@ -249,9 +240,7 @@ export default function AsistentePage() {
       [moduloActivo]: [...(prev[moduloActivo] || []), { id: loadingId, sender: 'loading', text: dynamicLoadingText }]
     }));
 
-    // 3. SEPARACIÓN DE RUTAS: GUEST vs CLIENT
     if (accessMode === 'guest') {
-      // Ruta Invitado: Solo simula respuesta
       setTimeout(() => {
         setChatsHistory(prev => {
           const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
@@ -263,7 +252,6 @@ export default function AsistentePage() {
       }, 1500);
 
     } else {
-      // Ruta Cliente Verificado: Conexión Real a N8N en DigitalOcean
       try {
         let base64Data = null;
         if (payloadFile) {
@@ -401,7 +389,8 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`flex h-[100dvh] w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    // FIX MAESTRO: Aquí cambiamos h-[100dvh] w-screen por "fixed inset-0 flex". Esto ancla la app a las esquinas y evita el salto por defecto del navegador en móviles.
+    <div className={`fixed inset-0 flex overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -468,8 +457,8 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* FIX: Agregado "overflow-hidden" a <main> para bloquear el salto del teclado sin dañar el diseño */}
-      <main className="flex-1 flex flex-col relative w-full min-w-0 overflow-hidden transition-all duration-300">
+      {/* FIX MAESTRO: Le agregamos h-full y overscroll-none. Esto le dice a iOS/Android: "Limita el movimiento táctil SOLO a la cajita de texto, no subas la pantalla". */}
+      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
         
         <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-10 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
@@ -503,7 +492,8 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        <section className={`flex-1 overflow-y-auto px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+        {/* FIX MAESTRO: La sección de mensajes está igual a tu diseño (sin empujar hacia abajo), pero con overscroll-none para atrapar rebotes táctiles. */}
+        <section className={`flex-1 overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           {currentMessages.length === 0 && (
             <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
               <img src={logoShield} className="w-8 h-10 md:w-10 md:h-12 object-contain" alt="Logo" />
@@ -550,7 +540,6 @@ export default function AsistentePage() {
                 <FileText size={14} />
                 <span className="truncate max-w-[200px] font-medium">{selectedFile.name}</span>
                 <button 
-                  // FIX: Al quitar el archivo con la X, también formateamos la memoria del botón input
                   onClick={() => { setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} 
                   className="hover:text-red-400 ml-1 transition-colors"
                 >
