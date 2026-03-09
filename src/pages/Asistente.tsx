@@ -273,7 +273,7 @@ export default function AsistentePage() {
         };
 
         // LLAMADA HTTP A TU SERVIDOR N8N (Ajustado a tu dominio)
-        const response = await fetch(`http://unidaddeia.duckdns.org:5678/webhook-test/${webhookActivo}`, {
+        const response = await fetch(`https://unidaddeia.duckdns.org/webhook-test/${webhookActivo}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestBody)
