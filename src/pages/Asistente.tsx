@@ -468,8 +468,8 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* FIX: Se agregó "overflow-hidden" a la etiqueta <main> para prevenir el salto del teclado en móviles */}
-      <main className="flex-1 flex flex-col relative w-full min-w-0 overflow-hidden transition-all duration-300">
+      {/* FIX: Se ajustaron las clases del contenedor principal para que mantenga su estructura frente a redimensionamientos en móviles (teclado). */}
+      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden transition-all duration-300">
         
         <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-10 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
@@ -503,9 +503,13 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        <section className={`flex-1 overflow-y-auto px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+        <section className={`flex-1 overflow-y-auto flex flex-col px-4 md:px-12 py-4 md:py-12 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+          
+          {/* FIX: Contenedor flexible que empuja el contenido hacia abajo. Esto evita el salto cuando el chat está vacío */}
+          <div className="flex-1"></div> 
+
           {currentMessages.length === 0 && (
-            <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4">
+            <div className="max-w-3xl mx-auto flex gap-4 items-start mb-4 mt-auto">
               <img src={logoShield} className="w-8 h-10 md:w-10 md:h-12 object-contain" alt="Logo" />
               <div className="space-y-4 mt-1">
                 <p className={`text-lg md:text-xl font-light ${currentColors.mainTitle}`}>Conectado a la red de <strong>{moduloActivo}</strong>.</p>
@@ -515,7 +519,7 @@ export default function AsistentePage() {
           )}
 
           {currentMessages.map((msg) => (
-            <div key={msg.id} className={`max-w-3xl mx-auto flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
+            <div key={msg.id} className={`max-w-3xl mx-auto flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
               
               {msg.sender === 'user' && (
                 <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none max-w-[90%] shadow-md`}>
@@ -550,7 +554,6 @@ export default function AsistentePage() {
                 <FileText size={14} />
                 <span className="truncate max-w-[200px] font-medium">{selectedFile.name}</span>
                 <button 
-                  // FIX: Al quitar el archivo con la X, también formateamos la memoria del botón input
                   onClick={() => { setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} 
                   className="hover:text-red-400 ml-1 transition-colors"
                 >
