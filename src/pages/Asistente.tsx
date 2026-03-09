@@ -81,7 +81,7 @@ const MODULES_DB = [
     name: 'Informes Automáticos', 
     hook: 'webhook-informes', 
     icon: '📊',
-    demoText: "Parámetros de generation recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
+    demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
     loadingText: "Estructurando reporte para la generación del dictamen..."
   },
   { 
@@ -397,7 +397,8 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`flex h-[100dvh] w-screen overflow-hidden ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    // FIX MAESTRO: overscroll-none agregado aquí para detener la cadena de desplazamiento general
+    <div className={`fixed inset-0 flex overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -464,7 +465,7 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col relative w-full min-w-0 overflow-hidden transition-all duration-300">
+      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
         
         <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-10 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
@@ -498,11 +499,8 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        {/* ¡FIX MAESTRO DE DISEÑO Y REBOTE!:
-          Convertí el section en un 'flex-col' y agrupé tus mensajes en un wrapper que respeta tu 'max-w-3xl'.
-          Al final puse un div invisible que actúa como resorte para llenar el espacio vacío.
-        */}
-        <section className={`flex-1 flex flex-col overflow-y-auto px-4 md:px-12 py-4 md:py-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+        {/* FIX MAESTRO: overscroll-none en la sección de chat para que el rebote de la pantalla muera aquí mismo y no empuje la caja de texto. */}
+        <section className={`flex-1 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           
           <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
             {currentMessages.length === 0 && (
@@ -540,7 +538,6 @@ export default function AsistentePage() {
             ))}
           </div>
           
-          {/* El resorte mágico que engaña a iOS y Android */}
           <div className="flex-1 min-h-[1px]"></div>
           
           <div ref={messagesEndRef} />
@@ -586,12 +583,12 @@ export default function AsistentePage() {
                 </>
               )}
 
+              {/* FIX MAESTRO: Reemplacé el text-sm (14px) por text-base (16px) para evitar el auto-zoom de Safari al escribir, que rompía el anclaje. */}
               <textarea 
                 id="userInput"
                 value={inputText}
                 onChange={(e) => {
                   setInputText(e.target.value);
-                  // FIX MAESTRO DE TECLADO MÓVIL: Evita que la caja colapse a 5px, lo cual provocaba el rebote violento.
                   e.target.style.height = "44px"; 
                   e.target.style.height = e.target.scrollHeight + "px";
                 }}
@@ -603,7 +600,7 @@ export default function AsistentePage() {
                 }}
                 placeholder={accessMode === 'client' ? "Escriba su consulta o adjunte un documento..." : "Escriba aquí (Modo Demo)..."} 
                 rows={1}
-                className={`w-full bg-transparent outline-none text-sm md:text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden pb-1 ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden pb-1 ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                 style={{ minHeight: '44px' }}
               />
               
