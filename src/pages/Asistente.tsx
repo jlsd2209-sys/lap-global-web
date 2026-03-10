@@ -571,12 +571,13 @@ export default function AsistentePage() {
                     ref={fileInputRef} 
                     className="hidden" 
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    accept=".pdf,.doc,.docx,.txt" 
+                    // AQUÍ ESTÁ EL CAMBIO: Se agregaron extensiones de imágenes y audio
+                    accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav,.ogg" 
                   />
                   <button 
                     onClick={() => fileInputRef.current?.click()} 
                     className={`p-2.5 rounded-full mb-1 transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
-                    title="Adjuntar Documento Legal"
+                    title="Adjuntar Documento, Imagen o Audio"
                   >
                     <Paperclip size={20} />
                   </button>
