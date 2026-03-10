@@ -2,14 +2,14 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-// CAMBIO: Importamos Paperclip y FileText para el manejo de archivos
-import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText } from 'lucide-react'; 
+// CAMBIO: Importamos Mic y Square para la grabadora de voz
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square } from 'lucide-react'; 
 
 type Message = {
   id: string;
   sender: 'user' | 'bot' | 'loading';
   text: string;
-  hasAttachment?: boolean; // Para saber si el mensaje incluyó archivo
+  hasAttachment?: boolean; 
 };
 
 // ==========================================
@@ -110,9 +110,14 @@ export default function AsistentePage() {
   const [webhookActivo, setWebhookActivo] = useState(initialModule.hook);
   const [inputText, setInputText] = useState('');
   
-  // NUEVOS ESTADOS PARA MANEJO DE ARCHIVOS
+  // ESTADOS PARA MANEJO DE ARCHIVOS
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // NUEVOS ESTADOS PARA GRABACIÓN DE AUDIO
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   
   const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -205,6 +210,45 @@ export default function AsistentePage() {
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = error => reject(error);
     });
+  };
+
+  // ==========================================
+  // FUNCIONES DE GRABACIÓN DE AUDIO
+  // ==========================================
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          audioChunksRef.current.push(e.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        // Lo convertimos en un File para que el sistema lo procese igual que si lo hubieran adjuntado
+        const audioFile = new File([audioBlob], `Nota_de_voz_${new Date().getTime()}.webm`, { type: 'audio/webm' });
+        setSelectedFile(audioFile);
+        stream.getTracks().forEach(track => track.stop()); // Apagamos el micrófono
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (err) {
+      console.error("Error al acceder al micrófono:", err);
+      alert("No se pudo acceder al micrófono. Por favor, verifique los permisos de su navegador.");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
   };
 
   // NÚCLEO DE CONEXIÓN CON N8N
@@ -397,7 +441,6 @@ export default function AsistentePage() {
   }
 
   return (
-    // FIX MAESTRO: overscroll-none agregado aquí para detener la cadena de desplazamiento general
     <div className={`fixed inset-0 flex overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
@@ -499,7 +542,6 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        {/* FIX MAESTRO: overscroll-none en la sección de chat para que el rebote de la pantalla muera aquí mismo y no empuje la caja de texto. */}
         <section className={`flex-1 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           
           <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
@@ -561,59 +603,87 @@ export default function AsistentePage() {
               </div>
             )}
 
-            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-3xl border border-gray-700 p-2 pl-3 flex items-end gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300`}>
+            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-3xl border border-gray-700 p-2 pl-3 flex items-center gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[60px]`}>
               
-              {/* BOTÓN DE ADJUNTAR ARCHIVO (Solo Cliente Verificado) */}
+              {/* BOTONES DE ADJUNTAR Y MICRÓFONO (Solo Cliente Verificado) */}
               {accessMode === 'client' && (
-                <>
+                <div className="flex items-center gap-1 self-end mb-1">
                   <input 
                     type="file" 
                     ref={fileInputRef} 
                     className="hidden" 
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    // AQUÍ ESTÁ EL CAMBIO: Se agregaron extensiones de imágenes y audio
                     accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav,.ogg" 
                   />
                   <button 
                     onClick={() => fileInputRef.current?.click()} 
-                    className={`p-2.5 rounded-full mb-1 transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
+                    className={`p-2.5 rounded-full transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
                     title="Adjuntar Documento, Imagen o Audio"
                   >
                     <Paperclip size={20} />
                   </button>
-                </>
+
+                  {/* NUEVO BOTÓN DE MICRÓFONO */}
+                  {!isRecording && (
+                    <button 
+                      onClick={startRecording} 
+                      className={`p-2.5 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200'}`}
+                      title="Grabar mensaje de voz"
+                    >
+                      <Mic size={20} />
+                    </button>
+                  )}
+                </div>
               )}
 
-              {/* FIX MAESTRO: Reemplacé el text-sm (14px) por text-base (16px) para evitar el auto-zoom de Safari al escribir, que rompía el anclaje. */}
-              <textarea 
-                id="userInput"
-                value={inputText}
-                onChange={(e) => {
-                  setInputText(e.target.value);
-                  e.target.style.height = "44px"; 
-                  e.target.style.height = e.target.scrollHeight + "px";
-                }}
-                onKeyDown={(e) => { 
-                  if (e.key === 'Enter' && !e.shiftKey) { 
-                    e.preventDefault(); 
-                    handleSend(); 
-                  } 
-                }}
-                placeholder={accessMode === 'client' ? "Escriba su consulta o adjunte un documento..." : "Escriba aquí (Modo Demo)..."} 
-                rows={1}
-                className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden pb-1 ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
-                style={{ minHeight: '44px' }}
-              />
+              {/* INTERFAZ CONDICIONAL: GRABANDO VS TEXTO */}
+              {isRecording ? (
+                <div className="flex-1 flex items-center justify-between px-3 h-[44px]">
+                  <div className="flex items-center gap-3 text-red-500 animate-pulse">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <span className="text-sm font-medium tracking-wide">Grabando nota de voz...</span>
+                  </div>
+                  <button 
+                    onClick={stopRecording}
+                    className="p-2 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex-shrink-0 mr-1"
+                    title="Detener grabación"
+                  >
+                    <Square size={20} className="fill-current" />
+                  </button>
+                </div>
+              ) : (
+                <textarea 
+                  id="userInput"
+                  value={inputText}
+                  onChange={(e) => {
+                    setInputText(e.target.value);
+                    e.target.style.height = "44px"; 
+                    e.target.style.height = e.target.scrollHeight + "px";
+                  }}
+                  onKeyDown={(e) => { 
+                    if (e.key === 'Enter' && !e.shiftKey) { 
+                      e.preventDefault(); 
+                      handleSend(); 
+                    } 
+                  }}
+                  placeholder={accessMode === 'client' ? "Escriba su consulta o adjunte un documento..." : "Escriba aquí (Modo Demo)..."} 
+                  rows={1}
+                  className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden py-3 self-end ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                  style={{ minHeight: '44px' }}
+                />
+              )}
               
-              <button 
-                onClick={handleSend}
-                className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 transition-all active:scale-95 flex-shrink-0`}
-                title="Enviar mensaje"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-5 md:w-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                </svg>
-              </button>
+              {!isRecording && (
+                <button 
+                  onClick={handleSend}
+                  className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 mr-1 self-end transition-all active:scale-95 flex-shrink-0`}
+                  title="Enviar mensaje"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-5 md:w-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </footer>
