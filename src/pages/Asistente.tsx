@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-// CAMBIO: Importamos Mic y Square para la grabadora de voz
 import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square } from 'lucide-react'; 
 
 type Message = {
@@ -60,7 +59,7 @@ const MODULES_DB = [
     name: 'Análisis Penal (Arg-Ven)', 
     hook: 'webhook-penal', 
     icon: '⚖️',
-    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defense comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
+    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
     loadingText: "Analizando marcos normativos y tratados vigentes..."
   },
   { 
@@ -202,7 +201,6 @@ export default function AsistentePage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // FUNCIÓN PARA CONVERTIR ARCHIVO A BASE64
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -212,9 +210,6 @@ export default function AsistentePage() {
     });
   };
 
-  // ==========================================
-  // FUNCIONES DE GRABACIÓN DE AUDIO
-  // ==========================================
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -230,10 +225,9 @@ export default function AsistentePage() {
 
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        // Lo convertimos en un File para que el sistema lo procese igual que si lo hubieran adjuntado
         const audioFile = new File([audioBlob], `Nota_de_voz_${new Date().getTime()}.webm`, { type: 'audio/webm' });
         setSelectedFile(audioFile);
-        stream.getTracks().forEach(track => track.stop()); // Apagamos el micrófono
+        stream.getTracks().forEach(track => track.stop()); 
       };
 
       mediaRecorder.start();
@@ -251,11 +245,9 @@ export default function AsistentePage() {
     }
   };
 
-  // NÚCLEO DE CONEXIÓN CON N8N
   const handleSend = async () => {
     if (!inputText.trim() && !selectedFile) return;
 
-    // 1. Mostrar mensaje del usuario en pantalla
     const userText = selectedFile ? `📎 [${selectedFile.name}]\n${inputText}` : inputText;
     const newUserMsg: Message = { 
       id: Date.now().toString(), 
@@ -269,7 +261,6 @@ export default function AsistentePage() {
       [moduloActivo]: [...(prev[moduloActivo] || []), newUserMsg]
     }));
     
-    // Guardamos copias locales para enviarlas y limpiamos la UI
     const payloadText = inputText;
     const payloadFile = selectedFile;
     
@@ -280,7 +271,6 @@ export default function AsistentePage() {
     const textarea = document.getElementById('userInput');
     if (textarea) textarea.style.height = '44px';
 
-    // 2. Mostrar indicador de carga
     const loadingId = (Date.now() + 1).toString();
     const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
     const dynamicLoadingText = payloadFile ? "Analizando documento adjunto de forma segura..." : (activeModuleData?.loadingText || "Analizando datos...");
@@ -290,7 +280,6 @@ export default function AsistentePage() {
       [moduloActivo]: [...(prev[moduloActivo] || []), { id: loadingId, sender: 'loading', text: dynamicLoadingText }]
     }));
 
-    // 3. SEPARACIÓN DE RUTAS: GUEST vs CLIENT
     if (accessMode === 'guest') {
       setTimeout(() => {
         setChatsHistory(prev => {
@@ -303,7 +292,6 @@ export default function AsistentePage() {
       }, 1500);
 
     } else {
-      // Ruta Cliente Verificado: Conexión Real a N8N en DigitalOcean
       try {
         let base64Data = null;
         if (payloadFile) {
@@ -571,18 +559,9 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
-                      {/* CAMBIO FINAL: Aquí aplicamos el regex mejorado para negro intenso y limpieza total de símbolos */}
-                      <p 
-                        className="text-sm md:text-base whitespace-pre-wrap leading-relaxed bot-message-content" 
-                        dangerouslySetInnerHTML={{ 
-                          __html: msg.text
-                            // 1. Limpiamos las líneas horizontales Markdown (---)
-                            .replace(/\n\s*---\s*\n/g, '<br/>')
-                            // 2. Limpiamos los asteriscos de viñeta (* espacio) al inicio de línea
-                            .replace(/^\s*\* /gm, '')
-                            // 3. Convertimos negritas Markdown (**) a HTML con color negro intenso y dorado al hover (opcional, ahora negro fijo)
-                            .replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-950 font-bold">$1</strong>') 
-                        }} 
+                      <div 
+                        className="text-sm md:text-base leading-relaxed bot-message-html-content prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap"
+                        dangerouslySetInnerHTML={{ __html: msg.text }} 
                       />
                     </div>
                     <BotMessageActions text={msg.text} theme={theme} />
