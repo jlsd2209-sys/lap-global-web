@@ -60,7 +60,7 @@ const MODULES_DB = [
     name: 'Análisis Penal (Arg-Ven)', 
     hook: 'webhook-penal', 
     icon: '⚖️',
-    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
+    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defense comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
     loadingText: "Analizando marcos normativos y tratados vigentes..."
   },
   { 
@@ -571,10 +571,18 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
-                      {/* CAMBIO: Aquí aplicamos dangerouslySetInnerHTML para renderizar el HTML correctamente y reemplazar los asteriscos por <strong> */}
+                      {/* CAMBIO FINAL: Aquí aplicamos el regex mejorado para negro intenso y limpieza total de símbolos */}
                       <p 
-                        className="text-sm md:text-base whitespace-pre-wrap leading-relaxed" 
-                        dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#c5a059] font-bold">$1</strong>') }} 
+                        className="text-sm md:text-base whitespace-pre-wrap leading-relaxed bot-message-content" 
+                        dangerouslySetInnerHTML={{ 
+                          __html: msg.text
+                            // 1. Limpiamos las líneas horizontales Markdown (---)
+                            .replace(/\n\s*---\s*\n/g, '<br/>')
+                            // 2. Limpiamos los asteriscos de viñeta (* espacio) al inicio de línea
+                            .replace(/^\s*\* /gm, '')
+                            // 3. Convertimos negritas Markdown (**) a HTML con color negro intenso y dorado al hover (opcional, ahora negro fijo)
+                            .replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-950 font-bold">$1</strong>') 
+                        }} 
                       />
                     </div>
                     <BotMessageActions text={msg.text} theme={theme} />
