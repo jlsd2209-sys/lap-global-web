@@ -571,7 +571,11 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
-                      <p className="text-sm md:text-base whitespace-pre-wrap leading-relaxed">{msg.text}</p>
+                      {/* CAMBIO: Aquí aplicamos dangerouslySetInnerHTML para renderizar el HTML correctamente y reemplazar los asteriscos por <strong> */}
+                      <p 
+                        className="text-sm md:text-base whitespace-pre-wrap leading-relaxed" 
+                        dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#c5a059] font-bold">$1</strong>') }} 
+                      />
                     </div>
                     <BotMessageActions text={msg.text} theme={theme} />
                   </div>
