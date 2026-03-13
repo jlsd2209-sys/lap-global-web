@@ -575,9 +575,9 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md overflow-hidden`}>
-                      {/* CAMBIO REALIZADO: Inyección directa de estilos Tailwind puros para garantizar jerarquía de Títulos (h3, h4) y diseño de Listas (ul, ol) sin depender del plugin Prose */}
+                      {/* CAMBIO REALIZADO: Se inyectó [&_*]:text-current para obligar a TODAS las etiquetas HTML a heredar el color dinámico de la burbuja y evitar textos blancos invisibles sobre fondo claro */}
                       <div 
-                        className={`text-sm md:text-base leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-base [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_li]:mb-1 [&_strong]:font-bold`}
+                        className={`text-sm md:text-base leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:text-current [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-base [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_li]:mb-1 [&_strong]:font-bold`}
                         dangerouslySetInnerHTML={{ __html: msg.text }} 
                       />
                     </div>
