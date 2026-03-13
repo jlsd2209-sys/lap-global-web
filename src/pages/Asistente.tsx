@@ -575,9 +575,9 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md overflow-hidden`}>
-                      {/* CAMBIO REALIZADO: Se añadieron selectores para manejar listas anidadas con elegancia ([&_ul_ul]:list-[circle] [&_ol_ol]:list-[lower-alpha]) */}
+                      {/* CAMBIO REALIZADO: Se añadieron [&_*]:font-sans para forzar tipografía moderna en todos los elementos y tamaños estandarizados (15px, 16px, 18px) para mantener jerarquía sin importar las etiquetas que inyecte la IA */}
                       <div 
-                        className={`text-sm md:text-base leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:text-current [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-base [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul_ul]:list-[circle] [&_ul_ul]:mt-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol_ol]:list-[lower-alpha] [&_ol_ol]:mt-2 [&_li]:mb-1 [&_strong]:font-bold`}
+                        className={`leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:font-sans [&_*]:text-current [&_h3]:text-[18px] [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-[16px] [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:text-[15px] [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul_ul]:list-[circle] [&_ul_ul]:mt-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol_ol]:list-[lower-alpha] [&_ol_ol]:mt-2 [&_li]:text-[15px] [&_li]:mb-1 [&_strong]:font-bold`}
                         dangerouslySetInnerHTML={{ __html: msg.text }} 
                       />
                     </div>
