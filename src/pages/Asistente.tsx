@@ -575,9 +575,9 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md overflow-hidden`}>
-                      {/* CAMBIO REALIZADO: Se eliminó 'whitespace-pre-wrap' y se añadieron clases prose-p:my-2 prose-headings:my-3 prose-li:my-0 para controlar estrictamente el espaciado y evitar que los Enter (\n) inyectados por la IA rompan el diseño. */}
+                      {/* CAMBIO REALIZADO: Inyección directa de estilos Tailwind puros para garantizar jerarquía de Títulos (h3, h4) y diseño de Listas (ul, ol) sin depender del plugin Prose */}
                       <div 
-                        className={`text-sm md:text-base leading-relaxed bot-message-html-content prose prose-sm max-w-none ${theme === 'dark' ? 'prose-invert' : ''} prose-p:my-2 prose-headings:my-3 prose-li:my-0 [&>h1]:text-current [&>h2]:text-current [&>h3]:text-current [&>h4]:text-current [&>p]:text-current [&>strong]:text-current [&>li]:text-current [&>span]:text-current [&>a]:text-current`}
+                        className={`text-sm md:text-base leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-base [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_li]:mb-1 [&_strong]:font-bold`}
                         dangerouslySetInnerHTML={{ __html: msg.text }} 
                       />
                     </div>
