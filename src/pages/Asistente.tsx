@@ -117,7 +117,6 @@ export default function AsistentePage() {
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-  // CAMBIO REALIZADO: Se agregó referencia para el reconocimiento de voz (Speech-to-Text)
   const recognitionRef = useRef<any>(null);
   
   const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
@@ -212,7 +211,6 @@ export default function AsistentePage() {
     });
   };
 
-  // CAMBIO REALIZADO: Modificación de grabación para transcribir audio a texto automáticamente
   const startRecording = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -256,7 +254,6 @@ export default function AsistentePage() {
     }
   };
 
-  // CAMBIO REALIZADO: Detener la transcripción
   const stopRecording = () => {
     if (recognitionRef.current && isRecording) {
       recognitionRef.current.stop();
@@ -326,7 +323,6 @@ export default function AsistentePage() {
           mimeType: payloadFile?.type || null
         };
 
-        // CAMBIO REALIZADO: Cambio de webhook-test a webhook para entorno de producción
         const response = await fetch(`https://unidaddeia.duckdns.org/webhook/${webhookActivo}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -578,10 +574,10 @@ export default function AsistentePage() {
                 
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
-                    <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
-                      {/* CAMBIO REALIZADO: Se inyectaron selectores en Tailwind ([&>h1]:text-current, etc.) para forzar la herencia de color en títulos y evitar que se vean blancos en fondo claro */}
+                    <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md overflow-hidden`}>
+                      {/* CAMBIO REALIZADO: Se eliminó 'whitespace-pre-wrap' y se añadieron clases prose-p:my-2 prose-headings:my-3 prose-li:my-0 para controlar estrictamente el espaciado y evitar que los Enter (\n) inyectados por la IA rompan el diseño. */}
                       <div 
-                        className={`text-sm md:text-base leading-relaxed bot-message-html-content prose prose-sm max-w-none whitespace-pre-wrap ${theme === 'dark' ? 'prose-invert' : ''} [&>h1]:text-current [&>h2]:text-current [&>h3]:text-current [&>h4]:text-current [&>p]:text-current [&>strong]:text-current [&>li]:text-current [&>span]:text-current [&>a]:text-current`}
+                        className={`text-sm md:text-base leading-relaxed bot-message-html-content prose prose-sm max-w-none ${theme === 'dark' ? 'prose-invert' : ''} prose-p:my-2 prose-headings:my-3 prose-li:my-0 [&>h1]:text-current [&>h2]:text-current [&>h3]:text-current [&>h4]:text-current [&>p]:text-current [&>strong]:text-current [&>li]:text-current [&>span]:text-current [&>a]:text-current`}
                         dangerouslySetInnerHTML={{ __html: msg.text }} 
                       />
                     </div>
@@ -664,7 +660,6 @@ export default function AsistentePage() {
                   </button>
                 </div>
               ) : (
-                // CAMBIO REALIZADO: Se modificó la clase de alineación del textarea de "py-3 self-end" a "py-2.5 my-auto" para arreglar el solapamiento visual
                 <textarea 
                   id="userInput"
                   value={inputText}
