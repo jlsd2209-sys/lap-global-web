@@ -113,10 +113,12 @@ export default function AsistentePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // NUEVOS ESTADOS PARA GRABACIÓN DE AUDIO
+  // ESTADOS PARA GRABACIÓN DE AUDIO / TRANSCRIPCIÓN
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  // CAMBIO REALIZADO: Se agregó referencia para el reconocimiento de voz (Speech-to-Text)
+  const recognitionRef = useRef<any>(null);
   
   const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -210,37 +212,54 @@ export default function AsistentePage() {
     });
   };
 
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
+  // CAMBIO REALIZADO: Modificación de grabación para transcribir audio a texto automáticamente
+  const startRecording = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Su navegador no soporta el reconocimiento de voz integrado. Recomendamos usar Google Chrome.");
+      return;
+    }
 
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          audioChunksRef.current.push(e.data);
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-VE'; // Configurado para español
+    recognition.continuous = false; // Se detiene al terminar de hablar
+    recognition.interimResults = false;
+    recognitionRef.current = recognition;
+
+    recognition.onstart = () => setIsRecording(true);
+    
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInputText(prev => prev ? prev + ' ' + transcript : transcript);
+      
+      // Auto-ajustar la altura del textarea al recibir el texto
+      setTimeout(() => {
+        const textarea = document.getElementById('userInput');
+        if (textarea) {
+          textarea.style.height = '44px';
+          textarea.style.height = textarea.scrollHeight + "px";
         }
-      };
+      }, 100);
+    };
 
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        const audioFile = new File([audioBlob], `Nota_de_voz_${new Date().getTime()}.webm`, { type: 'audio/webm' });
-        setSelectedFile(audioFile);
-        stream.getTracks().forEach(track => track.stop()); 
-      };
-
-      mediaRecorder.start();
-      setIsRecording(true);
+    recognition.onerror = (e: any) => {
+      console.error("Error al acceder al micrófono:", e);
+      setIsRecording(false);
+    };
+    
+    recognition.onend = () => setIsRecording(false);
+    
+    try {
+      recognition.start();
     } catch (err) {
-      console.error("Error al acceder al micrófono:", err);
-      alert("No se pudo acceder al micrófono. Por favor, verifique los permisos de su navegador.");
+      console.error("Error iniciando reconocimiento:", err);
     }
   };
 
+  // CAMBIO REALIZADO: Detener la transcripción
   const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
+    if (recognitionRef.current && isRecording) {
+      recognitionRef.current.stop();
       setIsRecording(false);
     }
   };
@@ -307,7 +326,8 @@ export default function AsistentePage() {
           mimeType: payloadFile?.type || null
         };
 
-        const response = await fetch(`https://unidaddeia.duckdns.org/webhook-test/${webhookActivo}`, {
+        // CAMBIO REALIZADO: Cambio de webhook-test a webhook para entorno de producción
+        const response = await fetch(`https://unidaddeia.duckdns.org/webhook/${webhookActivo}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestBody)
@@ -559,8 +579,9 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md`}>
+                      {/* CAMBIO REALIZADO: Se inyectaron selectores en Tailwind ([&>h1]:text-current, etc.) para forzar la herencia de color en títulos y evitar que se vean blancos en fondo claro */}
                       <div 
-                        className="text-sm md:text-base leading-relaxed bot-message-html-content prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap"
+                        className={`text-sm md:text-base leading-relaxed bot-message-html-content prose prose-sm max-w-none whitespace-pre-wrap ${theme === 'dark' ? 'prose-invert' : ''} [&>h1]:text-current [&>h2]:text-current [&>h3]:text-current [&>h4]:text-current [&>p]:text-current [&>strong]:text-current [&>li]:text-current [&>span]:text-current [&>a]:text-current`}
                         dangerouslySetInnerHTML={{ __html: msg.text }} 
                       />
                     </div>
@@ -619,7 +640,7 @@ export default function AsistentePage() {
                     <button 
                       onClick={startRecording} 
                       className={`p-2.5 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200'}`}
-                      title="Grabar mensaje de voz"
+                      title="Transcribir mensaje de voz"
                     >
                       <Mic size={20} />
                     </button>
@@ -632,17 +653,18 @@ export default function AsistentePage() {
                 <div className="flex-1 flex items-center justify-between px-3 h-[44px]">
                   <div className="flex items-center gap-3 text-red-500 animate-pulse">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span className="text-sm font-medium tracking-wide">Grabando nota de voz...</span>
+                    <span className="text-sm font-medium tracking-wide">Escuchando y transcribiendo...</span>
                   </div>
                   <button 
                     onClick={stopRecording}
                     className="p-2 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex-shrink-0 mr-1"
-                    title="Detener grabación"
+                    title="Detener transcripción"
                   >
                     <Square size={20} className="fill-current" />
                   </button>
                 </div>
               ) : (
+                // CAMBIO REALIZADO: Se modificó la clase de alineación del textarea de "py-3 self-end" a "py-2.5 my-auto" para arreglar el solapamiento visual
                 <textarea 
                   id="userInput"
                   value={inputText}
@@ -659,7 +681,7 @@ export default function AsistentePage() {
                   }}
                   placeholder={accessMode === 'client' ? "Escriba su consulta o adjunte un documento..." : "Escriba aquí (Modo Demo)..."} 
                   rows={1}
-                  className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden py-3 self-end ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                  className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden py-2.5 my-auto ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                   style={{ minHeight: '44px' }}
                 />
               )}
