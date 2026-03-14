@@ -740,7 +740,7 @@ export default function AsistentePage() {
               {/* ÁREA INFERIOR: HERRAMIENTAS Y BOTÓN ENVIAR */}
               <div className="flex items-end justify-between w-full mt-1">
                 
-                {/* HERRAMIENTAS IZQUIERDA (Clip, Micrófono) */}
+                {/* HERRAMIENTAS IZQUIERDA (Clip) */}
                 <div className="flex items-center gap-1">
                   {accessMode === 'client' && (
                     <>
@@ -758,40 +758,43 @@ export default function AsistentePage() {
                       >
                         <Paperclip size={18} />
                       </button>
-
-                      {isRecording ? (
-                        <button 
-                          onClick={stopRecording}
-                          className="p-2 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex-shrink-0"
-                          title="Detener transcripción"
-                        >
-                          <Square size={18} className="fill-current" />
-                        </button>
-                      ) : (
-                        <button 
-                          onClick={startRecording} 
-                          className={`p-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200'}`}
-                          title="Transcribir mensaje de voz"
-                        >
-                          <Mic size={18} />
-                        </button>
-                      )}
                     </>
                   )}
                 </div>
 
-                {/* BOTÓN ENVIAR DERECHA */}
-                {!isRecording && (
-                  <button 
-                    onClick={handleSend}
-                    className={`${currentColors.sendBtn} p-2.5 rounded-2xl transition-all active:scale-95 flex-shrink-0`}
-                    title="Enviar mensaje"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                    </svg>
-                  </button>
-                )}
+                {/* BOTÓN DINÁMICO DERECHA (Enviar, Grabar o Detener) */}
+                <div className="flex items-center">
+                  {isRecording ? (
+                    <button 
+                      onClick={stopRecording}
+                      className="p-2.5 rounded-2xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95 flex-shrink-0"
+                      title="Detener transcripción"
+                    >
+                      <Square size={20} className="fill-current" />
+                    </button>
+                  ) : (
+                    (inputText.trim() || selectedFile || accessMode === 'guest') ? (
+                      <button 
+                        onClick={handleSend}
+                        className={`${currentColors.sendBtn} p-2.5 rounded-2xl transition-all active:scale-95 flex-shrink-0`}
+                        title="Enviar mensaje"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                        </svg>
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={startRecording}
+                        className={`${currentColors.sendBtn} p-2.5 rounded-2xl transition-all active:scale-95 flex-shrink-0`}
+                        title="Grabar mensaje de voz"
+                      >
+                        <Mic size={20} />
+                      </button>
+                    )
+                  )}
+                </div>
+
               </div>
 
             </div>
