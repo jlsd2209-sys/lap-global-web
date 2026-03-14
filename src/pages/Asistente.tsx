@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2 } from 'lucide-react'; 
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share } from 'lucide-react'; 
 
 type Message = {
   id: string;
@@ -16,18 +16,27 @@ type Message = {
 // ==========================================
 const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => {
   const [copied, setCopied] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  // Limpiar el reproductor de voz si se desmonta el componente
+  useEffect(() => {
+    return () => {
+      if (isSpeaking && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [isSpeaking]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(text.replace(/<[^>]*>?/gm, '')); // Copia texto limpio sin HTML
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = async () => {
+    const plainText = text.replace(/<[^>]*>?/gm, ''); // Limpiamos el HTML
     if (navigator.share) {
       try {
-        // Limpiamos el HTML para compartir texto plano limpio
-        const plainText = text.replace(/<[^>]*>?/gm, '');
         await navigator.share({
           title: 'Análisis Legal - Unidad de IA',
           text: plainText,
@@ -37,7 +46,32 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
       }
     } else {
       handleCopy();
-      alert("Enlace copiado al portapapeles.");
+      alert("Respuesta copiada al portapapeles.");
+    }
+  };
+
+  const handleSpeak = () => {
+    if (!('speechSynthesis' in window)) {
+      alert("Su navegador no soporta la función de lectura en voz alta.");
+      return;
+    }
+
+    if (isSpeaking) {
+      // Si ya está hablando, lo detenemos
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      // Detener cualquier otra lectura activa antes de iniciar una nueva
+      window.speechSynthesis.cancel();
+      const plainText = text.replace(/<[^>]*>?/gm, ''); // Leemos texto limpio sin etiquetas
+      const utterance = new SpeechSynthesisUtterance(plainText);
+      utterance.lang = 'es-VE'; // Español (intenta usar variante local si está disponible)
+      
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
     }
   };
 
@@ -49,10 +83,13 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
 
   return (
     <div className="flex items-center gap-1 ml-2 mt-1">
+      <button onClick={handleSpeak} className={btnClass} title={isSpeaking ? "Detener lectura" : "Escuchar respuesta"}>
+        {isSpeaking ? <VolumeX size={14} className="text-red-400" /> : <Volume2 size={14} />}
+      </button>
       <button onClick={handleCopy} className={btnClass} title="Copiar respuesta">
         {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
       </button>
-      <button onClick={handleShare} className={btnClass} title="Compartir">
+      <button onClick={handleShare} className={btnClass} title="Compartir respuesta">
         <Share2 size={14} />
       </button>
       <button onClick={() => alert("La evaluación de respuestas se habilitará pronto para auditoría de calidad.")} className={btnClass} title="Buena respuesta">
@@ -200,6 +237,7 @@ export default function AsistentePage() {
       setWebhookActivo(initialModule.hook);
       setSelectedFile(null); 
       if (fileInputRef.current) fileInputRef.current.value = ''; 
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     }
   };
 
@@ -212,6 +250,33 @@ export default function AsistentePage() {
       });
       setSelectedFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    }
+  };
+
+  const handleShareChat = async () => {
+    if (currentMessages.length === 0) return;
+    
+    let chatText = `--- Historial de Chat: ${moduloActivo} ---\n\n`;
+    currentMessages.forEach(msg => {
+      if (msg.sender === 'loading') return;
+      const role = msg.sender === 'user' ? 'Usuario' : 'Asistente IA';
+      const cleanText = msg.text.replace(/<[^>]*>?/gm, ''); // Limpiar HTML
+      chatText += `[${role}]:\n${cleanText}\n\n`;
+    });
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Reporte de Chat - ${moduloActivo}`,
+          text: chatText,
+        });
+      } catch (error) {
+        console.log('Compartir chat cancelado.', error);
+      }
+    } else {
+      navigator.clipboard.writeText(chatText);
+      alert("Historial de chat completo copiado al portapapeles.");
     }
   };
 
@@ -221,6 +286,7 @@ export default function AsistentePage() {
     setIsMobileMenuOpen(false); 
     setSelectedFile(null); 
     if (fileInputRef.current) fileInputRef.current.value = '';
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   };
 
   const fileToBase64 = (file: File): Promise<string> => {
@@ -283,6 +349,8 @@ export default function AsistentePage() {
 
   const handleSend = async () => {
     if (!inputText.trim() && !selectedFile) return;
+
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 
     const userText = selectedFile ? `📎 [${selectedFile.name}]\n${inputText}` : inputText;
     const newUserMsg: Message = { 
@@ -550,9 +618,14 @@ export default function AsistentePage() {
           
           <div className="flex gap-2 md:gap-4 items-center flex-shrink-0">
             {currentMessages.length > 0 && (
-              <button onClick={handleClearChat} className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-red-400 hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:text-red-500 hover:bg-[#eee7d5]'} transition-all`} title="Limpiar historial de este módulo">
-                  <Trash2 size={18} />
-              </button>
+              <>
+                <button onClick={handleShareChat} className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:text-[#c5a059] hover:bg-[#eee7d5]'} transition-all`} title="Compartir historial completo">
+                    <Share size={18} />
+                </button>
+                <button onClick={handleClearChat} className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-red-400 hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:text-red-500 hover:bg-[#eee7d5]'} transition-all`} title="Limpiar historial de este módulo">
+                    <Trash2 size={18} />
+                </button>
+              </>
             )}
             <button onClick={toggleTheme} className={`p-2 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-[#1e2a40]' : 'text-[#2a303c] hover:bg-[#eee7d5]'} transition-all`} title={theme === 'dark' ? 'Cambiar a Modo Día' : 'Cambiar a Modo Noche'}>
                 {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
