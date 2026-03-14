@@ -600,10 +600,11 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
+      {/* MODIFICACIÓN ARQUITECTURA: Se añadió pt-[4rem] (y pt-[4.5rem] en móvil) para respetar el header absoluto y evitar solapamientos */}
+      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300 pt-[4rem]">
         
-        {/* CABECERA FIJA AÑADIDA: sticky top-0 z-30 asegura que nunca desaparezca del tope al hacer scroll o al abrir el teclado */}
-        <header className={`sticky top-0 z-30 flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md transition-colors duration-300`}>
+        {/* CABECERA FIJA ABSOLUTA: Se cambió sticky por absolute top-0 w-full para anclarlo independientemente de los saltos del teclado en móvil */}
+        <header className={`absolute top-0 left-0 right-0 z-30 h-[4rem] border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
               <Menu size={22} />
@@ -640,7 +641,7 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        <section className={`flex-1 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+        <section className={`flex-1 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           
           <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
             {currentMessages.length === 0 && (
@@ -686,11 +687,10 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* NUEVA ESTRUCTURA DEL INPUT TIPO CHATGPT: Caja apilada (Texto arriba, herramientas abajo) */}
-        <footer className="flex-shrink-0 p-4 md:pb-8 bg-transparent relative z-20">
+        {/* ESTRUCTURA FOOTER ULTRA-COMPACTA: Se redujeron paddings para emular diseño de WhatsApp en móvil */}
+        <footer className="flex-shrink-0 p-2 sm:p-4 pb-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
             
-            {/* VISTA PREVIA DEL ARCHIVO ADJUNTO FLOTANTE */}
             {selectedFile && (
               <div className={`absolute -top-10 left-4 ${theme === 'dark' ? 'bg-[#1e2a40] border-gray-700' : 'bg-[#eee7d5] border-[#c5a059]/30'} text-[#c5a059] text-xs py-1.5 px-3 rounded-t-xl border border-b-0 flex items-center gap-2 shadow-lg`}>
                 <FileText size={14} />
@@ -704,15 +704,14 @@ export default function AsistentePage() {
               </div>
             )}
 
-            {/* CONTENEDOR PRINCIPAL DEL INPUT (Columna) */}
-            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-3xl border border-gray-700 p-2 flex flex-col focus-within:border-[#c5a059] transition-all shadow-2xl duration-300`}>
+            {/* CONTENEDOR INPUT: Reducción de p-2 a p-1.5, bordes más cerrados */}
+            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 md:p-2 flex flex-col focus-within:border-[#c5a059] transition-all shadow-2xl duration-300`}>
               
-              {/* ÁREA SUPERIOR: TEXTAREA O MENSAJE DE GRABACIÓN */}
-              <div className="w-full px-2 pt-1">
+              <div className="w-full px-2 pt-1 md:pt-1.5">
                 {isRecording ? (
-                  <div className="flex items-center gap-3 text-red-500 animate-pulse h-[38px] px-1">
+                  <div className="flex items-center gap-3 text-red-500 animate-pulse h-[28px] px-1">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span className="text-sm font-medium tracking-wide">Escuchando y transcribiendo...</span>
+                    <span className="text-[13.5px] md:text-sm font-medium tracking-wide">Escuchando y transcribiendo...</span>
                   </div>
                 ) : (
                   <textarea 
@@ -729,18 +728,18 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
+                    // Se redujo la fuente en móvil a text-[13.5px] y se ajustó la altura mínima a 20px
                     placeholder={accessMode === 'client' ? "Ingrese texto, audio, documentos o video..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
-                    className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
-                    style={{ minHeight: '26px' }}
+                    className={`w-full bg-transparent outline-none text-[13.5px] md:text-[15px] resize-none max-h-[120px] md:max-h-[220px] py-0.5 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                    style={{ minHeight: '20px' }}
                   />
                 )}
               </div>
 
-              {/* ÁREA INFERIOR: HERRAMIENTAS Y BOTÓN ENVIAR */}
-              <div className="flex items-end justify-between w-full mt-1">
+              {/* BOTONERA INFERIOR UNIFICADA */}
+              <div className="flex items-center justify-between w-full mt-0">
                 
-                {/* HERRAMIENTAS IZQUIERDA (Clip) */}
                 <div className="flex items-center gap-1">
                   {accessMode === 'client' && (
                     <>
@@ -762,12 +761,11 @@ export default function AsistentePage() {
                   )}
                 </div>
 
-                {/* BOTÓN DINÁMICO DERECHA (Enviar, Grabar o Detener) */}
                 <div className="flex items-center">
                   {isRecording ? (
                     <button 
                       onClick={stopRecording}
-                      className="p-2.5 rounded-2xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95 flex-shrink-0"
+                      className="p-2.5 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95 flex-shrink-0"
                       title="Detener transcripción"
                     >
                       <Square size={20} className="fill-current" />
@@ -776,7 +774,7 @@ export default function AsistentePage() {
                     (inputText.trim() || selectedFile || accessMode === 'guest') ? (
                       <button 
                         onClick={handleSend}
-                        className={`${currentColors.sendBtn} p-2.5 rounded-2xl transition-all active:scale-95 flex-shrink-0`}
+                        className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95 flex-shrink-0`}
                         title="Enviar mensaje"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -786,7 +784,7 @@ export default function AsistentePage() {
                     ) : (
                       <button 
                         onClick={startRecording}
-                        className={`${currentColors.sendBtn} p-2.5 rounded-2xl transition-all active:scale-95 flex-shrink-0`}
+                        className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95 flex-shrink-0`}
                         title="Grabar mensaje de voz"
                       >
                         <Mic size={20} />
