@@ -65,7 +65,7 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
       window.speechSynthesis.cancel();
       const plainText = text.replace(/<[^>]*>?/gm, ''); // Leemos texto limpio sin etiquetas
       const utterance = new SpeechSynthesisUtterance(plainText);
-      utterance.lang = 'es-VE'; // Español (intenta usar variante local si está disponible)
+      utterance.lang = 'es-VE'; // Español
       
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
@@ -181,6 +181,16 @@ export default function AsistentePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
+
+  // NUEVO: BLOQUEO DE SCROLL NATIVO (Simula comportamiento App Nativa)
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, []);
 
   const [chatsHistory, setChatsHistory] = useState<Record<string, Message[]>>(() => {
     try {
@@ -322,6 +332,7 @@ export default function AsistentePage() {
         if (textarea) {
           textarea.style.height = 'auto';
           textarea.style.height = textarea.scrollHeight + "px";
+          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); // Ayuda al scroll al grabar
         }
       }, 100);
     };
@@ -533,7 +544,6 @@ export default function AsistentePage() {
   }
 
   return (
-    // CAMBIO ARQUITECTURA: Se añadió h-[100dvh] (Dynamic Viewport Height) al contenedor absoluto para que respete el teclado en móviles
     <div className={`fixed inset-0 flex h-[100dvh] w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
@@ -601,10 +611,10 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* ESTRUCTURA FLEX ESTRICTA (Soluciona el problema de la cabecera en el teclado móvil). Eliminado pt-[4rem] */}
-      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
+      {/* CLAVE FLEXBOX: Se agregó min-h-0 para permitir que el contenido se encoja sin empujar la cabecera hacia arriba */}
+      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 min-h-0 overflow-hidden overscroll-none transition-all duration-300">
         
-        {/* CABECERA (Ahora es flex-shrink-0 w-full dentro del flex-col, garantizando que nunca se oculte, sin usar absolute) */}
+        {/* CABECERA (w-full flex-shrink-0 asegura que nunca cambie de tamaño ni se oculte) */}
         <header className={`w-full flex-shrink-0 min-h-[4rem] border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-30 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
@@ -642,7 +652,8 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        <section className={`flex-1 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+        {/* CLAVE FLEXBOX: Se agregó min-h-0 aquí también para absorber el desborde del teclado */}
+        <section className={`flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           
           <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
             {currentMessages.length === 0 && (
@@ -689,7 +700,7 @@ export default function AsistentePage() {
         </section>
 
         {/* INPUT EN UNA SOLA LÍNEA (Estilo WhatsApp) */}
-        <footer className="flex-shrink-0 p-2 sm:p-4 pb-4 md:pb-8 bg-transparent relative z-20">
+        <footer className="flex-shrink-0 w-full p-2 sm:p-4 pb-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
             
             {/* VISTA PREVIA DEL ARCHIVO ADJUNTO FLOTANTE */}
@@ -742,7 +753,7 @@ export default function AsistentePage() {
                     value={inputText}
                     onChange={(e) => {
                       setInputText(e.target.value);
-                      e.target.style.height = "44px"; // Reinicia altura para calcular correctamente el salto de línea
+                      e.target.style.height = "24px"; // Reinicia altura para calcular correctamente el salto de línea
                       e.target.style.height = e.target.scrollHeight + "px";
                     }}
                     onKeyDown={(e) => { 
@@ -751,11 +762,15 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    // CAMBIO: Se cambió el placeholder a una frase corta y se restauró el text-base (16px)
+                    onFocus={() => {
+                      // Al enfocar, aseguramos que el scroll baje suavemente en móviles
+                      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 300);
+                    }}
+                    // TEXT-BASE OBLIGATORIO (16px) PARA EVITAR QUE iPHONE HAGA ZOOM AL ESCRIBIR
                     placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
                     className={`w-full bg-transparent outline-none text-base resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
-                    style={{ minHeight: '44px' }}
+                    style={{ minHeight: '44px', lineHeight: '20px' }}
                   />
                 )}
               </div>
