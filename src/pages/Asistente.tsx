@@ -53,42 +53,42 @@ const MODULES_DB = [
     hook: 'webhook-riesgo', 
     icon: '🌐',
     demoText: "He procesado su parámetro de búsqueda. En la versión verificada para clientes, nuestro módulo cruza esta información en tiempo real para anticipar vulnerabilidades corporativas antes de que ocurran. Nuestro sistema es capaz de predecir contingencias binacionales evaluando miles de indicadores diarios. Este módulo será adaptado a sus necesidades corporativas. Para obtener un reporte completo, blindar sus operaciones y desbloquear la matriz predictiva aplicada a su caso, contacte a nuestros especialistas para habilitar su cuenta.",
-    loadingText: "Cruzando indicadores de riesgo corporativo en tiempo real..."
+    loadingText: "Analizando su consulta..."
   },
   { 
     name: 'Análisis Penal (Arg-Ven)', 
     hook: 'webhook-penal', 
     icon: '⚖️',
     demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
-    loadingText: "Analizando marcos normativos y tratados vigentes..."
+    loadingText: "Analizando su consulta..."
   },
   { 
     name: 'Auditoría Documental', 
     hook: 'webhook-auditoria', 
     icon: '📄',
     demoText: "Parámetros de auditoría recibidos. En la red verificada, este servicio es capaz de procesar cientos de folios en segundos, detectando cláusulas abusivas, contingencias ocultas y vacíos normativos que el ojo humano podría pasar por alto. Este módulo será adaptado a sus necesidades corporativas. Si desea someter su documentación a nuestro ecosistema legal bajo estricto secreto profesional, contacte a nuestro equipo.",
-    loadingText: "Detectando contingencias y vacíos normativos en el documento..."
+    loadingText: "Analizando su consulta..."
   },
   { 
     name: 'Memoria Institucional', 
     hook: 'webhook-memoria', 
     icon: '🏛️',
     demoText: "Búsqueda en el archivo simulada. Este módulo exclusivo permite a nuestros clientes interactuar con el 'Cerebro Histórico' de sus casos, encontrando precedentes exactos, respuestas estratégicas en tiempo real y estandarizando sus decisiones legales victoriosas en el pasado. Este módulo será adaptado a sus necesidades corporativas. Su historial legal es su mayor activo; contáctenos para digitalizar y blindar su memoria corporativa.",
-    loadingText: "Procesando archivos del repositorio corporativo..."
+    loadingText: "Analizando su consulta..."
   },
   { 
     name: 'Informes Automáticos', 
     hook: 'webhook-informes', 
     icon: '📊',
     demoText: "Parámetros de generación recibidos. En la versión sin restricciones, nuestro sistema cruza la data solicitada y emite un reporte estructurado de los casos, argumentado y maquetado con los estándares más altos, listos para ser presentados ante Juntas Directivas, ahorrando días de trabajo analítico. Este módulo será adaptado a sus necesidades corporativas. Habilite su usuario para obtener documentos listos para la acción.",
-    loadingText: "Estructurando reporte para la generación del dictamen..."
+    loadingText: "Analizando su consulta..."
   },
   { 
     name: 'Boletín Jurídico', 
     hook: 'webhook-boletin', 
     icon: '📖',
     demoText: "Tema registrado en nuestro radar. A diferencia de un boletín tradicional, este modelo monitorea gacetas oficiales y despachos legislativos 24/7, filtrando únicamente los cambios normativos que impactan directamente en el sector de cada cliente. Este módulo será adaptado a sus necesidades corporativas. No sufra sorpresas legales; contáctenos para configurar su radar personalizado.",
-    loadingText: "Filtrando impactos legislativos en tiempo real..."
+    loadingText: "Analizando su consulta..."
   }
 ];
 
@@ -349,7 +349,7 @@ export default function AsistentePage() {
           const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
           return {
             ...prev,
-            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: "⚠️ Error de conexión con el núcleo de IA. Verifique que el entorno seguro de DigitalOcean (N8N) esté en línea." }]
+            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: "⚠️ No es posible establecer conexión con la red segura en este momento. El incidente ha sido reportado a soporte técnico." }]
           };
         });
       }
@@ -620,12 +620,12 @@ export default function AsistentePage() {
                     ref={fileInputRef} 
                     className="hidden" 
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.mp3,.wav,.ogg" 
+                    accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
                   />
                   <button 
                     onClick={() => fileInputRef.current?.click()} 
                     className={`p-2.5 rounded-full transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
-                    title="Adjuntar Documento, Imagen o Audio"
+                    title="Adjuntar Archivo, Audio o Video"
                   >
                     <Paperclip size={20} />
                   </button>
@@ -673,7 +673,7 @@ export default function AsistentePage() {
                       handleSend(); 
                     } 
                   }}
-                  placeholder={accessMode === 'client' ? "Escriba su consulta o adjunte un documento..." : "Escriba aquí (Modo Demo)..."} 
+                  placeholder={accessMode === 'client' ? "Ingrese texto, audio, documentos o video..." : "Escriba aquí (Modo Demo)..."} 
                   rows={1}
                   className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden py-2.5 my-auto ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                   style={{ minHeight: '44px' }}
