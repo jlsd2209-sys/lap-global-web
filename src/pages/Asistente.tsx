@@ -182,7 +182,7 @@ export default function AsistentePage() {
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
-  // NUEVO: BLOQUEO DE SCROLL NATIVO (Simula comportamiento App Nativa)
+  // BLOQUEO DE SCROLL NATIVO (Simula comportamiento App Nativa)
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
@@ -497,7 +497,8 @@ export default function AsistentePage() {
 
   if (accessMode === 'none') {
     return (
-      <div className="relative flex h-[100dvh] w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
+      // CAMBIO LOGIN: Se ajustó a min-h-screen por consistencia y estabilidad
+      <div className="relative flex min-h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
@@ -544,7 +545,8 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`fixed inset-0 flex h-[100dvh] w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    // CAMBIO CLAVE: Se eliminó h-[100dvh] de esta línea. Solo se depende de 'fixed inset-0' para mantener el contenedor estable al abrir el teclado en móviles
+    <div className={`fixed inset-0 flex w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -611,7 +613,6 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* CLAVE FLEXBOX: Se agregó min-h-0 para permitir que el contenido se encoja sin empujar la cabecera hacia arriba */}
       <main className="flex-1 flex flex-col relative w-full h-full min-w-0 min-h-0 overflow-hidden overscroll-none transition-all duration-300">
         
         {/* CABECERA (w-full flex-shrink-0 asegura que nunca cambie de tamaño ni se oculte) */}
@@ -652,7 +653,6 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        {/* CLAVE FLEXBOX: Se agregó min-h-0 aquí también para absorber el desborde del teclado */}
         <section className={`flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
           
           <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
@@ -766,7 +766,6 @@ export default function AsistentePage() {
                       // Al enfocar, aseguramos que el scroll baje suavemente en móviles
                       setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 300);
                     }}
-                    // TEXT-BASE OBLIGATORIO (16px) PARA EVITAR QUE iPHONE HAGA ZOOM AL ESCRIBIR
                     placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
                     className={`w-full bg-transparent outline-none text-base resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
