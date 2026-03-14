@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square } from 'lucide-react'; 
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2 } from 'lucide-react'; 
 
 type Message = {
   id: string;
@@ -23,6 +23,24 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        // Limpiamos el HTML para compartir texto plano limpio
+        const plainText = text.replace(/<[^>]*>?/gm, '');
+        await navigator.share({
+          title: 'Análisis Legal - Unidad de IA',
+          text: plainText,
+        });
+      } catch (error) {
+        console.log('Compartir cancelado o no disponible.', error);
+      }
+    } else {
+      handleCopy();
+      alert("Enlace copiado al portapapeles.");
+    }
+  };
+
   const btnClass = `p-1.5 rounded-md transition-colors ${
     theme === 'dark' 
       ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#1e2a40]' 
@@ -33,6 +51,9 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
     <div className="flex items-center gap-1 ml-2 mt-1">
       <button onClick={handleCopy} className={btnClass} title="Copiar respuesta">
         {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+      </button>
+      <button onClick={handleShare} className={btnClass} title="Compartir">
+        <Share2 size={14} />
       </button>
       <button onClick={() => alert("La evaluación de respuestas se habilitará pronto para auditoría de calidad.")} className={btnClass} title="Buena respuesta">
         <ThumbsUp size={14} />
@@ -233,7 +254,7 @@ export default function AsistentePage() {
       setTimeout(() => {
         const textarea = document.getElementById('userInput');
         if (textarea) {
-          textarea.style.height = '44px';
+          textarea.style.height = 'auto';
           textarea.style.height = textarea.scrollHeight + "px";
         }
       }, 100);
@@ -284,7 +305,7 @@ export default function AsistentePage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
     
     const textarea = document.getElementById('userInput');
-    if (textarea) textarea.style.height = '44px';
+    if (textarea) textarea.style.height = 'auto';
 
     const loadingId = (Date.now() + 1).toString();
     const activeModuleData = MODULES_DB.find(m => m.name === moduloActivo);
@@ -513,7 +534,8 @@ export default function AsistentePage() {
 
       <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
         
-        <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-10 transition-colors duration-300`}>
+        {/* CABECERA FIJA AÑADIDA: sticky top-0 z-30 asegura que nunca desaparezca del tope al hacer scroll o al abrir el teclado */}
+        <header className={`sticky top-0 z-30 flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
               <Menu size={22} />
@@ -574,7 +596,6 @@ export default function AsistentePage() {
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md overflow-hidden`}>
-                      {/* CAMBIO REALIZADO: Se añadió un regex .replace() para interceptar cualquier **texto** generado por error por la IA y convertirlo forzosamente en <strong>texto</strong> HTML puro. */}
                       <div 
                         className={`leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:font-sans [&_*]:text-current [&_h3]:text-[18px] [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-[16px] [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:text-[15px] [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul_ul]:list-[circle] [&_ul_ul]:mt-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol_ol]:list-[lower-alpha] [&_ol_ol]:mt-2 [&_li]:text-[15px] [&_li]:mb-1 [&_strong]:font-bold [&_li:has(h4)]:list-none [&_li_h4]:-ml-4 [&_li_h4]:block`}
                         dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
@@ -592,8 +613,8 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* ÁREA DE INPUT DE TEXTO Y ARCHIVO */}
-        <footer className="flex-shrink-0 p-4 md:pb-8">
+        {/* NUEVA ESTRUCTURA DEL INPUT TIPO CHATGPT: Caja apilada (Texto arriba, herramientas abajo) */}
+        <footer className="flex-shrink-0 p-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
             
             {/* VISTA PREVIA DEL ARCHIVO ADJUNTO FLOTANTE */}
@@ -610,87 +631,96 @@ export default function AsistentePage() {
               </div>
             )}
 
-            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-3xl border border-gray-700 p-2 pl-3 flex items-center gap-2 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[60px]`}>
+            {/* CONTENEDOR PRINCIPAL DEL INPUT (Columna) */}
+            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-3xl border border-gray-700 p-2 flex flex-col focus-within:border-[#c5a059] transition-all shadow-2xl duration-300`}>
               
-              {/* BOTONES DE ADJUNTAR Y MICRÓFONO (Solo Cliente Verificado) */}
-              {accessMode === 'client' && (
-                <div className="flex items-center gap-1 self-end mb-1">
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    className="hidden" 
-                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
-                  />
-                  <button 
-                    onClick={() => fileInputRef.current?.click()} 
-                    className={`p-2.5 rounded-full transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
-                    title="Adjuntar Archivo, Audio o Video"
-                  >
-                    <Paperclip size={20} />
-                  </button>
-
-                  {/* NUEVO BOTÓN DE MICRÓFONO */}
-                  {!isRecording && (
-                    <button 
-                      onClick={startRecording} 
-                      className={`p-2.5 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200'}`}
-                      title="Transcribir mensaje de voz"
-                    >
-                      <Mic size={20} />
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {/* INTERFAZ CONDICIONAL: GRABANDO VS TEXTO */}
-              {isRecording ? (
-                <div className="flex-1 flex items-center justify-between px-3 h-[44px]">
-                  <div className="flex items-center gap-3 text-red-500 animate-pulse">
+              {/* ÁREA SUPERIOR: TEXTAREA O MENSAJE DE GRABACIÓN */}
+              <div className="w-full px-2 pt-1">
+                {isRecording ? (
+                  <div className="flex items-center gap-3 text-red-500 animate-pulse h-[38px] px-1">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                     <span className="text-sm font-medium tracking-wide">Escuchando y transcribiendo...</span>
                   </div>
-                  <button 
-                    onClick={stopRecording}
-                    className="p-2 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex-shrink-0 mr-1"
-                    title="Detener transcripción"
-                  >
-                    <Square size={20} className="fill-current" />
-                  </button>
+                ) : (
+                  <textarea 
+                    id="userInput"
+                    value={inputText}
+                    onChange={(e) => {
+                      setInputText(e.target.value);
+                      e.target.style.height = "auto"; 
+                      e.target.style.height = e.target.scrollHeight + "px";
+                    }}
+                    onKeyDown={(e) => { 
+                      if (e.key === 'Enter' && !e.shiftKey) { 
+                        e.preventDefault(); 
+                        handleSend(); 
+                      } 
+                    }}
+                    placeholder={accessMode === 'client' ? "Ingrese texto, audio, documentos o video..." : "Escriba aquí (Modo Demo)..."} 
+                    rows={1}
+                    className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                    style={{ minHeight: '26px' }}
+                  />
+                )}
+              </div>
+
+              {/* ÁREA INFERIOR: HERRAMIENTAS Y BOTÓN ENVIAR */}
+              <div className="flex items-end justify-between w-full mt-1">
+                
+                {/* HERRAMIENTAS IZQUIERDA (Clip, Micrófono) */}
+                <div className="flex items-center gap-1">
+                  {accessMode === 'client' && (
+                    <>
+                      <input 
+                        type="file" 
+                        ref={fileInputRef} 
+                        className="hidden" 
+                        onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                        accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
+                      />
+                      <button 
+                        onClick={() => fileInputRef.current?.click()} 
+                        className={`p-2 rounded-full transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
+                        title="Adjuntar Archivo, Audio o Video"
+                      >
+                        <Paperclip size={18} />
+                      </button>
+
+                      {isRecording ? (
+                        <button 
+                          onClick={stopRecording}
+                          className="p-2 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex-shrink-0"
+                          title="Detener transcripción"
+                        >
+                          <Square size={18} className="fill-current" />
+                        </button>
+                      ) : (
+                        <button 
+                          onClick={startRecording} 
+                          className={`p-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200'}`}
+                          title="Transcribir mensaje de voz"
+                        >
+                          <Mic size={18} />
+                        </button>
+                      )}
+                    </>
+                  )}
                 </div>
-              ) : (
-                <textarea 
-                  id="userInput"
-                  value={inputText}
-                  onChange={(e) => {
-                    setInputText(e.target.value);
-                    e.target.style.height = "44px"; 
-                    e.target.style.height = e.target.scrollHeight + "px";
-                  }}
-                  onKeyDown={(e) => { 
-                    if (e.key === 'Enter' && !e.shiftKey) { 
-                      e.preventDefault(); 
-                      handleSend(); 
-                    } 
-                  }}
-                  placeholder={accessMode === 'client' ? "Ingrese texto, audio, documentos o video..." : "Escriba aquí (Modo Demo)..."} 
-                  rows={1}
-                  className={`w-full bg-transparent outline-none text-base resize-none max-h-[150px] md:max-h-[220px] [&::-webkit-scrollbar]:hidden py-2.5 my-auto ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
-                  style={{ minHeight: '44px' }}
-                />
-              )}
-              
-              {!isRecording && (
-                <button 
-                  onClick={handleSend}
-                  className={`${currentColors.sendBtn} p-3 rounded-2xl mb-1 mr-1 self-end transition-all active:scale-95 flex-shrink-0`}
-                  title="Enviar mensaje"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-5 md:w-5" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                  </svg>
-                </button>
-              )}
+
+                {/* BOTÓN ENVIAR DERECHA */}
+                {!isRecording && (
+                  <button 
+                    onClick={handleSend}
+                    className={`${currentColors.sendBtn} p-2.5 rounded-2xl transition-all active:scale-95 flex-shrink-0`}
+                    title="Enviar mensaje"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+
             </div>
           </div>
         </footer>
