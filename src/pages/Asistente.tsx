@@ -600,11 +600,11 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* MODIFICACIÓN ARQUITECTURA: Se añadió pt-[4rem] (y pt-[4.5rem] en móvil) para respetar el header absoluto y evitar solapamientos */}
-      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300 pt-[4rem]">
+      {/* ESTRUCTURA FLEX ESTRICTA (Soluciona el problema de la cabecera en el teclado móvil) */}
+      <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
         
-        {/* CABECERA FIJA ABSOLUTA: Se cambió sticky por absolute top-0 w-full para anclarlo independientemente de los saltos del teclado en móvil */}
-        <header className={`absolute top-0 left-0 right-0 z-30 h-[4rem] border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md transition-colors duration-300`}>
+        {/* CABECERA (Ahora es flex-shrink-0 dentro del flex-col, garantizando que nunca se oculte) */}
+        <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-30 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
               <Menu size={22} />
@@ -687,10 +687,11 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* ESTRUCTURA FOOTER ULTRA-COMPACTA: Se redujeron paddings para emular diseño de WhatsApp en móvil */}
+        {/* INPUT EN UNA SOLA LÍNEA (Estilo WhatsApp) */}
         <footer className="flex-shrink-0 p-2 sm:p-4 pb-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
             
+            {/* VISTA PREVIA DEL ARCHIVO ADJUNTO FLOTANTE */}
             {selectedFile && (
               <div className={`absolute -top-10 left-4 ${theme === 'dark' ? 'bg-[#1e2a40] border-gray-700' : 'bg-[#eee7d5] border-[#c5a059]/30'} text-[#c5a059] text-xs py-1.5 px-3 rounded-t-xl border border-b-0 flex items-center gap-2 shadow-lg`}>
                 <FileText size={14} />
@@ -704,14 +705,35 @@ export default function AsistentePage() {
               </div>
             )}
 
-            {/* CONTENEDOR INPUT: Reducción de p-2 a p-1.5, bordes más cerrados */}
-            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 md:p-2 flex flex-col focus-within:border-[#c5a059] transition-all shadow-2xl duration-300`}>
+            {/* CONTENEDOR INPUT: flex-row items-end para alinear todo en una línea horizontal */}
+            <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 flex flex-row items-end gap-1 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[50px]`}>
               
-              <div className="w-full px-2 pt-1 md:pt-1.5">
+              {/* IZQUIERDA: Botón de Adjuntar */}
+              {accessMode === 'client' && (
+                <div className="flex-shrink-0 mb-0.5">
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    className="hidden" 
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                    accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
+                  />
+                  <button 
+                    onClick={() => fileInputRef.current?.click()} 
+                    className={`p-2.5 rounded-full transition-all ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
+                    title="Adjuntar Archivo, Audio o Video"
+                  >
+                    <Paperclip size={20} />
+                  </button>
+                </div>
+              )}
+
+              {/* CENTRO: Área de Texto */}
+              <div className="flex-1 flex flex-col justify-center min-h-[44px]">
                 {isRecording ? (
-                  <div className="flex items-center gap-3 text-red-500 animate-pulse h-[28px] px-1">
+                  <div className="flex items-center gap-3 text-red-500 animate-pulse px-2 h-full">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span className="text-[13.5px] md:text-sm font-medium tracking-wide">Escuchando y transcribiendo...</span>
+                    <span className="text-[13.5px] md:text-sm font-medium tracking-wide">Escuchando...</span>
                   </div>
                 ) : (
                   <textarea 
@@ -719,7 +741,7 @@ export default function AsistentePage() {
                     value={inputText}
                     onChange={(e) => {
                       setInputText(e.target.value);
-                      e.target.style.height = "auto"; 
+                      e.target.style.height = "24px"; // Reinicia altura para calcular correctamente el salto de línea
                       e.target.style.height = e.target.scrollHeight + "px";
                     }}
                     onKeyDown={(e) => { 
@@ -728,71 +750,45 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    // Se redujo la fuente en móvil a text-[13.5px] y se ajustó la altura mínima a 20px
-                    placeholder={accessMode === 'client' ? "Ingrese texto, audio, documentos o video..." : "Escriba aquí (Modo Demo)..."} 
+                    placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
-                    className={`w-full bg-transparent outline-none text-[13.5px] md:text-[15px] resize-none max-h-[120px] md:max-h-[220px] py-0.5 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
-                    style={{ minHeight: '20px' }}
+                    className={`w-full bg-transparent outline-none text-[14px] md:text-[15px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                    style={{ minHeight: '44px', lineHeight: '20px' }}
                   />
                 )}
               </div>
 
-              {/* BOTONERA INFERIOR UNIFICADA */}
-              <div className="flex items-center justify-between w-full mt-0">
-                
-                <div className="flex items-center gap-1">
-                  {accessMode === 'client' && (
-                    <>
-                      <input 
-                        type="file" 
-                        ref={fileInputRef} 
-                        className="hidden" 
-                        onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                        accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
-                      />
-                      <button 
-                        onClick={() => fileInputRef.current?.click()} 
-                        className={`p-2 rounded-full transition-all flex-shrink-0 ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
-                        title="Adjuntar Archivo, Audio o Video"
-                      >
-                        <Paperclip size={18} />
-                      </button>
-                    </>
-                  )}
-                </div>
-
-                <div className="flex items-center">
-                  {isRecording ? (
+              {/* DERECHA: Botón Dinámico de Enviar / Grabar / Detener */}
+              <div className="flex-shrink-0 mb-0.5 ml-1">
+                {isRecording ? (
+                  <button 
+                    onClick={stopRecording}
+                    className="p-2.5 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95"
+                    title="Detener transcripción"
+                  >
+                    <Square size={20} className="fill-current" />
+                  </button>
+                ) : (
+                  (inputText.trim() || selectedFile || accessMode === 'guest') ? (
                     <button 
-                      onClick={stopRecording}
-                      className="p-2.5 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95 flex-shrink-0"
-                      title="Detener transcripción"
+                      onClick={handleSend}
+                      className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95`}
+                      title="Enviar mensaje"
                     >
-                      <Square size={20} className="fill-current" />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                      </svg>
                     </button>
                   ) : (
-                    (inputText.trim() || selectedFile || accessMode === 'guest') ? (
-                      <button 
-                        onClick={handleSend}
-                        className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95 flex-shrink-0`}
-                        title="Enviar mensaje"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                        </svg>
-                      </button>
-                    ) : (
-                      <button 
-                        onClick={startRecording}
-                        className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95 flex-shrink-0`}
-                        title="Grabar mensaje de voz"
-                      >
-                        <Mic size={20} />
-                      </button>
-                    )
-                  )}
-                </div>
-
+                    <button 
+                      onClick={startRecording}
+                      className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95`}
+                      title="Grabar mensaje de voz"
+                    >
+                      <Mic size={20} />
+                    </button>
+                  )
+                )}
               </div>
 
             </div>
