@@ -533,7 +533,8 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`fixed inset-0 flex overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    // CAMBIO ARQUITECTURA: Se añadió h-[100dvh] (Dynamic Viewport Height) al contenedor absoluto para que respete el teclado en móviles
+    <div className={`fixed inset-0 flex h-[100dvh] w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -600,11 +601,11 @@ export default function AsistentePage() {
         </div>
       </aside>
 
-      {/* ESTRUCTURA FLEX ESTRICTA (Soluciona el problema de la cabecera en el teclado móvil) */}
+      {/* ESTRUCTURA FLEX ESTRICTA (Soluciona el problema de la cabecera en el teclado móvil). Eliminado pt-[4rem] */}
       <main className="flex-1 flex flex-col relative w-full h-full min-w-0 overflow-hidden overscroll-none transition-all duration-300">
         
-        {/* CABECERA (Ahora es flex-shrink-0 dentro del flex-col, garantizando que nunca se oculte) */}
-        <header className={`flex-shrink-0 min-h-[4rem] py-3 border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-30 transition-colors duration-300`}>
+        {/* CABECERA (Ahora es flex-shrink-0 w-full dentro del flex-col, garantizando que nunca se oculte, sin usar absolute) */}
+        <header className={`w-full flex-shrink-0 min-h-[4rem] border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-30 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
               <Menu size={22} />
@@ -733,7 +734,7 @@ export default function AsistentePage() {
                 {isRecording ? (
                   <div className="flex items-center gap-3 text-red-500 animate-pulse px-2 h-full">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span className="text-[13.5px] md:text-sm font-medium tracking-wide">Escuchando...</span>
+                    <span className="text-base font-medium tracking-wide">Escuchando...</span>
                   </div>
                 ) : (
                   <textarea 
@@ -741,7 +742,7 @@ export default function AsistentePage() {
                     value={inputText}
                     onChange={(e) => {
                       setInputText(e.target.value);
-                      e.target.style.height = "24px"; // Reinicia altura para calcular correctamente el salto de línea
+                      e.target.style.height = "44px"; // Reinicia altura para calcular correctamente el salto de línea
                       e.target.style.height = e.target.scrollHeight + "px";
                     }}
                     onKeyDown={(e) => { 
@@ -750,10 +751,11 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
+                    // CAMBIO: Se cambió el placeholder a una frase corta y se restauró el text-base (16px)
                     placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
-                    className={`w-full bg-transparent outline-none text-[14px] md:text-[15px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
-                    style={{ minHeight: '44px', lineHeight: '20px' }}
+                    className={`w-full bg-transparent outline-none text-base resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                    style={{ minHeight: '44px' }}
                   />
                 )}
               </div>
