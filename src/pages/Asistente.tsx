@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import logoShield from '@/assets/logo.png.png'; // Recuerda renombrar tu archivo a logo.png en tu carpeta local si lo deseas
+import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
 import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share, Edit2, ChevronDown, ChevronUp } from 'lucide-react'; 
@@ -18,14 +18,13 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // MEJORA APLICADA: Cleanup de SpeechSynthesis corregido para evitar memory leaks
   useEffect(() => {
     return () => {
-      if ('speechSynthesis' in window) {
+      if (isSpeaking && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
     };
-  }, []);
+  }, [isSpeaking]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(text.replace(/<[^>]*>?/gm, '')); 
@@ -420,7 +419,6 @@ export default function AsistentePage() {
       hasAttachment: !!selectedFile 
     };
     
-    // MEJORA APLICADA: Limitar historial a 50 mensajes para ahorrar memoria
     setChatsHistory(prev => ({
       ...prev,
       [moduloActivo]: [...(prev[moduloActivo] || []), newUserMsg].slice(-50)
@@ -594,7 +592,7 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`fixed inset-0 flex w-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    <div className={`fixed inset-0 flex w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -762,24 +760,29 @@ export default function AsistentePage() {
 
             <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 flex flex-row items-end gap-1 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[50px]`}>
               
-              {accessMode === 'client' && (
-                <div className="flex-shrink-0 mb-0.5">
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    className="hidden" 
-                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
-                  />
-                  <button 
-                    onClick={() => fileInputRef.current?.click()} 
-                    className={`p-2.5 rounded-full transition-all ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
-                    title="Adjuntar Archivo, Audio o Video"
-                  >
-                    <Paperclip size={20} />
-                  </button>
-                </div>
-              )}
+              <div className="flex-shrink-0 mb-0.5">
+                {/* El input oculto de archivos se renderiza para todos, pero lo activaremos condicionalmente */}
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  className="hidden" 
+                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                  accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
+                />
+                <button 
+                  onClick={() => {
+                    if (accessMode === 'guest') {
+                      alert("La función de adjuntar documentos pesados y multimedia está disponible únicamente para clientes con cuentas verificadas.");
+                    } else {
+                      fileInputRef.current?.click();
+                    }
+                  }} 
+                  className={`p-2.5 rounded-full transition-all ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
+                  title="Adjuntar Archivo, Audio o Video"
+                >
+                  <Paperclip size={20} />
+                </button>
+              </div>
 
               <div className="flex-1 flex flex-col justify-center min-h-[44px]">
                 {isRecording ? (
@@ -802,7 +805,7 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
+                    placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba, dicte o adjunte (Demo)..."} 
                     rows={1}
                     className={`w-full bg-transparent outline-none text-[16px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                     style={{ minHeight: '44px', lineHeight: '20px' }}
@@ -820,7 +823,7 @@ export default function AsistentePage() {
                     <Square size={20} className="fill-current" />
                   </button>
                 ) : (
-                  (inputText.trim() || selectedFile || accessMode === 'guest') ? (
+                  (inputText.trim() || selectedFile) ? (
                     <button 
                       onClick={handleSend}
                       className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95`}
