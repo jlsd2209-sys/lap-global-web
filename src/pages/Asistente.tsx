@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import logoShield from '@/assets/logo.png.png'; 
+import logoShield from '@/assets/logo.png.png'; // Recuerda renombrar tu archivo a logo.png en tu carpeta local si lo deseas
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
 import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share, Edit2, ChevronDown, ChevronUp } from 'lucide-react'; 
@@ -18,13 +18,14 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
+  // MEJORA APLICADA: Cleanup de SpeechSynthesis corregido para evitar memory leaks
   useEffect(() => {
     return () => {
-      if (isSpeaking && 'speechSynthesis' in window) {
+      if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
     };
-  }, [isSpeaking]);
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(text.replace(/<[^>]*>?/gm, '')); 
@@ -106,7 +107,6 @@ const UserMessageBubble = ({ msg, theme, currentColors, onEdit }: { msg: Message
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  // Consideramos un mensaje largo si supera los 300 caracteres
   const isLong = msg.text.length > 300;
   const displayText = isLong && !expanded ? msg.text.substring(0, 300) + '...' : msg.text;
 
@@ -123,7 +123,6 @@ const UserMessageBubble = ({ msg, theme, currentColors, onEdit }: { msg: Message
   }`;
 
   return (
-    // SE ELIMINÓ w-full PARA QUE LA BURBUJA SE AJUSTE AL TAMAÑO DEL TEXTO
     <div className="flex flex-col items-end max-w-[90%] md:max-w-[85%]">
       <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none shadow-md`}>
         <p className="text-[15px] md:text-[16px] leading-relaxed whitespace-pre-wrap break-words">
@@ -131,7 +130,6 @@ const UserMessageBubble = ({ msg, theme, currentColors, onEdit }: { msg: Message
         </p>
       </div>
       
-      {/* Botonera del usuario (Abajo de su mensaje) */}
       <div className="flex items-center gap-1 mr-2 mt-1">
         {isLong && (
           <button onClick={() => setExpanded(!expanded)} className={btnClass} title={expanded ? "Mostrar menos" : "Mostrar más"}>
@@ -422,9 +420,10 @@ export default function AsistentePage() {
       hasAttachment: !!selectedFile 
     };
     
+    // MEJORA APLICADA: Limitar historial a 50 mensajes para ahorrar memoria
     setChatsHistory(prev => ({
       ...prev,
-      [moduloActivo]: [...(prev[moduloActivo] || []), newUserMsg]
+      [moduloActivo]: [...(prev[moduloActivo] || []), newUserMsg].slice(-50)
     }));
     
     const payloadText = inputText;
@@ -443,7 +442,7 @@ export default function AsistentePage() {
 
     setChatsHistory(prev => ({
       ...prev,
-      [moduloActivo]: [...(prev[moduloActivo] || []), { id: loadingId, sender: 'loading', text: dynamicLoadingText }]
+      [moduloActivo]: [...(prev[moduloActivo] || []), { id: loadingId, sender: 'loading', text: dynamicLoadingText }].slice(-50)
     }));
 
     if (accessMode === 'guest') {
@@ -452,7 +451,7 @@ export default function AsistentePage() {
           const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
           return {
             ...prev,
-            [moduloActivo]: [...filteredMessages, { id: (Date.now() + 2).toString(), sender: 'bot', text: activeModuleData?.demoText || "Modo Demo Activo." }]
+            [moduloActivo]: [...filteredMessages, { id: (Date.now() + 2).toString(), sender: 'bot', text: activeModuleData?.demoText || "Modo Demo Activo." }].slice(-50)
           };
         });
       }, 1500);
@@ -490,7 +489,7 @@ export default function AsistentePage() {
           const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
           return {
             ...prev,
-            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: botResponseText }]
+            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: botResponseText }].slice(-50)
           };
         });
 
@@ -500,7 +499,7 @@ export default function AsistentePage() {
           const filteredMessages = (prev[moduloActivo] || []).filter(msg => msg.id !== loadingId);
           return {
             ...prev,
-            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: "⚠️ No es posible establecer conexión con la red segura en este momento. El incidente ha sido reportado a soporte técnico." }]
+            [moduloActivo]: [...filteredMessages, { id: Date.now().toString(), sender: 'bot', text: "⚠️ No es posible establecer conexión con la red segura en este momento. El incidente ha sido reportado a soporte técnico." }].slice(-50)
           };
         });
       }
@@ -537,7 +536,7 @@ export default function AsistentePage() {
       mainTitle: 'text-[#0a1526]', 
       greetingP: 'text-[#2a303c]', 
       botBubble: 'bg-[#eee7d5] text-[#2a303c] border-[#c5a059]', 
-      userBubble: 'bg-[#151f32] text-white border-none', // <-- CORRECCIÓN: Azul marino oscuro en lugar de casi negro.
+      userBubble: 'bg-[#151f32] text-white border-none',
       footerBG: 'bg-[#eee7d5]', 
       textArea: 'text-[#2a303c]',
       sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
@@ -595,7 +594,7 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`fixed inset-0 flex w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    <div className={`fixed inset-0 flex w-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
