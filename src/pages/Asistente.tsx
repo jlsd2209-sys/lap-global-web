@@ -78,13 +78,16 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
     setFeedback(type); 
     
     try {
+      // FECHA VENEZUELA PARA EVALUACIÓN
+      const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
+      
       await fetch('https://unidaddeia.duckdns.org/webhook/evaluacion-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           evaluacion: type === 'up' ? 'Buena' : 'Mala',
           mensaje_bot: text.replace(/<[^>]*>?/gm, ''), 
-          fecha: new Date().toISOString()
+          fecha: fechaVE
         })
       });
     } catch (error) {
@@ -229,7 +232,7 @@ export default function AsistentePage() {
   
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginHovered, setIsLoginHovered] = useState(false);
-  const [isNotificationHovered, setIsNotificationHovered] = useState(false); // NUEVO ESTADO PARA EL HOVER DE LA NOTIFICACIÓN
+  const [isNotificationHovered, setIsNotificationHovered] = useState(false); 
 
   const [searchParams] = useSearchParams();
   const urlParam = searchParams.get('modulo') || 'webhook-riesgo';
@@ -304,6 +307,9 @@ export default function AsistentePage() {
     e.preventDefault();
     
     try {
+      // FECHA VENEZUELA PARA REGISTRO
+      const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
+
       await fetch('https://unidaddeia.duckdns.org/webhook/registro-usuario', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -312,11 +318,10 @@ export default function AsistentePage() {
           correo: username, 
           telefono: registerPhone,
           password: password,
-          fecha: new Date().toISOString()
+          fecha: fechaVE
         })
       });
       
-      // Mostrar notificación elegante con el nuevo texto solicitado
       setNotification({
         title: 'Solicitud Enviada',
         message: 'Su solicitud de acceso ha sido recibida con éxito. Nuestro equipo de asesores verificará su perfil y se pondrá en contacto pronto.'
@@ -341,16 +346,18 @@ export default function AsistentePage() {
     e.preventDefault();
     
     try {
+      // FECHA VENEZUELA PARA RECUPERACIÓN
+      const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
+
       await fetch('https://unidaddeia.duckdns.org/webhook/recuperar-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           correo: username, 
-          fecha: new Date().toISOString()
+          fecha: fechaVE
         })
       });
       
-      // Mostrar notificación elegante
       setNotification({
         title: 'Recuperación en Proceso',
         message: 'Si el correo ingresado coincide con nuestros registros seguros, recibirá instrucciones detalladas para restablecer su acceso.'
@@ -655,11 +662,12 @@ export default function AsistentePage() {
           <Particles count={40} />
         </div>
         
-        <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)] overflow-hidden">
+        {/* LA TARJETA AHORA TIENE transition-all PARA ENCOGERSE Y ADAPTARSE AL CONTENIDO */}
+        <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)] transition-all duration-500">
           
-          {/* OVERLAY DE NOTIFICACIÓN ELEGANTE CON LOGO Y EFECTOS HOVER */}
-          {notification && (
-            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#0a1526]/95 backdrop-blur-md p-8 text-center transition-all duration-300">
+          {notification ? (
+            /* CONTENIDO DE LA NOTIFICACIÓN: Reemplaza al formulario para que la caja se encoja */
+            <div className="flex flex-col items-center justify-center text-center animate-in fade-in duration-500">
               
               <div 
                 className="flex flex-col items-center mb-4 group cursor-pointer" 
@@ -669,7 +677,7 @@ export default function AsistentePage() {
                 <div className="relative w-24 h-28 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                   <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
                 </div>
-                <h3 className={`text-2xl font-serif tracking-wide transition-colors duration-300 ${isNotificationHovered ? 'gradient-text-gold text-[#c5a059]' : 'text-white'}`}>
+                <h3 className={`text-2xl font-serif tracking-wide transition-colors duration-300 ${isNotificationHovered && !notification.isError ? 'gradient-text-gold text-[#c5a059]' : notification.isError ? 'text-red-400' : 'text-white'}`}>
                   {notification.title}
                 </h3>
               </div>
@@ -684,109 +692,111 @@ export default function AsistentePage() {
                 Aceptar
               </button>
             </div>
-          )}
-
-          <div className="flex flex-col items-center mb-8 group cursor-pointer" onMouseEnter={() => setIsLoginHovered(true)} onMouseLeave={() => setIsLoginHovered(false)}>
-            {/* LOGO AUMENTADO DE TAMAÑO EN LA PANTALLA PRINCIPAL */}
-            <div className="relative w-24 h-28 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
-            </div>
-            <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
-              {isRegistering ? 'Nuevo Registro' : isRecovering ? 'Recuperar Acceso' : 'Acceso Seguro'}
-            </h2>
-            <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Plataforma de Inteligencia Legal</p>
-          </div>
-          
-          <form onSubmit={isRegistering ? handleRegister : isRecovering ? handleRecoverPassword : handleLogin} className="space-y-4">
-            
-            {isRegistering && (
-              <div>
-                <input 
-                  type="text" 
-                  placeholder="Nombre completo" 
-                  value={registerName}
-                  onChange={(e) => setRegisterName(e.target.value)}
-                  required
-                  className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
-                />
-              </div>
-            )}
-
-            <div>
-              <input 
-                type="text" 
-                placeholder={isRegistering || isRecovering ? "Correo electrónico" : "Usuario o Correo"} 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
-                required
-                className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
-              />
-            </div>
-
-            {isRegistering && (
-              <div>
-                <input 
-                  type="tel" 
-                  placeholder="Número de teléfono (Ej: +54 9 11...)" 
-                  value={registerPhone}
-                  onChange={(e) => setRegisterPhone(e.target.value)}
-                  required
-                  className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
-                />
-              </div>
-            )}
-
-            {!isRecovering && (
-              <div className="space-y-1">
-                <div className="relative">
-                  <input 
-                    type={showPassword ? "text" : "password"} 
-                    placeholder="Contraseña" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required
-                    className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 pr-12 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
-                  />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#c5a059] transition-colors focus:outline-none">
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
+          ) : (
+            /* CONTENIDO ORIGINAL DEL FORMULARIO */
+            <>
+              <div className="flex flex-col items-center mb-8 group cursor-pointer" onMouseEnter={() => setIsLoginHovered(true)} onMouseLeave={() => setIsLoginHovered(false)}>
+                <div className="relative w-24 h-28 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                  <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
                 </div>
+                <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
+                  {isRegistering ? 'Nuevo Registro' : isRecovering ? 'Recuperar Acceso' : 'Acceso Seguro'}
+                </h2>
+                <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Plataforma de Inteligencia Legal</p>
+              </div>
+              
+              <form onSubmit={isRegistering ? handleRegister : isRecovering ? handleRecoverPassword : handleLogin} className="space-y-4">
                 
-                {!isRegistering && (
-                  <div className="flex justify-end pr-1 pt-1">
-                    <button type="button" onClick={() => setIsRecovering(true)} className="text-xs text-gray-400 hover:text-[#c5a059] transition-colors">¿Olvidó su contraseña?</button>
+                {isRegistering && (
+                  <div>
+                    <input 
+                      type="text" 
+                      placeholder="Nombre completo" 
+                      value={registerName}
+                      onChange={(e) => setRegisterName(e.target.value)}
+                      required
+                      className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
+                    />
                   </div>
                 )}
+
+                <div>
+                  <input 
+                    type="text" 
+                    placeholder={isRegistering || isRecovering ? "Correo electrónico" : "Usuario o Correo"} 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)} 
+                    required
+                    className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
+                  />
+                </div>
+
+                {isRegistering && (
+                  <div>
+                    <input 
+                      type="tel" 
+                      placeholder="Número de teléfono (Ej: +54 9 11...)" 
+                      value={registerPhone}
+                      onChange={(e) => setRegisterPhone(e.target.value)}
+                      required
+                      className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
+                    />
+                  </div>
+                )}
+
+                {!isRecovering && (
+                  <div className="space-y-1">
+                    <div className="relative">
+                      <input 
+                        type={showPassword ? "text" : "password"} 
+                        placeholder="Contraseña" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        required
+                        className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 pr-12 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
+                      />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#c5a059] transition-colors focus:outline-none">
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      </button>
+                    </div>
+                    
+                    {!isRegistering && (
+                      <div className="flex justify-end pr-1 pt-1">
+                        <button type="button" onClick={() => setIsRecovering(true)} className="text-xs text-gray-400 hover:text-[#c5a059] transition-colors">¿Olvidó su contraseña?</button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {loginError && !isRegistering && !isRecovering && <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>}
+                
+                <button type="submit" className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95 mt-2">
+                  <Lock size={18} /> {isRegistering ? 'Solicitar Registro' : isRecovering ? 'Enviar Enlace' : 'Ingresar a la red'}
+                </button>
+              </form>
+              
+              <div className="mt-8 pt-6 border-t border-gray-800 text-center space-y-4">
+                {isRecovering ? (
+                  <p className="text-gray-400 text-sm">
+                    ¿Recordó su contraseña?{' '}
+                    <button onClick={() => setIsRecovering(false)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Inicia sesión</button>
+                  </p>
+                ) : isRegistering ? (
+                  <p className="text-gray-400 text-sm">
+                    ¿Ya tienes una cuenta?{' '}
+                    <button onClick={() => setIsRegistering(false)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Inicia sesión</button>
+                  </p>
+                ) : (
+                  <p className="text-gray-400 text-sm">
+                    ¿No eres cliente aún?{' '}
+                    <button onClick={() => setIsRegistering(true)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Solicita tu acceso</button>
+                  </p>
+                )}
+
+                <button onClick={() => setAccessMode('guest')} className="text-[#c5a059] hover:text-white text-sm font-medium transition-colors border border-[#c5a059]/30 px-6 py-2 rounded-full hover:bg-[#c5a059]/10">Entrar a la versión Demo (Invitado)</button>
               </div>
-            )}
-
-            {loginError && !isRegistering && !isRecovering && <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>}
-            
-            <button type="submit" className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95 mt-2">
-              <Lock size={18} /> {isRegistering ? 'Solicitar Registro' : isRecovering ? 'Enviar Enlace' : 'Ingresar a la red'}
-            </button>
-          </form>
-          
-          <div className="mt-8 pt-6 border-t border-gray-800 text-center space-y-4">
-            {isRecovering ? (
-              <p className="text-gray-400 text-sm">
-                ¿Recordó su contraseña?{' '}
-                <button onClick={() => setIsRecovering(false)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Inicia sesión</button>
-              </p>
-            ) : isRegistering ? (
-              <p className="text-gray-400 text-sm">
-                ¿Ya tienes una cuenta?{' '}
-                <button onClick={() => setIsRegistering(false)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Inicia sesión</button>
-              </p>
-            ) : (
-              <p className="text-gray-400 text-sm">
-                ¿No eres cliente aún?{' '}
-                <button onClick={() => setIsRegistering(true)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Solicita tu acceso</button>
-              </p>
-            )}
-
-            <button onClick={() => setAccessMode('guest')} className="text-[#c5a059] hover:text-white text-sm font-medium transition-colors border border-[#c5a059]/30 px-6 py-2 rounded-full hover:bg-[#c5a059]/10">Entrar a la versión Demo (Invitado)</button>
-          </div>
+            </>
+          )}
         </div>
       </div>
     );
