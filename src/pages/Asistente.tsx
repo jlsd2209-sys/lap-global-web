@@ -221,9 +221,12 @@ export default function AsistentePage() {
   const [loginError, setLoginError] = useState(false);
   
   const [isRegistering, setIsRegistering] = useState(false);
-  const [isRecovering, setIsRecovering] = useState(false); // NUEVO ESTADO PARA RECUPERAR CONTRASEÑA
+  const [isRecovering, setIsRecovering] = useState(false); 
   const [registerName, setRegisterName] = useState(''); 
   const [registerPhone, setRegisterPhone] = useState(''); 
+  
+  // NUEVO: Estado para notificaciones elegantes en la pantalla de Login
+  const [notification, setNotification] = useState<{title: string, message: string, isError?: boolean} | null>(null);
   
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginHovered, setIsLoginHovered] = useState(false);
@@ -313,7 +316,12 @@ export default function AsistentePage() {
         })
       });
       
-      alert("Su solicitud de acceso ha sido enviada. Nuestro equipo evaluará su perfil y se pondrá en contacto.");
+      // Mostrar notificación elegante en lugar de alert()
+      setNotification({
+        title: 'Solicitud Enviada',
+        message: 'Su solicitud de acceso ha sido recibida con éxito. Nuestro equipo de asesores evaluará su perfil y se pondrá en contacto pronto.'
+      });
+      
       setIsRegistering(false); 
       setUsername('');
       setPassword('');
@@ -321,16 +329,18 @@ export default function AsistentePage() {
       setRegisterPhone('');
     } catch (error) {
       console.error("Error al registrar:", error);
-      alert("Hubo un error de conexión al enviar su solicitud. Por favor intente más tarde.");
+      setNotification({
+        title: 'Error de Conexión',
+        message: 'Hubo un error de conexión al enviar su solicitud. Por favor intente nuevamente en unos minutos.',
+        isError: true
+      });
     }
   };
 
-  // NUEVO: Función para enviar solicitud de recuperación de contraseña a N8N
   const handleRecoverPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      // AQUÍ PUEDES REEMPLAZAR ESTE ENLACE POR TU WEBHOOK REAL DE RECUPERACIÓN
       await fetch('https://unidaddeia.duckdns.org/webhook/recuperar-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -340,12 +350,21 @@ export default function AsistentePage() {
         })
       });
       
-      alert("Si el correo existe en nuestra base de datos, recibirá instrucciones para restablecer su contraseña.");
+      // Mostrar notificación elegante en lugar de alert()
+      setNotification({
+        title: 'Recuperación en Proceso',
+        message: 'Si el correo ingresado coincide con nuestros registros seguros, recibirá instrucciones detalladas para restablecer su acceso.'
+      });
+      
       setIsRecovering(false); 
       setUsername('');
     } catch (error) {
       console.error("Error al recuperar contraseña:", error);
-      alert("Hubo un error de conexión. Por favor intente más tarde.");
+      setNotification({
+        title: 'Error de Conexión',
+        message: 'Hubo un error de comunicación con el servidor. Por favor intente nuevamente en unos minutos.',
+        isError: true
+      });
     }
   };
 
@@ -636,12 +655,32 @@ export default function AsistentePage() {
           <Particles count={40} />
         </div>
         
-        <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)]">
+        {/* SE AÑADIÓ overflow-hidden A LA TARJETA PRINCIPAL PARA CONTENER EL MODAL */}
+        <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)] overflow-hidden">
+          
+          {/* OVERLAY DE NOTIFICACIÓN ELEGANTE */}
+          {notification && (
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#0a1526]/95 backdrop-blur-md p-8 text-center transition-all duration-300">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 border ${notification.isError ? 'bg-red-500/20 border-red-500/30' : 'bg-[#c5a059]/20 border-[#c5a059]/30'}`}>
+                {notification.isError ? <X size={32} className="text-red-400" /> : <Check size={32} className="text-[#c5a059]" />}
+              </div>
+              <h3 className="text-2xl font-serif text-white mb-3">{notification.title}</h3>
+              <p className="text-gray-400 text-[15px] mb-8 leading-relaxed px-2">
+                {notification.message}
+              </p>
+              <button 
+                onClick={() => setNotification(null)}
+                className="w-full flex justify-center items-center py-3.5 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95"
+              >
+                Aceptar
+              </button>
+            </div>
+          )}
+
           <div className="flex flex-col items-center mb-8 group cursor-pointer" onMouseEnter={() => setIsLoginHovered(true)} onMouseLeave={() => setIsLoginHovered(false)}>
             <div className="relative w-20 h-24 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
             </div>
-            {/* Título dinámico */}
             <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
               {isRegistering ? 'Nuevo Registro' : isRecovering ? 'Recuperar Acceso' : 'Acceso Seguro'}
             </h2>
@@ -650,7 +689,6 @@ export default function AsistentePage() {
           
           <form onSubmit={isRegistering ? handleRegister : isRecovering ? handleRecoverPassword : handleLogin} className="space-y-4">
             
-            {/* Campos visibles solo para Registro */}
             {isRegistering && (
               <div>
                 <input 
@@ -664,7 +702,6 @@ export default function AsistentePage() {
               </div>
             )}
 
-            {/* Campo Email (Visible en los 3 estados) */}
             <div>
               <input 
                 type="text" 
@@ -676,7 +713,6 @@ export default function AsistentePage() {
               />
             </div>
 
-            {/* Campo Teléfono visible solo en Registro */}
             {isRegistering && (
               <div>
                 <input 
@@ -690,7 +726,6 @@ export default function AsistentePage() {
               </div>
             )}
 
-            {/* Campo de Contraseña y Olvidó su contraseña (Ocultos si está recuperando contraseña) */}
             {!isRecovering && (
               <div className="space-y-1">
                 <div className="relative">
@@ -722,7 +757,6 @@ export default function AsistentePage() {
             </button>
           </form>
           
-          {/* Enlaces inferiores condicionales */}
           <div className="mt-8 pt-6 border-t border-gray-800 text-center space-y-4">
             {isRecovering ? (
               <p className="text-gray-400 text-sm">
@@ -961,7 +995,7 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    placeholder={accessMode === 'client' ? "Escriba o adjunte archivos..." : "Escriba o adjunte (Demo)..."} 
+                    placeholder={accessMode === 'client' ? "Escriba o adjunte archivos..." : "Escriba, dicte o adjunte (Demo)..."} 
                     rows={1}
                     className={`w-full bg-transparent outline-none text-[16px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                     style={{ minHeight: '44px', lineHeight: '20px' }}
