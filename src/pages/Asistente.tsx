@@ -117,7 +117,7 @@ const MODULES_DB = [
     name: 'Análisis Penal (Arg-Ven)', 
     hook: 'webhook-penal', 
     icon: '⚖️',
-    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
+    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generating dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
     loadingText: "Analizando su consulta..."
   },
   { 
@@ -181,35 +181,6 @@ export default function AsistentePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
-
-  // BLOQUEO MAESTRO DE SCROLL (Candado iOS)
-  useEffect(() => {
-    // Almacenamos estilos originales por si se cierra sesión
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    const originalPosition = window.getComputedStyle(document.body).position;
-    
-    // Convertimos la página en una App Nativa bloqueando el body completo
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = '0';
-    document.body.style.bottom = '0';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-    document.documentElement.style.overflow = 'hidden';
-    
-    return () => {
-      // Limpiamos los estilos al desmontar
-      document.body.style.overflow = originalStyle;
-      document.body.style.position = originalPosition;
-      document.body.style.top = '';
-      document.body.style.bottom = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
-      document.documentElement.style.overflow = '';
-    };
-  }, []);
 
   const [chatsHistory, setChatsHistory] = useState<Record<string, Message[]>>(() => {
     try {
@@ -563,8 +534,8 @@ export default function AsistentePage() {
   }
 
   return (
-    // CAMBIO MAESTRO: 'w-full h-full' combinado con el candado del body garantiza estabilidad total.
-    <div className={`fixed inset-0 flex w-full h-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    // CAMBIO CLAVE: Estructura raíz estable sin candados invasivos ni h-[100dvh] que peleen con el teclado.
+    <div className={`fixed inset-0 flex w-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -633,7 +604,7 @@ export default function AsistentePage() {
 
       <main className="flex-1 flex flex-col relative w-full h-full min-w-0 min-h-0 overflow-hidden overscroll-none transition-all duration-300">
         
-        {/* CABECERA (w-full flex-shrink-0) */}
+        {/* CABECERA (w-full flex-shrink-0 asegura que nunca cambie de tamaño ni se oculte) */}
         <header className={`w-full flex-shrink-0 min-h-[4rem] border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-30 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
@@ -735,7 +706,7 @@ export default function AsistentePage() {
               </div>
             )}
 
-            {/* CONTENEDOR INPUT */}
+            {/* CONTENEDOR INPUT: flex-row items-end para alinear todo en una línea horizontal */}
             <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 flex flex-row items-end gap-1 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[50px]`}>
               
               {/* IZQUIERDA: Botón de Adjuntar */}
@@ -780,17 +751,11 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    onFocus={() => {
-                      // Al enfocar, forzamos un reset del scroll del body por si el navegador intentó empujar
-                      setTimeout(() => {
-                        window.scrollTo(0, 0);
-                        document.body.scrollTop = 0;
-                        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-                      }, 300);
-                    }}
+                    // CAMBIO CLAVE: Se eliminó el onFocus que causaba el salto incontrolable en móviles
+                    // TEXT-[16px] OBLIGATORIO PARA EVITAR ZOOM DE iOS EN LA CAJA DE TEXTO
                     placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
-                    className={`w-full bg-transparent outline-none text-base resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
+                    className={`w-full bg-transparent outline-none text-[16px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                     style={{ minHeight: '44px', lineHeight: '20px' }}
                   />
                 )}
