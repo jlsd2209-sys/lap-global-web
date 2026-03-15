@@ -182,12 +182,31 @@ export default function AsistentePage() {
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
   const [isLogoHovered, setIsLogoHovered] = useState(false); 
 
-  // BLOQUEO DE SCROLL NATIVO (Simula comportamiento App Nativa)
+  // BLOQUEO MAESTRO DE SCROLL (Candado iOS)
   useEffect(() => {
+    // Almacenamos estilos originales por si se cierra sesión
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    const originalPosition = window.getComputedStyle(document.body).position;
+    
+    // Convertimos la página en una App Nativa bloqueando el body completo
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = '0';
+    document.body.style.bottom = '0';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
     document.documentElement.style.overflow = 'hidden';
+    
     return () => {
-      document.body.style.overflow = '';
+      // Limpiamos los estilos al desmontar
+      document.body.style.overflow = originalStyle;
+      document.body.style.position = originalPosition;
+      document.body.style.top = '';
+      document.body.style.bottom = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
       document.documentElement.style.overflow = '';
     };
   }, []);
@@ -332,7 +351,7 @@ export default function AsistentePage() {
         if (textarea) {
           textarea.style.height = 'auto';
           textarea.style.height = textarea.scrollHeight + "px";
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); // Ayuda al scroll al grabar
+          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); 
         }
       }, 100);
     };
@@ -497,8 +516,7 @@ export default function AsistentePage() {
 
   if (accessMode === 'none') {
     return (
-      // CAMBIO LOGIN: Se ajustó a min-h-screen por consistencia y estabilidad
-      <div className="relative flex min-h-screen w-screen items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
+      <div className="relative flex min-h-screen w-full items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img src="/fondo-servicios.jpg.png" alt="Fondo" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
@@ -545,8 +563,8 @@ export default function AsistentePage() {
   }
 
   return (
-    // CAMBIO CLAVE: Se eliminó h-[100dvh] de esta línea. Solo se depende de 'fixed inset-0' para mantener el contenedor estable al abrir el teclado en móviles
-    <div className={`fixed inset-0 flex w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    // CAMBIO MAESTRO: 'w-full h-full' combinado con el candado del body garantiza estabilidad total.
+    <div className={`fixed inset-0 flex w-full h-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -615,7 +633,7 @@ export default function AsistentePage() {
 
       <main className="flex-1 flex flex-col relative w-full h-full min-w-0 min-h-0 overflow-hidden overscroll-none transition-all duration-300">
         
-        {/* CABECERA (w-full flex-shrink-0 asegura que nunca cambie de tamaño ni se oculte) */}
+        {/* CABECERA (w-full flex-shrink-0) */}
         <header className={`w-full flex-shrink-0 min-h-[4rem] border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-30 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
@@ -717,7 +735,7 @@ export default function AsistentePage() {
               </div>
             )}
 
-            {/* CONTENEDOR INPUT: flex-row items-end para alinear todo en una línea horizontal */}
+            {/* CONTENEDOR INPUT */}
             <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 flex flex-row items-end gap-1 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[50px]`}>
               
               {/* IZQUIERDA: Botón de Adjuntar */}
@@ -763,8 +781,12 @@ export default function AsistentePage() {
                       } 
                     }}
                     onFocus={() => {
-                      // Al enfocar, aseguramos que el scroll baje suavemente en móviles
-                      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 300);
+                      // Al enfocar, forzamos un reset del scroll del body por si el navegador intentó empujar
+                      setTimeout(() => {
+                        window.scrollTo(0, 0);
+                        document.body.scrollTop = 0;
+                        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+                      }, 300);
                     }}
                     placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
