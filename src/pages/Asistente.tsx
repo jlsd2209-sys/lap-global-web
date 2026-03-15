@@ -537,7 +537,7 @@ export default function AsistentePage() {
       mainTitle: 'text-[#0a1526]', 
       greetingP: 'text-[#2a303c]', 
       botBubble: 'bg-[#eee7d5] text-[#2a303c] border-[#c5a059]', 
-      userBubble: 'bg-[#0a1526] text-white border-none', 
+      userBubble: 'bg-[#151f32] text-white border-none', // <-- CORRECCIÓN: Azul marino oscuro en lugar de casi negro.
       footerBG: 'bg-[#eee7d5]', 
       textArea: 'text-[#2a303c]',
       sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
@@ -595,7 +595,7 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`fixed inset-0 flex w-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    <div className={`fixed inset-0 flex w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
