@@ -804,7 +804,7 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    placeholder={accessMode === 'client' ? "Escriba o adjunte archivos..." : "Escriba, dicte o adjunte (Demo)..."} 
+                    placeholder={accessMode === 'client' ? "Escriba o adjunte archivos..." : "Escriba o adjunte archivos (Demo)..."} 
                     rows={1}
                     className={`w-full bg-transparent outline-none text-[16px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                     style={{ minHeight: '44px', lineHeight: '20px' }}
