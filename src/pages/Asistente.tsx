@@ -200,6 +200,9 @@ export default function AsistentePage() {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
   
+  // NUEVO ESTADO PARA CONTROLAR EL REGISTRO
+  const [isRegistering, setIsRegistering] = useState(false);
+  
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginHovered, setIsLoginHovered] = useState(false);
 
@@ -270,6 +273,13 @@ export default function AsistentePage() {
     } else {
       setLoginError(true);
     }
+  };
+
+  // NUEVA FUNCIÓN PARA MANEJAR EL REGISTRO
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert("Solicitud de registro enviada. Pronto habilitaremos la validación de usuarios.");
+    setIsRegistering(false); // Devuelve al usuario a la pantalla de login temporalmente
   };
 
   const handleLogout = () => {
@@ -543,6 +553,9 @@ export default function AsistentePage() {
 
   const currentColors = palettes[theme];
 
+  // ==========================================
+  // PANTALLA DE ACCESO Y REGISTRO (MODIFICADA)
+  // ==========================================
   if (accessMode === 'none') {
     return (
       <div className="relative flex min-h-screen w-full items-center justify-center bg-[#0a1526] font-sans overflow-hidden">
@@ -559,33 +572,87 @@ export default function AsistentePage() {
             <div className="relative w-20 h-24 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
             </div>
-            <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>Acceso Seguro</h2>
+            {/* Título dinámico dependiendo de si se está registrando o logueando */}
+            <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
+              {isRegistering ? 'Nuevo Registro' : 'Acceso Seguro'}
+            </h2>
             <p className="text-[#c5a059] text-xs uppercase tracking-widest mt-1">Plataforma de Inteligencia Legal</p>
           </div>
-          <form onSubmit={handleLogin} className="space-y-4">
+
+          {/* Formulario que alterna entre Login y Registro */}
+          <form onSubmit={isRegistering ? handleRegister : handleLogin} className="space-y-4">
+            
+            {/* Campo extra: Nombre completo (Solo visible en Registro) */}
+            {isRegistering && (
+              <div>
+                <input 
+                  type="text" 
+                  placeholder="Nombre completo" 
+                  required
+                  className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
+                />
+              </div>
+            )}
+
             <div>
-              <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" />
+              <input 
+                type="text" 
+                placeholder={isRegistering ? "Correo corporativo" : "Usuario"} 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                required
+                className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
+              />
             </div>
             <div className="space-y-1">
               <div className="relative">
-                <input type={showPassword ? "text" : "password"} placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 pr-12 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" />
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="Contraseña" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  required
+                  className="w-full bg-[#1e2330]/80 text-white placeholder-gray-500 border border-gray-700 rounded-xl p-4 pr-12 focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-all" 
+                />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#c5a059] transition-colors focus:outline-none">
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <div className="flex justify-end pr-1 pt-1">
-                <button type="button" onClick={() => alert("Por favor, contacte a su administrador de cuenta corporativa para restablecer sus credenciales.")} className="text-xs text-gray-400 hover:text-[#c5a059] transition-colors">¿Olvidó su contraseña?</button>
-              </div>
+              
+              {/* Opción de olvidar contraseña (Solo visible en Login) */}
+              {!isRegistering && (
+                <div className="flex justify-end pr-1 pt-1">
+                  <button type="button" onClick={() => alert("Por favor, contacte a su administrador de cuenta corporativa para restablecer sus credenciales.")} className="text-xs text-gray-400 hover:text-[#c5a059] transition-colors">¿Olvidó su contraseña?</button>
+                </div>
+              )}
             </div>
-            {loginError && <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>}
+
+            {loginError && !isRegistering && <p className="text-red-400 text-sm text-center animate-pulse">Credenciales incorrectas. Intente nuevamente.</p>}
+            
             <button type="submit" className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#c5a059] via-[#e2c792] to-[#c5a059] text-[#0a1526] font-bold uppercase tracking-wider py-4 rounded-xl hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all active:scale-95 mt-2">
-              <Lock size={18} /> Ingresar a la red
+              <Lock size={18} /> {isRegistering ? 'Solicitar Registro' : 'Ingresar a la red'}
             </button>
           </form>
-          <div className="mt-8 pt-6 border-t border-gray-800 text-center">
-            <p className="text-gray-400 text-sm mb-3">¿Desea conocer la plataforma?</p>
-            <button onClick={() => setAccessMode('guest')} className="text-[#c5a059] hover:text-white text-sm font-medium transition-colors border border-[#c5a059]/30 px-6 py-2 rounded-full hover:bg-[#c5a059]/10">Entrar a la versión Demo (Invitado)</button>
+
+          {/* Enlaces para alternar entre Crear Cuenta e Iniciar Sesión */}
+          <div className="mt-8 pt-6 border-t border-gray-800 text-center space-y-4">
+            {isRegistering ? (
+              <p className="text-gray-400 text-sm">
+                ¿Ya tienes una cuenta?{' '}
+                <button onClick={() => setIsRegistering(false)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Inicia sesión aquí</button>
+              </p>
+            ) : (
+              <p className="text-gray-400 text-sm">
+                ¿No eres cliente aún?{' '}
+                <button onClick={() => setIsRegistering(true)} className="text-[#c5a059] hover:text-white transition-colors font-medium">Solicita tu acceso</button>
+              </p>
+            )}
+            
+            <button onClick={() => setAccessMode('guest')} className="text-[#c5a059] hover:text-white text-sm font-medium transition-colors border border-[#c5a059]/30 px-6 py-2 rounded-full hover:bg-[#c5a059]/10">
+              Entrar a la versión Demo (Invitado)
+            </button>
           </div>
+
         </div>
       </div>
     );
@@ -742,7 +809,7 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        <footer className="flex-shrink-0 w-full p-4 md:pb-8 bg-transparent relative z-20">
+        <footer className="flex-shrink-0 w-full px-4 py-2 sm:p-4 pb-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
             
             {selectedFile && (
