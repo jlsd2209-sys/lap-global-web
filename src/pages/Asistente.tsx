@@ -305,7 +305,7 @@ export default function AsistentePage() {
     currentMessages.forEach(msg => {
       if (msg.sender === 'loading') return;
       const role = msg.sender === 'user' ? 'Usuario' : 'Asistente IA';
-      const cleanText = msg.text.replace(/<[^>]*>?/gm, ''); // Limpiar HTML
+      const cleanText = msg.text.replace(/<[^>]*>?/gm, ''); 
       chatText += `[${role}]:\n${cleanText}\n\n`;
     });
 
@@ -592,7 +592,7 @@ export default function AsistentePage() {
   }
 
   return (
-    <div className={`fixed inset-0 flex w-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    <div className={`fixed inset-0 flex w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -742,7 +742,6 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* CAMBIO REALIZADO: Se restauró el padding lateral (p-4) para devolver el ancho original al contenedor, despegándolo de los bordes */}
         <footer className="flex-shrink-0 w-full p-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
             
@@ -761,33 +760,29 @@ export default function AsistentePage() {
 
             <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 flex flex-row items-end gap-1 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[50px]`}>
               
-              {/* IZQUIERDA: Botón de Adjuntar */}
-              {accessMode === 'client' && (
-                <div className="flex-shrink-0 mb-0.5">
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    className="hidden" 
-                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                    accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
-                  />
-                  <button 
-                    onClick={() => {
-                      if (accessMode === 'guest') {
-                        alert("La función de adjuntar documentos pesados y multimedia está disponible únicamente para clientes con cuentas verificadas.");
-                      } else {
-                        fileInputRef.current?.click();
-                      }
-                    }} 
-                    className={`p-2.5 rounded-full transition-all ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
-                    title="Adjuntar Archivo, Audio o Video"
-                  >
-                    <Paperclip size={20} />
-                  </button>
-                </div>
-              )}
+              <div className="flex-shrink-0 mb-0.5">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  className="hidden" 
+                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                  accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
+                />
+                <button 
+                  onClick={() => {
+                    if (accessMode === 'guest') {
+                      alert("La función de adjuntar documentos pesados y multimedia está disponible únicamente para clientes con cuentas verificadas.");
+                    } else {
+                      fileInputRef.current?.click();
+                    }
+                  }} 
+                  className={`p-2.5 rounded-full transition-all ${selectedFile ? 'bg-[#c5a059]/20 text-[#c5a059]' : (theme === 'dark' ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#c5a059]/10' : 'text-gray-500 hover:text-[#c5a059] hover:bg-gray-200')}`}
+                  title="Adjuntar Archivo, Audio o Video"
+                >
+                  <Paperclip size={20} />
+                </button>
+              </div>
 
-              {/* CENTRO: Área de Texto */}
               <div className="flex-1 flex flex-col justify-center min-h-[44px]">
                 {isRecording ? (
                   <div className="flex items-center gap-3 text-red-500 animate-pulse px-2 h-full">
@@ -809,8 +804,7 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    // CAMBIO REALIZADO: Se aplicó el placeholder solicitado
-                    placeholder={accessMode === 'client' ? "Escriba o adjunte archivos..." : "Escriba o adjunte (Demo)..."} 
+                    placeholder={accessMode === 'client' ? "Escriba o adjunte archivos..." : "Escriba, dicte o adjunte (Demo)..."} 
                     rows={1}
                     className={`w-full bg-transparent outline-none text-[16px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
                     style={{ minHeight: '44px', lineHeight: '20px' }}
@@ -818,7 +812,6 @@ export default function AsistentePage() {
                 )}
               </div>
 
-              {/* DERECHA: Botón Dinámico de Enviar / Grabar / Detener */}
               <div className="flex-shrink-0 mb-0.5 ml-1">
                 {isRecording ? (
                   <button 
@@ -829,7 +822,7 @@ export default function AsistentePage() {
                     <Square size={20} className="fill-current" />
                   </button>
                 ) : (
-                  (inputText.trim() || selectedFile || accessMode === 'guest') ? (
+                  (inputText.trim() || selectedFile) ? (
                     <button 
                       onClick={handleSend}
                       className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95`}
