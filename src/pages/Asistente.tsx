@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share } from 'lucide-react'; 
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share, Edit2, ChevronDown, ChevronUp } from 'lucide-react'; 
 
 type Message = {
   id: string;
@@ -12,13 +12,12 @@ type Message = {
 };
 
 // ==========================================
-// SUBCOMPONENTE: ACCIONES DEL MENSAJE
+// SUBCOMPONENTE: ACCIONES DEL MENSAJE DEL BOT
 // ==========================================
 const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => {
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // Limpiar el reproductor de voz si se desmonta el componente
   useEffect(() => {
     return () => {
       if (isSpeaking && 'speechSynthesis' in window) {
@@ -28,13 +27,13 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
   }, [isSpeaking]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(text.replace(/<[^>]*>?/gm, '')); // Copia texto limpio sin HTML
+    navigator.clipboard.writeText(text.replace(/<[^>]*>?/gm, '')); 
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShare = async () => {
-    const plainText = text.replace(/<[^>]*>?/gm, ''); // Limpiamos el HTML
+    const plainText = text.replace(/<[^>]*>?/gm, ''); 
     if (navigator.share) {
       try {
         await navigator.share({
@@ -57,15 +56,13 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
     }
 
     if (isSpeaking) {
-      // Si ya está hablando, lo detenemos
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
     } else {
-      // Detener cualquier otra lectura activa antes de iniciar una nueva
       window.speechSynthesis.cancel();
-      const plainText = text.replace(/<[^>]*>?/gm, ''); // Leemos texto limpio sin etiquetas
+      const plainText = text.replace(/<[^>]*>?/gm, ''); 
       const utterance = new SpeechSynthesisUtterance(plainText);
-      utterance.lang = 'es-VE'; // Español
+      utterance.lang = 'es-VE'; 
       
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
@@ -103,6 +100,55 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
 };
 
 // ==========================================
+// SUBCOMPONENTE: MENSAJE DEL USUARIO (CON EDICIÓN Y EXPANSIÓN)
+// ==========================================
+const UserMessageBubble = ({ msg, theme, currentColors, onEdit }: { msg: Message, theme: string, currentColors: any, onEdit: (text: string) => void }) => {
+  const [copied, setCopied] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  // Consideramos un mensaje largo si supera los 300 caracteres
+  const isLong = msg.text.length > 300;
+  const displayText = isLong && !expanded ? msg.text.substring(0, 300) + '...' : msg.text;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(msg.text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const btnClass = `p-1.5 rounded-md transition-colors ${
+    theme === 'dark' 
+      ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#1e2a40]' 
+      : 'text-gray-500 hover:text-[#c5a059] hover:bg-[#eee7d5]'
+  }`;
+
+  return (
+    <div className="flex flex-col items-end w-full max-w-[90%] md:max-w-[85%]">
+      <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none shadow-md w-full`}>
+        <p className="text-[15px] md:text-[16px] leading-relaxed whitespace-pre-wrap break-words">
+          {displayText}
+        </p>
+      </div>
+      
+      {/* Botonera del usuario (Abajo de su mensaje) */}
+      <div className="flex items-center gap-1 mr-2 mt-1">
+        {isLong && (
+          <button onClick={() => setExpanded(!expanded)} className={btnClass} title={expanded ? "Mostrar menos" : "Mostrar más"}>
+            {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        )}
+        <button onClick={handleCopy} className={btnClass} title="Copiar mi mensaje">
+          {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+        </button>
+        <button onClick={() => onEdit(msg.text)} className={btnClass} title="Editar para reusar">
+          <Edit2 size={14} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ==========================================
 // BASE DE DATOS DE MÓDULOS
 // ==========================================
 const MODULES_DB = [
@@ -117,7 +163,7 @@ const MODULES_DB = [
     name: 'Análisis Penal (Arg-Ven)', 
     hook: 'webhook-penal', 
     icon: '⚖️',
-    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generating dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
+    demoText: "He analizado los elementos preliminares de su caso. En nuestro entorno seguro, este módulo estructura una defensa comparada, cruzando legislación vigente de Argentina y/o Venezuela junto con los tratados bilaterales para encontrar la mejor ruta de mitigación, generando dictámenes con niveles altos de precisión argumentativa. Este módulo será adaptado a sus necesidades corporativas. Para un análisis confidencial y detallado por nuestra red de expertos, inicie su proceso de alta como cliente.",
     loadingText: "Analizando su consulta..."
   },
   { 
@@ -348,6 +394,23 @@ export default function AsistentePage() {
     }
   };
 
+  // Función para reusar y editar un mensaje del usuario en la caja de texto
+  const handleEditUserMessage = (textToEdit: string) => {
+    // Limpia la etiqueta de archivo adjunto si la hubiera para que solo quede el texto puro
+    const cleanText = textToEdit.replace(/^📎 \[.*?\]\n/, '');
+    setInputText(cleanText);
+    
+    // Se asegura de enfocar la caja y reajustar su tamaño
+    setTimeout(() => {
+      const textarea = document.getElementById('userInput');
+      if (textarea) {
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+        textarea.focus();
+      }
+    }, 50);
+  };
+
   const handleSend = async () => {
     if (!inputText.trim() && !selectedFile) return;
 
@@ -534,8 +597,7 @@ export default function AsistentePage() {
   }
 
   return (
-    // CAMBIO CLAVE: Estructura raíz estable sin candados invasivos ni h-[100dvh] que peleen con el teclado.
-    <div className={`fixed inset-0 flex w-full overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
+    <div className={`fixed inset-0 flex w-screen overflow-hidden overscroll-none ${currentColors.appBG} font-sans transition-colors duration-300`}>
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity" onClick={() => setIsMobileMenuOpen(false)} />
       )}
@@ -592,7 +654,7 @@ export default function AsistentePage() {
               {accessMode === 'client' ? <User size={18} /> : 'G'}
             </div>
             <div className={`flex flex-col truncate transition-opacity duration-300 ${isDesktopSidebarCollapsed ? 'hidden' : 'block'}`}>
-              <span className="text-sm font-medium text-gray-200 truncate">{accessMode === 'client' ? username : 'Invitado'}</span>
+              <span className="text-[15px] md:text-[16px] font-medium text-gray-200 truncate">{accessMode === 'client' ? username : 'Invitado'}</span>
               <span className="text-[10px] text-[#c5a059] uppercase tracking-wider truncate">{accessMode === 'client' ? 'Cuenta Verificada' : 'Modo Demo'}</span>
             </div>
           </div>
@@ -604,14 +666,13 @@ export default function AsistentePage() {
 
       <main className="flex-1 flex flex-col relative w-full h-full min-w-0 min-h-0 overflow-hidden overscroll-none transition-all duration-300">
         
-        {/* CABECERA (w-full flex-shrink-0 asegura que nunca cambie de tamaño ni se oculte) */}
         <header className={`w-full flex-shrink-0 min-h-[4rem] border-b ${currentColors.mainHeaderBorder} flex items-center justify-between px-4 md:px-6 ${currentColors.mainHeaderBG} backdrop-blur-md z-30 transition-colors duration-300`}>
           <div className="flex items-center gap-3 md:gap-4 w-full">
             <button className={`md:hidden p-2 -ml-2 rounded-full transition-all flex-shrink-0 ${theme === 'dark' ? 'text-gray-300 hover:bg-[#1e2a40]' : 'text-gray-600 hover:bg-gray-200'}`} onClick={() => setIsMobileMenuOpen(true)}>
               <Menu size={22} />
             </button>
             <div className="flex flex-col items-start gap-1 md:flex-row md:items-center md:gap-3 flex-1">
-              <h2 className={`font-medium ${currentColors.mainTitle} tracking-wide text-base md:text-lg leading-tight`}>{moduloActivo}</h2>
+              <h2 className={`font-medium ${currentColors.mainTitle} tracking-wide text-[15px] md:text-lg leading-tight`}>{moduloActivo}</h2>
               <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium border ${accessMode === 'client' ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10'}`}>
                 {accessMode === 'client' ? 'Verificado' : 'Modo Demo'}
               </span>
@@ -650,7 +711,7 @@ export default function AsistentePage() {
                 <img src={logoShield} className="w-8 h-10 md:w-10 md:h-12 object-contain" alt="Logo" />
                 <div className="space-y-4 mt-1">
                   <p className={`text-lg md:text-xl font-light ${currentColors.mainTitle}`}>Conectado a la red de <strong>{moduloActivo}</strong>.</p>
-                  <p className={`${currentColors.greetingP} leading-relaxed text-sm md:text-base`}>¿En qué asunto legal específico puedo ayudarle?</p>
+                  <p className={`${currentColors.greetingP} leading-relaxed text-[15px] md:text-[16px]`}>¿En qué asunto legal específico puedo ayudarle?</p>
                 </div>
               </div>
             )}
@@ -659,20 +720,19 @@ export default function AsistentePage() {
               <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start mt-2'}`}>
                 
                 {msg.sender === 'user' && (
-                  <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none max-w-[90%] shadow-md`}>
-                    <p className="text-sm md:text-base whitespace-pre-wrap break-words">{msg.text}</p>
-                  </div>
+                  <UserMessageBubble msg={msg} theme={theme} currentColors={currentColors} onEdit={handleEditUserMessage} />
                 )}
                 
                 {msg.sender === 'loading' && (
-                  <div className="text-[#c5a059] text-xs md:text-sm font-medium animate-pulse ml-2">{msg.text}</div>
+                  <div className="text-[#c5a059] text-[15px] font-medium animate-pulse ml-2">{msg.text}</div>
                 )}
                 
                 {msg.sender === 'bot' && (
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md overflow-hidden`}>
+                      {/* HOMOLOGACIÓN: Se fijó el tamaño base de todos los textos del bot a 15px en móvil y 16px en desktop para igualar a la caja y al usuario */}
                       <div 
-                        className={`leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:font-sans [&_*]:text-current [&_h3]:text-[18px] [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-[16px] [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:text-[15px] [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul_ul]:list-[circle] [&_ul_ul]:mt-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol_ol]:list-[lower-alpha] [&_ol_ol]:mt-2 [&_li]:text-[15px] [&_li]:mb-1 [&_strong]:font-bold [&_li:has(h4)]:list-none [&_li_h4]:-ml-4 [&_li_h4]:block`}
+                        className={`leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:font-sans [&_*]:text-current [&_h3]:text-[18px] [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-[16px] [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:text-[15px] md:[&_p]:text-[16px] [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul_ul]:list-[circle] [&_ul_ul]:mt-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol_ol]:list-[lower-alpha] [&_ol_ol]:mt-2 [&_li]:text-[15px] md:[&_li]:text-[16px] [&_li]:mb-1 [&_strong]:font-bold [&_li:has(h4)]:list-none [&_li_h4]:-ml-4 [&_li_h4]:block`}
                         dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
                       />
                     </div>
@@ -688,11 +748,9 @@ export default function AsistentePage() {
           <div ref={messagesEndRef} />
         </section>
 
-        {/* INPUT EN UNA SOLA LÍNEA (Estilo WhatsApp) */}
         <footer className="flex-shrink-0 w-full p-2 sm:p-4 pb-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
             
-            {/* VISTA PREVIA DEL ARCHIVO ADJUNTO FLOTANTE */}
             {selectedFile && (
               <div className={`absolute -top-10 left-4 ${theme === 'dark' ? 'bg-[#1e2a40] border-gray-700' : 'bg-[#eee7d5] border-[#c5a059]/30'} text-[#c5a059] text-xs py-1.5 px-3 rounded-t-xl border border-b-0 flex items-center gap-2 shadow-lg`}>
                 <FileText size={14} />
@@ -706,10 +764,8 @@ export default function AsistentePage() {
               </div>
             )}
 
-            {/* CONTENEDOR INPUT: flex-row items-end para alinear todo en una línea horizontal */}
             <div className={`${currentColors.footerBG} ${selectedFile ? 'rounded-tl-none' : ''} rounded-[24px] md:rounded-3xl border border-gray-700 p-1.5 flex flex-row items-end gap-1 focus-within:border-[#c5a059] transition-all shadow-2xl duration-300 min-h-[50px]`}>
               
-              {/* IZQUIERDA: Botón de Adjuntar */}
               {accessMode === 'client' && (
                 <div className="flex-shrink-0 mb-0.5">
                   <input 
@@ -729,12 +785,11 @@ export default function AsistentePage() {
                 </div>
               )}
 
-              {/* CENTRO: Área de Texto */}
               <div className="flex-1 flex flex-col justify-center min-h-[44px]">
                 {isRecording ? (
                   <div className="flex items-center gap-3 text-red-500 animate-pulse px-2 h-full">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span className="text-base font-medium tracking-wide">Escuchando...</span>
+                    <span className="text-[15px] font-medium tracking-wide">Escuchando...</span>
                   </div>
                 ) : (
                   <textarea 
@@ -742,7 +797,7 @@ export default function AsistentePage() {
                     value={inputText}
                     onChange={(e) => {
                       setInputText(e.target.value);
-                      e.target.style.height = "24px"; // Reinicia altura para calcular correctamente el salto de línea
+                      e.target.style.height = "24px"; 
                       e.target.style.height = e.target.scrollHeight + "px";
                     }}
                     onKeyDown={(e) => { 
@@ -751,8 +806,6 @@ export default function AsistentePage() {
                         handleSend(); 
                       } 
                     }}
-                    // CAMBIO CLAVE: Se eliminó el onFocus que causaba el salto incontrolable en móviles
-                    // TEXT-[16px] OBLIGATORIO PARA EVITAR ZOOM DE iOS EN LA CAJA DE TEXTO
                     placeholder={accessMode === 'client' ? "Escriba, dicte o adjunte..." : "Escriba aquí (Modo Demo)..."} 
                     rows={1}
                     className={`w-full bg-transparent outline-none text-[16px] resize-none max-h-[120px] md:max-h-[220px] py-3 px-1 [&::-webkit-scrollbar]:hidden ${currentColors.textArea} ${accessMode === 'guest' ? 'pl-2' : ''}`}
@@ -761,7 +814,6 @@ export default function AsistentePage() {
                 )}
               </div>
 
-              {/* DERECHA: Botón Dinámico de Enviar / Grabar / Detener */}
               <div className="flex-shrink-0 mb-0.5 ml-1">
                 {isRecording ? (
                   <button 
