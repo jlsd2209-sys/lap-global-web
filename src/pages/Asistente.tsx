@@ -225,11 +225,11 @@ export default function AsistentePage() {
   const [registerName, setRegisterName] = useState(''); 
   const [registerPhone, setRegisterPhone] = useState(''); 
   
-  // NUEVO: Estado para notificaciones elegantes en la pantalla de Login
   const [notification, setNotification] = useState<{title: string, message: string, isError?: boolean} | null>(null);
   
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginHovered, setIsLoginHovered] = useState(false);
+  const [isNotificationHovered, setIsNotificationHovered] = useState(false); // NUEVO ESTADO PARA EL HOVER DE LA NOTIFICACIÓN
 
   const [searchParams] = useSearchParams();
   const urlParam = searchParams.get('modulo') || 'webhook-riesgo';
@@ -316,10 +316,10 @@ export default function AsistentePage() {
         })
       });
       
-      // Mostrar notificación elegante en lugar de alert()
+      // Mostrar notificación elegante con el nuevo texto solicitado
       setNotification({
         title: 'Solicitud Enviada',
-        message: 'Su solicitud de acceso ha sido recibida con éxito. Nuestro equipo de asesores evaluará su perfil y se pondrá en contacto pronto.'
+        message: 'Su solicitud de acceso ha sido recibida con éxito. Nuestro equipo de asesores verificará su perfil y se pondrá en contacto pronto.'
       });
       
       setIsRegistering(false); 
@@ -350,7 +350,7 @@ export default function AsistentePage() {
         })
       });
       
-      // Mostrar notificación elegante en lugar de alert()
+      // Mostrar notificación elegante
       setNotification({
         title: 'Recuperación en Proceso',
         message: 'Si el correo ingresado coincide con nuestros registros seguros, recibirá instrucciones detalladas para restablecer su acceso.'
@@ -655,17 +655,26 @@ export default function AsistentePage() {
           <Particles count={40} />
         </div>
         
-        {/* SE AÑADIÓ overflow-hidden A LA TARJETA PRINCIPAL PARA CONTENER EL MODAL */}
         <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)] overflow-hidden">
           
-          {/* OVERLAY DE NOTIFICACIÓN ELEGANTE */}
+          {/* OVERLAY DE NOTIFICACIÓN ELEGANTE CON LOGO Y EFECTOS HOVER */}
           {notification && (
             <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#0a1526]/95 backdrop-blur-md p-8 text-center transition-all duration-300">
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 border ${notification.isError ? 'bg-red-500/20 border-red-500/30' : 'bg-[#c5a059]/20 border-[#c5a059]/30'}`}>
-                {notification.isError ? <X size={32} className="text-red-400" /> : <Check size={32} className="text-[#c5a059]" />}
+              
+              <div 
+                className="flex flex-col items-center mb-4 group cursor-pointer" 
+                onMouseEnter={() => setIsNotificationHovered(true)} 
+                onMouseLeave={() => setIsNotificationHovered(false)}
+              >
+                <div className="relative w-24 h-28 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                  <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
+                </div>
+                <h3 className={`text-2xl font-serif tracking-wide transition-colors duration-300 ${isNotificationHovered ? 'gradient-text-gold text-[#c5a059]' : 'text-white'}`}>
+                  {notification.title}
+                </h3>
               </div>
-              <h3 className="text-2xl font-serif text-white mb-3">{notification.title}</h3>
-              <p className="text-gray-400 text-[15px] mb-8 leading-relaxed px-2">
+
+              <p className={`text-[15px] mb-8 leading-relaxed px-2 ${notification.isError ? 'text-red-400' : 'text-gray-400'}`}>
                 {notification.message}
               </p>
               <button 
@@ -678,7 +687,8 @@ export default function AsistentePage() {
           )}
 
           <div className="flex flex-col items-center mb-8 group cursor-pointer" onMouseEnter={() => setIsLoginHovered(true)} onMouseLeave={() => setIsLoginHovered(false)}>
-            <div className="relative w-20 h-24 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+            {/* LOGO AUMENTADO DE TAMAÑO EN LA PANTALLA PRINCIPAL */}
+            <div className="relative w-24 h-28 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <img src={logoShield} alt="LAP Global" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
             </div>
             <h2 className={`text-xl font-serif tracking-wide transition-colors duration-300 ${isLoginHovered ? 'gradient-text-gold' : 'text-white'}`}>
