@@ -14,7 +14,8 @@ type Message = {
 // ==========================================
 // SUBCOMPONENTE: ACCIONES DEL MENSAJE DEL BOT
 // ==========================================
-const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => {
+// AHORA RECIBE EL accessMode y la función showToast
+const BotMessageActions = ({ text, theme, accessMode, showToast }: { text: string, theme: string, accessMode: string, showToast: (msg: string) => void }) => {
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [feedback, setFeedback] = useState<'none' | 'up' | 'down'>('none'); 
@@ -46,13 +47,13 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
       }
     } else {
       handleCopy();
-      alert("Respuesta copiada al portapapeles.");
+      showToast("Respuesta copiada al portapapeles.");
     }
   };
 
   const handleSpeak = () => {
     if (!('speechSynthesis' in window)) {
-      alert("Su navegador no soporta la función de lectura en voz alta.");
+      showToast("Su navegador no soporta la función de lectura en voz alta.");
       return;
     }
 
@@ -77,8 +78,13 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
     if (feedback !== 'none') return; 
     setFeedback(type); 
     
+    // BLOQUEO DE N8N PARA EL MODO DEMO
+    if (accessMode === 'guest') {
+      showToast("Evaluación simulada en Modo Demo.");
+      return; // El código se detiene aquí y no envía nada al Webhook
+    }
+
     try {
-      // FECHA VENEZUELA PARA EVALUACIÓN
       const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
       
       await fetch('https://unidaddeia.duckdns.org/webhook/evaluacion-chat', {
@@ -90,6 +96,7 @@ const BotMessageActions = ({ text, theme }: { text: string, theme: string }) => 
           fecha: fechaVE
         })
       });
+      showToast("Gracias por su evaluación. Nos ayuda a mejorar.");
     } catch (error) {
       console.error("Error enviando evaluación:", error);
     }
@@ -228,7 +235,16 @@ export default function AsistentePage() {
   const [registerName, setRegisterName] = useState(''); 
   const [registerPhone, setRegisterPhone] = useState(''); 
   
+  // MODALES GRANDES (LOGIN/REGISTRO)
   const [notification, setNotification] = useState<{title: string, message: string, isError?: boolean} | null>(null);
+  
+  // TOASTS FLOTANTES PEQUEÑOS (INTERFAZ CHAT)
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+  
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 3000);
+  };
   
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginHovered, setIsLoginHovered] = useState(false);
@@ -307,7 +323,6 @@ export default function AsistentePage() {
     e.preventDefault();
     
     try {
-      // FECHA VENEZUELA PARA REGISTRO
       const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
 
       await fetch('https://unidaddeia.duckdns.org/webhook/registro-usuario', {
@@ -346,7 +361,6 @@ export default function AsistentePage() {
     e.preventDefault();
     
     try {
-      // FECHA VENEZUELA PARA RECUPERACIÓN
       const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
 
       await fetch('https://unidaddeia.duckdns.org/webhook/recuperar-password', {
@@ -425,7 +439,7 @@ export default function AsistentePage() {
       }
     } else {
       navigator.clipboard.writeText(chatText);
-      alert("Historial de chat completo copiado al portapapeles.");
+      showToast("Historial de chat completo copiado al portapapeles.");
     }
   };
 
@@ -450,7 +464,7 @@ export default function AsistentePage() {
   const startRecording = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert("Su navegador no soporta el reconocimiento de voz integrado. Recomendamos usar Google Chrome.");
+      showToast("El reconocimiento de voz integrado no es compatible con este navegador.");
       return;
     }
 
@@ -662,13 +676,10 @@ export default function AsistentePage() {
           <Particles count={40} />
         </div>
         
-        {/* LA TARJETA AHORA TIENE transition-all PARA ENCOGERSE Y ADAPTARSE AL CONTENIDO */}
         <div className="relative z-10 w-full max-w-md p-8 sm:p-10 mx-4 bg-gradient-to-br from-[#151f32]/95 via-[#0a1526]/95 to-[#030712]/95 backdrop-blur-xl border border-[#c5a059]/30 rounded-3xl shadow-[0_0_40px_rgba(197,160,89,0.15)] transition-all duration-500">
           
           {notification ? (
-            /* CONTENIDO DE LA NOTIFICACIÓN: Reemplaza al formulario para que la caja se encoja */
             <div className="flex flex-col items-center justify-center text-center animate-in fade-in duration-500">
-              
               <div 
                 className="flex flex-col items-center mb-4 group cursor-pointer" 
                 onMouseEnter={() => setIsNotificationHovered(true)} 
@@ -693,7 +704,6 @@ export default function AsistentePage() {
               </button>
             </div>
           ) : (
-            /* CONTENIDO ORIGINAL DEL FORMULARIO */
             <>
               <div className="flex flex-col items-center mb-8 group cursor-pointer" onMouseEnter={() => setIsLoginHovered(true)} onMouseLeave={() => setIsLoginHovered(false)}>
                 <div className="relative w-24 h-28 mb-4 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
@@ -941,7 +951,7 @@ export default function AsistentePage() {
                         dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
                       />
                     </div>
-                    <BotMessageActions text={msg.text} theme={theme} />
+                    <BotMessageActions text={msg.text} theme={theme} accessMode={accessMode} showToast={showToast} />
                   </div>
                 )}
               </div>
@@ -952,6 +962,14 @@ export default function AsistentePage() {
           
           <div ref={messagesEndRef} />
         </section>
+
+        {/* CONTENEDOR DEL TOAST FLOTANTE */}
+        {toastMsg && (
+          <div className="fixed bottom-28 left-1/2 -translate-x-1/2 z-[100] bg-[#0a1526] text-[#c5a059] border border-[#c5a059]/30 px-6 py-3 rounded-full shadow-[0_0_20px_rgba(197,160,89,0.2)] flex items-center gap-3 text-[14px] font-medium animate-in fade-in zoom-in-95 duration-300 text-center whitespace-nowrap max-w-[90vw] overflow-hidden text-ellipsis">
+            <Check size={16} className="flex-shrink-0" />
+            <span className="truncate">{toastMsg}</span>
+          </div>
+        )}
 
         <footer className="flex-shrink-0 w-full px-4 py-2 sm:p-4 pb-4 md:pb-8 bg-transparent relative z-20">
           <div className="max-w-3xl mx-auto relative group">
@@ -982,7 +1000,7 @@ export default function AsistentePage() {
                 <button 
                   onClick={() => {
                     if (accessMode === 'guest') {
-                      alert("La función de adjuntar documentos pesados y multimedia está disponible únicamente para clientes con cuentas verificadas.");
+                      showToast("La función de adjuntar documentos pesados y multimedia está disponible únicamente para clientes con cuentas verificadas.");
                     } else {
                       fileInputRef.current?.click();
                     }
