@@ -4,7 +4,6 @@ import { Particles } from '../Particles';
 import { Link } from 'react-router-dom';
 
 /* ── CONFIGURACIÓN DE DISEÑO ── */
-// Mantenemos paddings de sección y tamaño de título como pidió el usuario
 const SECTION_PADDING = 'py-14'; 
 const TITLE_SIZE = 'text-3xl md:text-4xl'; 
 /* ───────────────────────────── */
@@ -27,25 +26,25 @@ const Card = ({ item, index }: {item: typeof modulesList[0]; index: number;}) =>
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ scale: 1.04 }}
-      // CAMBIO CLAVE: Reducimos padding de p-8 a p-5 (md:p-6 en escritorio para balance)
-      className="group relative flex flex-col text-center p-5 md:p-6 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer h-full"
+      // CAMBIO CLAVE: px-3 py-4 para móvil (mínimo espacio a los lados), px-5 py-5 para escritorio
+      className="group relative flex flex-col text-center px-3 py-4 md:px-5 md:py-5 bg-cream/5 backdrop-blur-md rounded-2xl border-2 border-[#c5a059]/30 transition-all duration-400 hover:border-[#c5a059] hover:shadow-2xl hover:shadow-cyan/20 overflow-hidden cursor-pointer h-full"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 z-0" />
       
       <div className="relative z-10 flex flex-col h-full">
-        {/* Mantenemos icono w-12 h-12 pero reducimos mb-6 a mb-4 */}
+        {/* Contenedor del icono */}
         <div className="text-[#c5a059] mb-4 flex justify-center">
           <item.icon className="w-12 h-12 relative z-10" strokeWidth={1.5} />
         </div>
 
-        {/* Mantenemos tamaño de fuente text-lg pero reducimos mb-3 a mb-2 */}
+        {/* Contenedor del título */}
         <div className="flex items-center justify-center mb-2">
           <span className="text-sm md:text-lg font-serif font-bold text-white leading-snug">
             {item.title}
           </span>
         </div>
 
-        {/* Mantenemos text-xs y text-sm pero reducimos mb-3 a mb-2 si hubiera */}
+        {/* Descripción de la tarjeta */}
         <p className="text-gray-300 text-xs md:text-sm leading-relaxed mt-auto">
           {item.desc}
         </p>
@@ -75,7 +74,7 @@ export const ServicesSection = () => {
           </h2>
         </motion.div>
         
-        {/* Usamos el GAP original de gap-6 y grid-cols-2 md:grid-cols-3 de la unificación */}
+        {/* Grid: 2 columnas en móvil, 3 en escritorio. Gap mantenido en 6. */}
         <div className={`grid grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto`}>
           {modulesList.map((item, i) => <Card key={item.title} item={item} index={i} />)}
         </div>
