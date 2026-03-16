@@ -9,12 +9,12 @@ const TITLE_SIZE = 'text-3xl md:text-4xl';
 /* ───────────────────────────── */
 
 const modulesList = [
-  { icon: Globe, title: 'Monitor de Riesgo (Arg-Ven)', hook: 'webhook-riesgo', desc: 'Vigilancia continua de indicadores de riesgo preventivo.' },
-  { icon: Scale, title: 'Análisis Penal (Arg-Ven)', hook: 'webhook-penal', desc: 'Evaluación jurisdiccional transnacional asistida por Modelos de Lenguaje.' },
+  { icon: Globe, title: 'Monitor de Riesgo', hook: 'webhook-riesgo', desc: 'Vigilancia continua de indicadores de riesgo preventivo.' },
+  { icon: Scale, title: 'Análisis Legal', hook: 'webhook-penal', desc: 'Evaluación jurisdiccional transnacional asistida por Modelos de Lenguaje.' },
   { icon: FileSearch, title: 'Auditoría Documental', hook: 'webhook-auditoria', desc: 'Análisis exhaustivo e inteligente de documentación legal.' },
   { icon: Landmark, title: 'Memoria Institucional', hook: 'webhook-memoria', desc: 'Repositorio de precedentes y jurisprudencia corporativa.' },
   { icon: FileBarChart, title: 'Informes Automáticos', hook: 'webhook-informes', desc: 'Reportes y dictámenes generados en tiempo real.' },
-  { icon: Newspaper, title: 'Boletín Jurídico', hook: 'webhook-boletin', desc: 'Actualizaciones normativas periódicas y alertas.' }
+  { icon: Newspaper, title: 'Boletín Jurídico', hook: 'webhook-boletin', desc: 'Actualizaciones normativas periódicas mediante alertas.' }
 ];
 
 const Card = ({ item, index }: {item: typeof modulesList[0]; index: number;}) => (
