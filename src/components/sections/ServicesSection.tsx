@@ -10,7 +10,7 @@ const TITLE_SIZE = 'text-3xl md:text-4xl';
 
 const modulesList = [
   { icon: Globe, title: 'Monitor de Riesgo', hook: 'webhook-riesgo', desc: 'Vigilancia continua de indicadores de riesgo preventivo.' },
-  { icon: Scale, title: 'Análisis Legal', hook: 'webhook-penal', desc: 'Evaluación jurisdiccional transnacional asistida por Modelos de Lenguaje.' },
+  { icon: Scale, title: 'Análisis Legal', hook: 'webhook-penal', desc: 'Evaluación jurisdiccional transnacional asistida por IA.' },
   { icon: FileSearch, title: 'Auditoría Documental', hook: 'webhook-auditoria', desc: 'Análisis exhaustivo e inteligente de documentación legal.' },
   { icon: Landmark, title: 'Memoria Institucional', hook: 'webhook-memoria', desc: 'Repositorio de precedentes y jurisprudencia corporativa.' },
   { icon: FileBarChart, title: 'Informes Automáticos', hook: 'webhook-informes', desc: 'Reportes y dictámenes generados en tiempo real.' },
