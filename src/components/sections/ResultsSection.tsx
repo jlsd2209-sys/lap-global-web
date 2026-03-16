@@ -63,8 +63,8 @@ export const ResultsSection = () => {
           </h2>
         </motion.div>
 
-        {/* CLAVES: grid-cols-3 fijo para móvil, gap pequeño en móvil (gap-2) y max-w-5xl para igualar a servicios en PC */}
-        <div className="grid grid-cols-3 gap-2 md:gap-8 max-w-5xl mx-auto">
+        {/* CLAVE 1: max-w-6xl estira la grilla hacia los extremos en PC. Mantenemos grid-cols-3 y gap-2 para móvil. */}
+        <div className="grid grid-cols-3 gap-2 md:gap-8 max-w-6xl mx-auto">
           {results.map((result, index) => (
             <motion.div
               key={result.text}
@@ -72,26 +72,26 @@ export const ResultsSection = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              // CLAVES: Padding mínimo en móvil (px-2 py-4), padding amplio en PC (md:px-6 md:py-8)
-              className="group text-center px-2 py-4 md:px-6 md:py-8 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20"
+              // CLAVE 2: md:py-6 (antes py-8) reduce la altura en PC. md:px-5 ajusta el ancho interno.
+              className="group text-center px-2 py-4 md:px-5 md:py-6 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20 h-full flex flex-col justify-center"
             >
-              <div className="text-gold mb-2 md:mb-4">
-                {/* Ícono reducido en móvil, normal en escritorio */}
+              {/* Espaciado ajustado (mb-2 en móvil, mb-3 en PC) */}
+              <div className="text-gold mb-2 md:mb-3">
                 <result.icon className="w-6 h-6 md:w-12 md:h-12 mx-auto" />
               </div>
 
-              <div className="flex items-baseline justify-center mb-1 md:mb-2">
-                {/* Números más pequeños en móvil para que quepan los 3 */}
-                <span className="text-2xl sm:text-3xl md:text-6xl font-serif font-bold text-white">
+              {/* Espaciado ajustado (mb-1 fijo) */}
+              <div className="flex items-baseline justify-center mb-1">
+                <span className="text-2xl sm:text-3xl md:text-6xl font-serif font-bold text-white leading-none">
                   <Counter target={result.target} />
                 </span>
-                <span className="text-lg sm:text-xl md:text-4xl font-bold text-cyan ml-1">
+                <span className="text-lg sm:text-xl md:text-4xl font-bold text-cyan ml-1 leading-none">
                   {result.symbol}
                 </span>
               </div>
 
-              {/* Texto en tamaño mínimo (10px) en celular y normal en escritorio */}
-              <p className="text-[10px] md:text-sm text-cream-light/80 leading-tight md:leading-normal mt-1 md:mt-2">
+              {/* Texto ajustado (mt-1 fijo) */}
+              <p className="text-[10px] md:text-sm text-cream-light/80 leading-tight md:leading-normal mt-1">
                 {result.text}
               </p>
             </motion.div>
