@@ -55,113 +55,118 @@ export const Header = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
-      <nav className="container flex justify-between items-center h-24">
-        
-        <a 
-          href="#home" 
-          onClick={(e) => handleNavClick(e, '#home')} 
-          className="flex items-center gap-2 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
-          onMouseEnter={() => setIsLogoHovered(true)}
-          onMouseLeave={() => setIsLogoHovered(false)}
-        >
-          <div className="relative flex-shrink-0 flex items-center justify-center transition-all duration-300 ease-out w-[48px] h-[48px] md:w-[64px] md:h-[64px] group-hover:w-[54px] group-hover:h-[54px] md:group-hover:w-[72px] md:group-hover:h-[72px]">
-            <img 
-              alt="LAP Global & IA Logo" 
-              className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" 
-              src={logoShield} 
-            />
-          </div>
+    <>
+      <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
+        <nav className="container flex justify-between items-center h-24">
           
-          <span 
-            className={`inline-block font-serif text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
-              isLogoHovered ? 'gradient-text-gold' : 'text-white'
-            }`}
+          <a 
+            href="#home" 
+            onClick={(e) => handleNavClick(e, '#home')} 
+            className="flex items-center gap-2 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
+            onMouseEnter={() => setIsLogoHovered(true)}
+            onMouseLeave={() => setIsLogoHovered(false)}
           >
-            Unidad de Asuntos Transnacionales & IA
-          </span>
-        </a>
-
-        <ul className="hidden md:flex gap-10">
-          {navItems.map((item) => {
-            const isActive = activeSection === item.href.substring(1);
-            const isHovered = hoveredLink === item.href;
-            const applyGold = isActive || isHovered;
-
-            return (
-              <li key={item.href}>
-                <a 
-                  href={item.href} 
-                  onClick={(e) => handleNavClick(e, item.href)} 
-                  onMouseEnter={() => setHoveredLink(item.href)}
-                  onMouseLeave={() => setHoveredLink(null)}
-                  className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
-                    ${isActive ? 'font-bold scale-105' : 'hover:scale-105'}`}
-                >
-                  <span className={applyGold ? 'gradient-text-gold inline-block' : 'text-white'}>
-                    {item.label}
-                  </span>
-                  <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-
-        <button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
-        </button>
-
-        <AnimatePresence>
-          {isMenuOpen && (
-            <>
-              {/* CAPA 1: El telón oscuro que apaga el fondo */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="fixed inset-0 bg-black/70 z-30 md:hidden"
-                onClick={() => setIsMenuOpen(false)}
+            <div className="relative flex-shrink-0 flex items-center justify-center transition-all duration-300 ease-out w-[48px] h-[48px] md:w-[64px] md:h-[64px] group-hover:w-[54px] group-hover:h-[54px] md:group-hover:w-[72px] md:group-hover:h-[72px]">
+              <img 
+                alt="LAP Global & IA Logo" 
+                className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" 
+                src={logoShield} 
               />
+            </div>
+            
+            <span 
+              className={`inline-block font-serif text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
+                isLogoHovered ? 'gradient-text-gold' : 'text-white'
+              }`}
+            >
+              Unidad de Asuntos Transnacionales & IA
+            </span>
+          </a>
 
-              {/* CAPA 2: El menú con borde dorado y sombra hacia la izquierda */}
-              <motion.div 
-                initial={{ x: '100%' }} 
-                animate={{ x: 0 }} 
-                exit={{ x: '100%' }} 
-                transition={{ type: 'tween', duration: 0.3 }} 
-                className="fixed top-0 right-0 w-52 h-full bg-[#0a1526] border-l border-[#c5a059]/30 p-6 pt-24 md:hidden z-40 shadow-[-15px_0_30px_rgba(0,0,0,0.7)]"
-              >
-                <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
-                  <X size={32} />
-                </button>
-                
-                <ul className="flex flex-col gap-4">
-                  {navItems.map((item, index) => (
-                    <motion.li 
-                      key={item.href} 
-                      initial={{ opacity: 0, x: 50 }} 
-                      animate={{ opacity: 1, x: 0 }} 
-                      transition={{ delay: index * 0.1 }}
+          <ul className="hidden md:flex gap-10">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.substring(1);
+              const isHovered = hoveredLink === item.href;
+              const applyGold = isActive || isHovered;
+
+              return (
+                <li key={item.href}>
+                  <a 
+                    href={item.href} 
+                    onClick={(e) => handleNavClick(e, item.href)} 
+                    onMouseEnter={() => setHoveredLink(item.href)}
+                    onMouseLeave={() => setHoveredLink(null)}
+                    className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
+                      ${isActive ? 'font-bold scale-105' : 'hover:scale-105'}`}
+                  >
+                    <span className={applyGold ? 'gradient-text-gold inline-block' : 'text-white'}>
+                      {item.label}
+                    </span>
+                    <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+
+          <button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <Menu size={32} />
+          </button>
+        </nav>
+      </header>
+
+      {/* EL MENÚ MÓVIL AHORA ESTÁ FUERA DEL HEADER PARA NO CORTARSE.
+        z-[60] y z-[70] lo colocan por encima de todo. h-[100dvh] garantiza pantalla completa.
+      */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <div className="md:hidden">
+            {/* El telón oscuro que apaga el fondo */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/70 z-[60]"
+              onClick={() => setIsMenuOpen(false)}
+            />
+
+            {/* El menú lateral con tu fondo azul y borde dorado */}
+            <motion.div 
+              initial={{ x: '100%' }} 
+              animate={{ x: 0 }} 
+              exit={{ x: '100%' }} 
+              transition={{ type: 'tween', duration: 0.3 }} 
+              className="fixed top-0 right-0 w-48 h-[100dvh] bg-[#0a1526] border-l border-[#c5a059]/40 p-6 pt-24 z-[70] shadow-[-15px_0_30px_rgba(0,0,0,0.7)]"
+            >
+              <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
+                <X size={32} />
+              </button>
+              
+              <ul className="flex flex-col gap-4">
+                {navItems.map((item, index) => (
+                  <motion.li 
+                    key={item.href} 
+                    initial={{ opacity: 0, x: 50 }} 
+                    animate={{ opacity: 1, x: 0 }} 
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <a 
+                      href={item.href} 
+                      onClick={(e) => handleNavClick(e, item.href)} 
+                      className={`text-xl font-medium transition-all duration-300 inline-block ${
+                        activeSection === item.href.substring(1) ? 'gradient-text-gold' : 'text-white'
+                      }`}
                     >
-                      <a 
-                        href={item.href} 
-                        onClick={(e) => handleNavClick(e, item.href)} 
-                        className={`text-xl font-medium transition-all duration-300 inline-block ${
-                          activeSection === item.href.substring(1) ? 'gradient-text-gold' : 'text-white'
-                        }`}
-                      >
-                        {item.label}
-                      </a>
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </nav>
-    </header>
+                      {item.label}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
