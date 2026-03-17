@@ -15,8 +15,8 @@ const navLinks = [
 ];
 
 const contactInfo = [
-  { icon: Mail, text: 'contacto@lapglobal.ai', href: 'mailto:contacto@lapglobal.ai' },
-  { icon: Phone, text: '+54 9 11 1234-5678', href: 'tel:+5491112345678' },
+  { icon: Mail, text: 'unidaddeia@gmail.com', href: 'mailto:unidaddeia@gmail.com' },
+  { icon: Phone, text: '+54 9 11 2677-0449', href: 'tel:+58 424-4958585' },
   { icon: MapPin, text: 'Buenos Aires, Argentina', href: null },
   { icon: MapPin, text: 'Caracas, Venezuela', href: null }
 ];
