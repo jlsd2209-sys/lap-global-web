@@ -65,10 +65,6 @@ export const Header = () => {
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          {/* EL TRUCO DEFINITIVO ANTI-BLUR: 
-            En lugar de usar 'scale-110', animamos los pixeles exactos.
-            Móvil: de 48px a 54px. PC: de 64px a 72px.
-          */}
           <div className="relative flex-shrink-0 flex items-center justify-center transition-all duration-300 ease-out w-[48px] h-[48px] md:w-[64px] md:h-[64px] group-hover:w-[54px] group-hover:h-[54px] md:group-hover:w-[72px] md:group-hover:h-[72px]">
             <img 
               alt="LAP Global & IA Logo" 
@@ -86,6 +82,7 @@ export const Header = () => {
           </span>
         </a>
 
+        {/* MENÚ DE ESCRITORIO */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
@@ -112,44 +109,56 @@ export const Header = () => {
           })}
         </ul>
 
-        <button className="md:hidden text-white p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        {/* BOTÓN HAMBURGUESA MÓVIL */}
+        <button className="md:hidden text-white p-2 relative z-[60]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
 
+        {/* MENÚ DESPLEGABLE MÓVIL CON FONDO SÓLIDO */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
-              initial={{ x: '100%' }} 
-              animate={{ x: 0 }} 
-              exit={{ x: '100%' }} 
-              transition={{ type: 'tween', duration: 0.3 }} 
-              className="fixed top-0 right-0 w-48 h-full bg-navy-dark/98 backdrop-blur-lg p-6 pt-24 md:hidden z-40 shadow-2xl"
-            >
-              <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
-                <X size={32} />
-              </button>
-              
-              <ul className="flex flex-col gap-6">
-                {navItems.map((item, index) => (
-                  <motion.li 
-                    key={item.href} 
-                    initial={{ opacity: 0, x: 50 }} 
-                    animate={{ opacity: 1, x: 0 }} 
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <a 
-                      href={item.href} 
-                      onClick={(e) => handleNavClick(e, item.href)} 
-                      className={`text-xl font-medium transition-all duration-300 inline-block ${
-                        activeSection === item.href.substring(1) ? 'gradient-text-gold' : 'text-white'
-                      }`}
+            <>
+              {/* Overlay oscuro para tapar el resto de la pantalla */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] md:hidden"
+                onClick={() => setIsMenuOpen(false)}
+              />
+
+              {/* Panel lateral del menú */}
+              <motion.div 
+                initial={{ x: '100%' }} 
+                animate={{ x: 0 }} 
+                exit={{ x: '100%' }} 
+                transition={{ type: 'tween', duration: 0.3 }} 
+                // Fondo completamente sólido y borde dorado
+                className="fixed top-0 right-0 w-[65%] max-w-sm h-screen bg-[#0a1526] border-l border-gold/20 p-8 pt-28 md:hidden z-[50] shadow-2xl"
+              >
+                <ul className="flex flex-col gap-8">
+                  {navItems.map((item, index) => (
+                    <motion.li 
+                      key={item.href} 
+                      initial={{ opacity: 0, x: 20 }} 
+                      animate={{ opacity: 1, x: 0 }} 
+                      transition={{ delay: index * 0.1 }}
                     >
-                      {item.label}
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
+                      <a 
+                        href={item.href} 
+                        onClick={(e) => handleNavClick(e, item.href)} 
+                        className={`text-xl font-serif font-bold transition-all duration-300 inline-block border-b border-transparent hover:border-gold pb-1 ${
+                          activeSection === item.href.substring(1) ? 'gradient-text-gold border-gold/50' : 'text-cream-light/90'
+                        }`}
+                      >
+                        {item.label}
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </nav>
