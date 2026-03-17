@@ -123,14 +123,19 @@ export const Header = () => {
               animate={{ x: 0 }} 
               exit={{ x: '100%' }} 
               transition={{ type: 'tween', duration: 0.3 }} 
-              // CAMBIO 1: bg-[#0a1526] para hacerlo oscuro y opaco
-              className="fixed top-0 right-0 w-48 h-full bg-[#0a1526] backdrop-blur-lg p-6 pt-24 md:hidden z-40 shadow-2xl"
+              // SE ELIMINÓ 'bg-[#0a1526]' Y SE AÑADIÓ 'style' CON IMAGEN Y SUPERPOSICIÓN OSCURA
+              className="fixed top-0 right-0 w-48 h-full backdrop-blur-lg p-6 pt-24 md:hidden z-40 shadow-2xl"
+              style={{
+                backgroundImage: 'linear-gradient(rgba(10, 21, 38, 0.95), rgba(10, 21, 38, 0.95)), url(/fondo-servicios.jpg.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
             >
               <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
                 <X size={32} />
               </button>
               
-              {/* CAMBIO 2: gap-4 en vez de gap-6 para reducir interlineado */}
+              {/* gap-4 en vez de gap-6 para reducir interlineado */}
               <ul className="flex flex-col gap-4">
                 {navItems.map((item, index) => (
                   <motion.li 
