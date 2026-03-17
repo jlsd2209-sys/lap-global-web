@@ -37,7 +37,7 @@ export const CTASection = () => {
             className="mb-8">
 
             <a
-              href="https://wa.me/5491112345678?text=Hola,%20quiero%20una%20consulta%20sobre%20servicios%20de%20IA%20legal"
+              href="https://wa.me/5491126770449?text=Hola,%20quiero%20una%20consulta%20sobre%20servicios%20de%20IA%20legal"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-bold text-lg rounded-full transition-all hover:shadow-2xl hover:shadow-gold/50 hover:scale-105"
