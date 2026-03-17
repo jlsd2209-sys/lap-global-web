@@ -128,19 +128,28 @@ export const Header = () => {
               onClick={() => setIsMenuOpen(false)}
             />
 
-            {/* CAMBIO AQUÍ: h-auto, pb-8, rounded-bl-3xl y border-b */}
+            {/* Menú Flotante. Se quitó bg-[#0a1526] y se añadió overflow-hidden */}
             <motion.div 
               initial={{ x: '100%' }} 
               animate={{ x: 0 }} 
               exit={{ x: '100%' }} 
               transition={{ type: 'tween', duration: 0.3 }} 
-              className="fixed top-0 right-0 w-48 h-auto pb-8 bg-[#0a1526] border-l border-b border-[#c5a059]/40 rounded-bl-3xl p-6 pt-24 z-[70] shadow-[-15px_15px_30px_rgba(0,0,0,0.7)]"
+              className="fixed top-0 right-0 w-48 h-auto pb-8 border-l border-b border-[#c5a059]/40 rounded-bl-3xl px-6 pt-24 z-[70] shadow-[-15px_15px_30px_rgba(0,0,0,0.7)] overflow-hidden"
             >
-              <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
+              {/* === INICIO FONDO ESTILO ASISTENTE === */}
+              <div className="absolute inset-0 z-0">
+                <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
+              </div>
+              {/* === FIN FONDO === */}
+
+              {/* Botón Cerrar (relative z-10 para que quede encima del fondo) */}
+              <button className="absolute top-6 right-6 text-white z-10" onClick={() => setIsMenuOpen(false)}>
                 <X size={32} />
               </button>
               
-              <ul className="flex flex-col gap-4">
+              {/* Lista de enlaces (relative z-10 para que queden encima del fondo) */}
+              <ul className="flex flex-col gap-4 relative z-10">
                 {navItems.map((item, index) => (
                   <motion.li 
                     key={item.href} 
