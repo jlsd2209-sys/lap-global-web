@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MessageSquare, ArrowUp, X, Send, Mic, Square, Sun, Moon, Trash2 } from 'lucide-react';
+import { ArrowUp, X, Send, Mic, Square, Sun, Moon, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Share2, Volume2, VolumeX, Edit2, ChevronDown, ChevronUp, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logoShield from '@/assets/logo.png.png'; 
 import { Particles } from '@/components/Particles';
@@ -8,6 +8,143 @@ type Message = {
   id: string;
   sender: 'user' | 'bot';
   text: string;
+};
+
+// ==========================================
+// SUBCOMPONENTE: ACCIONES DEL MENSAJE DEL BOT
+// ==========================================
+const BotMessageActions = ({ text, theme, showToast }: { text: string, theme: string, showToast: (msg: string) => void }) => {
+  const [copied, setCopied] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [feedback, setFeedback] = useState<'none' | 'up' | 'down'>('none'); 
+
+  useEffect(() => {
+    return () => {
+      if (isSpeaking && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [isSpeaking]);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text.replace(/<[^>]*>?/gm, '')); 
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShare = async () => {
+    const plainText = text.replace(/<[^>]*>?/gm, ''); 
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Asesor Virtual - LAP Global',
+          text: plainText,
+        });
+      } catch (error) {
+        console.log('Compartir cancelado.', error);
+      }
+    } else {
+      handleCopy();
+      showToast("Respuesta copiada al portapapeles.");
+    }
+  };
+
+  const handleSpeak = () => {
+    if (!('speechSynthesis' in window)) {
+      showToast("Su navegador no soporta lectura en voz alta.");
+      return;
+    }
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      window.speechSynthesis.cancel();
+      const plainText = text.replace(/<[^>]*>?/gm, ''); 
+      const utterance = new SpeechSynthesisUtterance(plainText);
+      utterance.lang = 'es-VE'; 
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
+    }
+  };
+
+  const handleFeedback = (type: 'up' | 'down') => {
+    if (feedback !== 'none') return; 
+    setFeedback(type); 
+    showToast("Gracias por tu evaluación.");
+  };
+
+  const btnClass = `p-1.5 rounded-md transition-colors ${
+    theme === 'dark' 
+      ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#1e2a40]' 
+      : 'text-gray-500 hover:text-[#c5a059] hover:bg-[#eee7d5]'
+  }`;
+
+  return (
+    <div className="flex items-center gap-1 ml-2 mt-1">
+      <button onClick={handleSpeak} className={btnClass} title={isSpeaking ? "Detener lectura" : "Escuchar respuesta"}>
+        {isSpeaking ? <VolumeX size={14} className="text-red-400" /> : <Volume2 size={14} />}
+      </button>
+      <button onClick={handleCopy} className={btnClass} title="Copiar respuesta">
+        {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+      </button>
+      <button onClick={handleShare} className={btnClass} title="Compartir respuesta">
+        <Share2 size={14} />
+      </button>
+      <button onClick={() => handleFeedback('up')} className={`${btnClass} ${feedback === 'up' ? '!text-green-500' : ''}`} title="Buena respuesta">
+        <ThumbsUp size={14} />
+      </button>
+      <button onClick={() => handleFeedback('down')} className={`${btnClass} ${feedback === 'down' ? '!text-red-500' : ''}`} title="Mala respuesta">
+        <ThumbsDown size={14} />
+      </button>
+    </div>
+  );
+};
+
+// ==========================================
+// SUBCOMPONENTE: MENSAJE DEL USUARIO
+// ==========================================
+const UserMessageBubble = ({ msg, theme, currentColors, onEdit }: { msg: Message, theme: string, currentColors: any, onEdit: (text: string) => void }) => {
+  const [copied, setCopied] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const isLong = msg.text.length > 300;
+  const displayText = isLong && !expanded ? msg.text.substring(0, 300) + '...' : msg.text;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(msg.text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const btnClass = `p-1.5 rounded-md transition-colors ${
+    theme === 'dark' 
+      ? 'text-gray-400 hover:text-[#c5a059] hover:bg-[#1e2a40]' 
+      : 'text-gray-500 hover:text-[#c5a059] hover:bg-[#eee7d5]'
+  }`;
+
+  return (
+    <div className="flex flex-col items-end max-w-[90%] md:max-w-[85%]">
+      <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none shadow-md`}>
+        <p className="text-[14px] md:text-[15px] leading-relaxed whitespace-pre-wrap break-words">
+          {displayText}
+        </p>
+      </div>
+      <div className="flex items-center gap-1 mr-2 mt-1">
+        {isLong && (
+          <button onClick={() => setExpanded(!expanded)} className={btnClass} title={expanded ? "Mostrar menos" : "Mostrar más"}>
+            {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        )}
+        <button onClick={handleCopy} className={btnClass} title="Copiar mi mensaje">
+          {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+        </button>
+        <button onClick={() => onEdit(msg.text)} className={btnClass} title="Editar">
+          <Edit2 size={14} />
+        </button>
+      </div>
+    </div>
+  );
 };
 
 // ==========================================
@@ -21,7 +158,8 @@ export const FloatingButtons = () => {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-  const [isHeaderHovered, setIsHeaderHovered] = useState(false); // Estado para el hover del logo/título
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
   
   // Estados de micrófono
   const [isRecording, setIsRecording] = useState(false);
@@ -30,11 +168,17 @@ export const FloatingButtons = () => {
   const initialMessage: Message = { 
     id: 'welcome', 
     sender: 'bot', 
-    text: '¡Hola! Soy el Agente de IA de la Unidad de Asuntos Transnacionales. ¿Te gustaría conocer nuestros servicios o agendar una consulta con un experto?' 
+    // NUEVO MENSAJE DE BIENVENIDA
+    text: '¡Hola! Soy el Asesor Virtual de la Unidad de Asuntos Transnacionales. ¿Te gustaría conocer nuestros servicios o agendar una consulta con un experto?' 
   };
 
   const [messages, setMessages] = useState<Message[]>([initialMessage]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 3000);
+  };
 
   // Paleta de colores exacta a la del Asistente
   const palettes = {
@@ -85,7 +229,7 @@ export const FloatingButtons = () => {
   const startRecording = () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert("Reconocimiento de voz no compatible.");
+      showToast("Reconocimiento de voz no compatible.");
       return;
     }
     const recognition = new SpeechRecognition();
@@ -108,6 +252,10 @@ export const FloatingButtons = () => {
       recognitionRef.current.stop();
       setIsRecording(false);
     }
+  };
+
+  const handleEditUserMessage = (textToEdit: string) => {
+    setInputText(textToEdit);
   };
 
   const handleSendMessage = async () => {
@@ -151,6 +299,18 @@ export const FloatingButtons = () => {
         }
       `}</style>
 
+      {/* TOAST FLOTANTE */}
+      <AnimatePresence>
+        {toastMsg && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-[100] bg-[#0a1526] text-[#c5a059] border border-[#c5a059]/30 px-6 py-3 rounded-full shadow-[0_0_20px_rgba(197,160,89,0.2)] flex items-center gap-3 text-[14px] font-medium whitespace-nowrap max-w-[90vw]"
+          >
+            <Check size={16} /> <span className="truncate">{toastMsg}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* 1. VENTANA DE CHAT FLOTANTE */}
       <AnimatePresence>
         {isChatOpen && (
@@ -168,7 +328,7 @@ export const FloatingButtons = () => {
                 <Particles count={15} />
               </div>
 
-              {/* BLOQUE HOVER: Escudo y Texto */}
+              {/* BLOQUE HOVER: Escudo y Texto (AQUÍ ESTÁ EL NUEVO TÍTULO) */}
               <div 
                 className="flex items-center gap-3 relative z-10 cursor-pointer group"
                 onMouseEnter={() => setIsHeaderHovered(true)}
@@ -179,7 +339,7 @@ export const FloatingButtons = () => {
                 </div>
                 <div>
                   <h3 className={`font-serif font-bold leading-tight text-[15px] transition-colors duration-300 ${isHeaderHovered ? 'gradient-text-gold text-[#c5a059]' : 'text-white'}`}>
-                    Asistente Comercial
+                    Asesor Virtual IA
                   </h3>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -207,17 +367,16 @@ export const FloatingButtons = () => {
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.sender === 'user' ? (
-                    <div className={`${currentColors.userBubble} p-3 px-4 rounded-2xl rounded-tr-none shadow-md max-w-[85%]`}>
-                      <p className="text-[13px] md:text-[14px] leading-relaxed whitespace-pre-wrap break-words">
-                        {msg.text}
-                      </p>
-                    </div>
+                    <UserMessageBubble msg={msg} theme={theme} currentColors={currentColors} onEdit={handleEditUserMessage} />
                   ) : (
-                    <div className={`${currentColors.botBubble} p-3 px-4 rounded-2xl rounded-tl-none shadow-md max-w-[85%] overflow-hidden`}>
-                      <div 
-                        className={`leading-relaxed text-[13px] md:text-[14px] font-sans max-w-none [&_strong]:font-bold [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4`}
-                        dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
-                      />
+                    <div className="flex flex-col gap-1 max-w-[90%]">
+                      <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none shadow-md overflow-hidden`}>
+                        <div 
+                          className={`leading-relaxed text-[13px] md:text-[14px] font-sans max-w-none [&_strong]:font-bold [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4`}
+                          dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
+                        />
+                      </div>
+                      {/* Sin los botones sociales en el chat flotante para mantenerlo limpio */}
                     </div>
                   )}
                 </div>
@@ -266,7 +425,7 @@ export const FloatingButtons = () => {
         )}
       </AnimatePresence>
 
-      {/* 2. BOTÓN DEL AGENTE DE IA (CON LOGO Y PULSO) */}
+      {/* 2. BOTÓN DEL AGENTE DE IA (NUEVO ICONO DE ROBOT/IA) */}
       <button
         onClick={() => setIsChatOpen(!isChatOpen)}
         aria-label="Abrir asistente virtual"
@@ -282,7 +441,8 @@ export const FloatingButtons = () => {
           {isChatOpen ? (
             <X size={28} className="text-white" />
           ) : (
-            <img src={logoShield} alt="Logo" className="w-[65%] h-[65%] object-contain drop-shadow-[0_0_8px_rgba(197,160,89,0.4)] transition-transform group-hover:scale-110" />
+            // Reemplazo de la imagen del logo por el icono "Bot" de Lucide React
+            <Bot size={32} className="text-[#c5a059] drop-shadow-[0_0_8px_rgba(197,160,89,0.6)] transition-transform group-hover:scale-110" />
           )}
         </div>
       </button>
