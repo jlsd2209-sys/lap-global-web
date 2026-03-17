@@ -63,7 +63,7 @@ export const CTASection = () => {
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="text-gold" size={20} />
-              <span>Buenos Aires, Argentina</span>
+              <span>Caracas, Venezuela</span>
             </div>
           </motion.div>
         </div>
