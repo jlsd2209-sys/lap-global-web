@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoShield from '@/assets/logo-shield.png';
+// RUTA CORREGIDA PARA QUE VERCEL NO FALLE:
+import logoShield from '@/assets/logo.png.png';
 
 const navItems = [{
   href: '#home',
@@ -22,7 +23,6 @@ export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isLogoHovered, setIsLogoHovered] = useState(false);
-  // Estado para controlar el hover de los enlaces de forma nativa
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export const Header = () => {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
-        {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
+        {/* Logo y Nombre */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
@@ -83,11 +83,10 @@ export const Header = () => {
           </span>
         </a>
 
-        {/* Desktop Navigation con Efectos de Texto Degradado */}
+        {/* Desktop Navigation */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
-            // Lógica pura para aplicar gradient-text-gold idéntico al CTA
             const isHovered = hoveredLink === item.href;
             const applyGold = isActive || isHovered;
 
@@ -115,7 +114,7 @@ export const Header = () => {
           {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
 
-        {/* Mobile Navigation - NUEVO ESTILO FLOTANTE */}
+        {/* Mobile Navigation - NUEVO ESTILO FLOTANTE CON COLORES ORIGINALES */}
         <AnimatePresence>
           {isMenuOpen && (
             <>
@@ -129,7 +128,7 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               />
 
-              {/* Panel flotante ajustado (Estilo Asistente) */}
+              {/* Panel flotante estilo Asistente */}
               <motion.div 
                 initial={{ opacity: 0, y: -20, scale: 0.95 }} 
                 animate={{ opacity: 1, y: 0, scale: 1 }} 
@@ -148,8 +147,9 @@ export const Header = () => {
                       <a 
                         href={item.href} 
                         onClick={(e) => handleNavClick(e, item.href)} 
+                        // SE RESTAURÓ EL TEXT-WHITE PARA LOS INACTIVOS:
                         className={`text-[17px] font-serif transition-all duration-300 block w-full text-left ${
-                          activeSection === item.href.substring(1) ? 'gradient-text-gold font-bold' : 'text-cream-light/90 hover:text-white'
+                          activeSection === item.href.substring(1) ? 'gradient-text-gold font-bold' : 'text-white'
                         }`}
                       >
                         {item.label}
