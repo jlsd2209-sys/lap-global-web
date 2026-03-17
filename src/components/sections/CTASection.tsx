@@ -59,7 +59,7 @@ export const CTASection = () => {
 
             <div className="flex items-center gap-2">
               <Mail className="text-gold" size={20} />
-              <span>contacto@lapglobal.ai</span>
+              <span>unidaddeia@gmail.com</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="text-gold" size={20} />
