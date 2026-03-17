@@ -124,17 +124,17 @@ export const Header = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[45] md:hidden"
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] md:hidden"
                 onClick={() => setIsMenuOpen(false)}
               />
 
-              {/* Panel flotante (Estilo Asistente) */}
+              {/* Panel flotante ajustado (w-48 lo hace más delgado, right-4 lo pega al borde) */}
               <motion.div 
                 initial={{ opacity: 0, y: -20, scale: 0.95 }} 
                 animate={{ opacity: 1, y: 0, scale: 1 }} 
                 exit={{ opacity: 0, y: -20, scale: 0.95 }} 
                 transition={{ duration: 0.2 }} 
-                className="absolute top-[90px] right-4 w-56 bg-[#0a1526]/95 backdrop-blur-xl border border-[#c5a059]/40 rounded-2xl p-6 md:hidden z-[50] shadow-[0_8px_30px_rgba(0,0,0,0.5)] shadow-cyan/10"
+                className="absolute top-[85px] right-4 w-48 bg-[#0a1526]/95 backdrop-blur-xl border border-[#c5a059]/40 rounded-2xl p-5 md:hidden z-[50] shadow-[0_8px_30px_rgba(0,0,0,0.6)] shadow-cyan/10"
               >
                 <ul className="flex flex-col gap-5">
                   {navItems.map((item, index) => (
@@ -147,8 +147,8 @@ export const Header = () => {
                       <a 
                         href={item.href} 
                         onClick={(e) => handleNavClick(e, item.href)} 
-                        className={`text-lg font-serif transition-all duration-300 block w-full border-b border-transparent hover:border-[#c5a059]/50 pb-2 ${
-                          activeSection === item.href.substring(1) ? 'gradient-text-gold border-[#c5a059]/30 font-bold' : 'text-cream-light/90'
+                        className={`text-[17px] font-serif transition-all duration-300 block w-full text-left ${
+                          activeSection === item.href.substring(1) ? 'gradient-text-gold font-bold' : 'text-cream-light/90 hover:text-white'
                         }`}
                       >
                         {item.label}
