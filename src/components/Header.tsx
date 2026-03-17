@@ -115,9 +115,6 @@ export const Header = () => {
         </nav>
       </header>
 
-      {/* EL MENÚ MÓVIL AHORA ESTÁ FUERA DEL HEADER PARA NO CORTARSE.
-        z-[60] y z-[70] lo colocan por encima de todo. h-[100dvh] garantiza pantalla completa.
-      */}
       <AnimatePresence>
         {isMenuOpen && (
           <div className="md:hidden">
@@ -131,13 +128,13 @@ export const Header = () => {
               onClick={() => setIsMenuOpen(false)}
             />
 
-            {/* El menú lateral con tu fondo azul y borde dorado */}
+            {/* CAMBIO AQUÍ: h-auto, pb-8, rounded-bl-3xl y border-b */}
             <motion.div 
               initial={{ x: '100%' }} 
               animate={{ x: 0 }} 
               exit={{ x: '100%' }} 
               transition={{ type: 'tween', duration: 0.3 }} 
-              className="fixed top-0 right-0 w-48 h-[100dvh] bg-[#0a1526] border-l border-[#c5a059]/40 p-6 pt-24 z-[70] shadow-[-15px_0_30px_rgba(0,0,0,0.7)]"
+              className="fixed top-0 right-0 w-48 h-auto pb-8 bg-[#0a1526] border-l border-b border-[#c5a059]/40 rounded-bl-3xl p-6 pt-24 z-[70] shadow-[-15px_15px_30px_rgba(0,0,0,0.7)]"
             >
               <button className="absolute top-6 right-6 text-white" onClick={() => setIsMenuOpen(false)}>
                 <X size={32} />
