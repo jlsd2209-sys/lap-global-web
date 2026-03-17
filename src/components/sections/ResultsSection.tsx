@@ -63,6 +63,7 @@ export const ResultsSection = () => {
           </h2>
         </motion.div>
 
+        {/* 3 columnas fijas. Ancho máximo 6xl para estirar hacia los lados */}
         <div className="grid grid-cols-3 gap-2 md:gap-8 max-w-6xl mx-auto">
           {results.map((result, index) => (
             <motion.div
@@ -71,13 +72,16 @@ export const ResultsSection = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group text-center px-2 py-4 md:px-5 md:py-6 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20 h-full flex flex-col justify-center"
+              // CLAVE: py-3 en móvil, md:py-4 en PC. Esto reduce drásticamente la altura de la tarjeta.
+              className="group text-center px-2 py-3 md:px-5 md:py-4 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20 h-full flex flex-col justify-center"
             >
-              <div className="text-gold mb-2 md:mb-3">
+              {/* Menos espacio debajo del icono */}
+              <div className="text-gold mb-1 md:mb-2">
                 <result.icon className="w-6 h-6 md:w-12 md:h-12 mx-auto" />
               </div>
 
-              <div className="flex items-baseline justify-center mb-1">
+              {/* Menos espacio debajo del número */}
+              <div className="flex items-baseline justify-center mb-0 md:mb-1">
                 <span className="text-2xl sm:text-3xl md:text-6xl font-serif font-bold text-white leading-none">
                   <Counter target={result.target} />
                 </span>
@@ -86,8 +90,8 @@ export const ResultsSection = () => {
                 </span>
               </div>
 
-              {/* CLAVE: Se restauró el tamaño normal para escritorio (md:text-base) y se mantuvo diminuto para el celular (text-[10px]) */}
-              <p className="text-[10px] sm:text-xs md:text-base text-cream-light/80 leading-tight md:leading-relaxed mt-1 md:mt-2">
+              {/* Letra tamaño base pero con interlineado más compacto (leading-snug) */}
+              <p className="text-[10px] sm:text-xs md:text-base text-cream-light/80 leading-tight md:leading-snug mt-1">
                 {result.text}
               </p>
             </motion.div>
