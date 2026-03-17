@@ -4,7 +4,7 @@ import logoShield from '@/assets/logo.png.png';
 const socialLinks = [
   { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
   { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-  { icon: MessageCircle, href: 'https://wa.me/5491112345678', label: 'WhatsApp' }
+  { icon: MessageCircle, href: 'https://wa.me/5491126770449', label: 'WhatsApp' }
 ];
 
 const navLinks = [
@@ -16,9 +16,9 @@ const navLinks = [
 
 const contactInfo = [
   { icon: Mail, text: 'unidaddeia@gmail.com', href: 'mailto:unidaddeia@gmail.com' },
-  { icon: Phone, text: '+54 9 11 2677-0449', href: 'tel:+58 424-4958585' },
-  { icon: MapPin, text: 'Buenos Aires, Argentina', href: null },
-  { icon: MapPin, text: 'Caracas, Venezuela', href: null }
+  { icon: Phone, text: '+58 424-4958585', href: 'tel:+54 9 11 2677-0449' },
+  { icon: MapPin, text: 'Caracas, Venezuela', href: null },
+  { icon: MapPin, text: 'Buenos Aires, Argentina', href: null }
 ];
 
 export const Footer = () => {
