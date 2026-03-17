@@ -63,8 +63,8 @@ export const ResultsSection = () => {
           </h2>
         </motion.div>
 
-        {/* 3 columnas fijas. Ancho máximo 6xl para estirar hacia los lados */}
-        <div className="grid grid-cols-3 gap-2 md:gap-8 max-w-6xl mx-auto">
+        {/* EL AJUSTE FINAL AQUÍ: max-w-[1200px] y md:gap-10 para empujar a los extremos igual que en Servicios */}
+        <div className="grid grid-cols-3 gap-2 md:gap-10 max-w-[1200px] mx-auto">
           {results.map((result, index) => (
             <motion.div
               key={result.text}
@@ -72,15 +72,12 @@ export const ResultsSection = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              // CLAVE: py-3 en móvil, md:py-4 en PC. Esto reduce drásticamente la altura de la tarjeta.
               className="group text-center px-2 py-3 md:px-5 md:py-4 bg-gradient-to-br from-navy-dark/50 to-navy-medium/30 rounded-2xl border-2 border-gold/20 transition-all duration-400 hover:-translate-y-2 hover:border-cyan hover:shadow-2xl hover:shadow-cyan/20 h-full flex flex-col justify-center"
             >
-              {/* Menos espacio debajo del icono */}
               <div className="text-gold mb-1 md:mb-2">
                 <result.icon className="w-6 h-6 md:w-12 md:h-12 mx-auto" />
               </div>
 
-              {/* Menos espacio debajo del número */}
               <div className="flex items-baseline justify-center mb-0 md:mb-1">
                 <span className="text-2xl sm:text-3xl md:text-6xl font-serif font-bold text-white leading-none">
                   <Counter target={result.target} />
@@ -90,7 +87,6 @@ export const ResultsSection = () => {
                 </span>
               </div>
 
-              {/* Letra tamaño base pero con interlineado más compacto (leading-snug) */}
               <p className="text-[10px] sm:text-xs md:text-base text-cream-light/80 leading-tight md:leading-snug mt-1">
                 {result.text}
               </p>
