@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logoShield from '@/assets/logo.png.png';
+import logoShield from '@/assets/logo-shield.png';
 
 const navItems = [{
   href: '#home',
@@ -22,6 +22,7 @@ export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isLogoHovered, setIsLogoHovered] = useState(false);
+  // Estado para controlar el hover de los enlaces de forma nativa
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,23 +59,23 @@ export const Header = () => {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy-dark/95 backdrop-blur-md shadow-lg' : 'bg-navy-dark/80 backdrop-blur-sm'}`}>
       <nav className="container flex justify-between items-center h-24">
         
+        {/* Logo y Nombre con Efecto Hover Blanco -> Dorado */}
         <a 
           href="#home" 
           onClick={(e) => handleNavClick(e, '#home')} 
-          className="flex items-center gap-2 md:gap-4 group cursor-pointer max-w-[80%] md:max-w-none"
+          className="flex items-center gap-4 group cursor-pointer"
           onMouseEnter={() => setIsLogoHovered(true)}
           onMouseLeave={() => setIsLogoHovered(false)}
         >
-          <div className="relative flex-shrink-0 flex items-center justify-center transition-all duration-300 ease-out w-[48px] h-[48px] md:w-[64px] md:h-[64px] group-hover:w-[54px] group-hover:h-[54px] md:group-hover:w-[72px] md:group-hover:h-[72px]">
+          <div className="relative w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <img 
               alt="LAP Global & IA Logo" 
-              className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.4)]" 
+              className="w-full h-full object-contain drop-shadow-2xl" 
               src={logoShield} 
             />
           </div>
-          
           <span 
-            className={`inline-block font-serif text-lg md:text-xl xl:text-2xl font-bold leading-tight transition-all duration-300 ${
+            className={`hidden lg:block font-serif text-xl xl:text-2xl font-bold transition-all duration-300 ${
               isLogoHovered ? 'gradient-text-gold' : 'text-white'
             }`}
           >
@@ -82,10 +83,11 @@ export const Header = () => {
           </span>
         </a>
 
-        {/* MENÚ DE ESCRITORIO */}
+        {/* Desktop Navigation con Efectos de Texto Degradado */}
         <ul className="hidden md:flex gap-10">
           {navItems.map((item) => {
             const isActive = activeSection === item.href.substring(1);
+            // Lógica pura para aplicar gradient-text-gold idéntico al CTA
             const isHovered = hoveredLink === item.href;
             const applyGold = isActive || isHovered;
 
@@ -97,11 +99,10 @@ export const Header = () => {
                   onMouseEnter={() => setHoveredLink(item.href)}
                   onMouseLeave={() => setHoveredLink(null)}
                   className={`relative font-medium py-2 text-lg transition-all duration-300 inline-block cursor-pointer
+                    ${applyGold ? 'gradient-text-gold' : 'text-white'}
                     ${isActive ? 'font-bold scale-105' : 'hover:scale-105'}`}
                 >
-                  <span className={applyGold ? 'gradient-text-gold inline-block' : 'text-white'}>
-                    {item.label}
-                  </span>
+                  {item.label}
                   <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-bright transition-all duration-300 ${isActive ? 'w-full' : 'w-0'}`} />
                 </a>
               </li>
@@ -109,12 +110,12 @@ export const Header = () => {
           })}
         </ul>
 
-        {/* BOTÓN HAMBURGUESA MÓVIL */}
+        {/* Mobile Menu Toggle */}
         <button className="md:hidden text-white p-2 relative z-[60]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
 
-        {/* MENÚ DESPLEGABLE MÓVIL TIPO DROPDOWN FLOTANTE */}
+        {/* Mobile Navigation - NUEVO ESTILO FLOTANTE */}
         <AnimatePresence>
           {isMenuOpen && (
             <>
@@ -128,7 +129,7 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               />
 
-              {/* Panel flotante ajustado (w-48 lo hace más delgado, right-4 lo pega al borde) */}
+              {/* Panel flotante ajustado (Estilo Asistente) */}
               <motion.div 
                 initial={{ opacity: 0, y: -20, scale: 0.95 }} 
                 animate={{ opacity: 1, y: 0, scale: 1 }} 
