@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logoShield from '@/assets/logo.png.png';
+// AJUSTE: Importar el componente de partículas (verifica que la ruta sea correcta)
+import { Particles } from '@/components/Particles';
 
 const navItems = [{
   href: '#home',
@@ -66,6 +68,7 @@ export const Header = () => {
             onMouseEnter={() => setIsLogoHovered(true)}
             onMouseLeave={() => setIsLogoHovered(false)}
           >
+            {/* EL TRUCO DEFINITIVO ANTI-BLUR */}
             <div className="relative flex-shrink-0 flex items-center justify-center transition-all duration-300 ease-out w-[48px] h-[48px] md:w-[64px] md:h-[64px] group-hover:w-[54px] group-hover:h-[54px] md:group-hover:w-[72px] md:group-hover:h-[72px]">
               <img 
                 alt="LAP Global & IA Logo" 
@@ -128,7 +131,7 @@ export const Header = () => {
               onClick={() => setIsMenuOpen(false)}
             />
 
-            {/* Menú Flotante. Se quitó bg-[#0a1526] y se añadió overflow-hidden */}
+            {/* Menú Flotante Estilo Asistente */}
             <motion.div 
               initial={{ x: '100%' }} 
               animate={{ x: 0 }} 
@@ -136,19 +139,24 @@ export const Header = () => {
               transition={{ type: 'tween', duration: 0.3 }} 
               className="fixed top-0 right-0 w-48 h-auto pb-8 border-l border-b border-[#c5a059]/40 rounded-bl-3xl px-6 pt-24 z-[70] shadow-[-15px_15px_30px_rgba(0,0,0,0.7)] overflow-hidden"
             >
-              {/* === INICIO FONDO ESTILO ASISTENTE === */}
+              {/* === FONDO ESTILO ASISTENTE === */}
               <div className="absolute inset-0 z-0">
                 <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-[#0a1526]/85 backdrop-blur-[2px]"></div>
               </div>
-              {/* === FIN FONDO === */}
 
-              {/* Botón Cerrar (relative z-10 para que quede encima del fondo) */}
+              {/* === AJUSTE: PARTICULAS ESTILO ASISTENTE === */}
+              <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
+                <Particles count={15} /> {/* Conteo bajo para área pequeña */}
+              </div>
+              {/* === FIN PARTICULAS === */}
+
+              {/* Botón Cerrar (relative z-10) */}
               <button className="absolute top-6 right-6 text-white z-10" onClick={() => setIsMenuOpen(false)}>
                 <X size={32} />
               </button>
               
-              {/* Lista de enlaces (relative z-10 para que queden encima del fondo) */}
+              {/* Lista de enlaces (relative z-10) */}
               <ul className="flex flex-col gap-4 relative z-10">
                 {navItems.map((item, index) => (
                   <motion.li 
