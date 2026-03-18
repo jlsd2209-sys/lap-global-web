@@ -36,7 +36,7 @@ export const FloatingButtons = () => {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  // MODIFICADO: Inicia en 'light' por defecto
+  // Inicia en 'light' por defecto
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
@@ -143,11 +143,18 @@ export const FloatingButtons = () => {
     setIsLoading(true);
 
     try {
-      // AQUÍ ESTÁ EL WEBHOOK QUE DEBES USAR EN N8N:
+      // AQUÍ SE CALCULA LA FECHA EXACTA DE VENEZUELA
+      const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
+
+      // WEBHOOK N8N
       const response = await fetch('https://unidaddeia.duckdns.org/webhook/agente-comercial', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: 'visitante-web', mensaje: userMsg.text })
+        body: JSON.stringify({ 
+          sessionId: 'visitante-web', 
+          mensaje: userMsg.text,
+          fecha_actual: fechaVE // <-- Se envía la fecha y hora correctas
+        })
       });
 
       if (!response.ok) throw new Error('Error en el servidor');
@@ -300,7 +307,7 @@ export const FloatingButtons = () => {
         )}
       </AnimatePresence>
 
-      {/* 2. BOTÓN DEL AGENTE DE IA (NUEVO ICONO: BotMessageSquare) */}
+      {/* 2. BOTÓN DEL AGENTE DE IA */}
       <button
         onClick={() => setIsChatOpen(!isChatOpen)}
         aria-label="Abrir asesor virtual"
@@ -316,7 +323,6 @@ export const FloatingButtons = () => {
           {isChatOpen ? (
             <X size={28} className="text-white" />
           ) : (
-            // Usamos BotMessageSquare (Burbuja de chat con carita de IA)
             <BotMessageSquare size={30} className="text-[#c5a059] drop-shadow-[0_0_8px_rgba(197,160,89,0.6)] transition-transform group-hover:scale-110" />
           )}
         </div>
