@@ -297,7 +297,7 @@ export const FloatingButtons = () => {
                         <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none shadow-md overflow-hidden`}>
                           {/* AJUSTE AQUÍ: Interlineado y margen de párrafo reducidos (leading-snug, mb-1.5) */}
                           <div 
-                            className={`leading-snug md:leading-normal text-[13.5px] md:text-[14px] font-sans max-w-none [&_strong]:font-bold [&_p]:mb-1.75 md:[&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-4`}
+                            className={`leading-snug md:leading-normal text-[13.2px] md:text-[14px] font-sans max-w-none [&_strong]:font-bold [&_p]:mb-1.60 md:[&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-4`}
                             dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
                           />
                         </div>
