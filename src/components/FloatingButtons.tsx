@@ -17,8 +17,8 @@ const UserMessageBubble = ({ msg, currentColors }: { msg: Message, currentColors
   return (
     <div className="flex flex-col items-end max-w-[90%] md:max-w-[85%]">
       <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none shadow-md`}>
-        {/* AJUSTE AQUÍ: leading-snug para reducir el interlineado en móvil */}
-        <p className="text-[14px] md:text-[15px] leading-snug md:leading-normal whitespace-pre-wrap break-words">
+        {/* AJUSTE AQUÍ: Tamaño e interlineado idéntico al mensaje del bot */}
+        <p className="text-[13.2px] md:text-[14px] leading-snug md:leading-normal whitespace-pre-wrap break-words">
           {msg.text}
         </p>
       </div>
@@ -295,7 +295,6 @@ export const FloatingButtons = () => {
                     ) : (
                       <div className="flex flex-col gap-1 max-w-[90%]">
                         <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none shadow-md overflow-hidden`}>
-                          {/* AJUSTE AQUÍ: Interlineado y margen de párrafo reducidos (leading-snug, mb-1.5) */}
                           <div 
                             className={`leading-snug md:leading-normal text-[13.2px] md:text-[14px] font-sans max-w-none [&_strong]:font-bold [&_p]:mb-1.60 md:[&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-4`}
                             dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
