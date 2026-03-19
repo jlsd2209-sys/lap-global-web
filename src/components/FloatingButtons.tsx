@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowUp, X, Send, Mic, Square, Sun, Moon, Trash2, BotMessageSquare } from 'lucide-react';
+import { ArrowUp, X, Send, Mic, Square, Sun, Moon, Trash2, BotMessageSquare, ArrowDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logoShield from '@/assets/logo.png.png'; 
 import { Particles } from '@/components/Particles';
@@ -17,7 +17,8 @@ const UserMessageBubble = ({ msg, currentColors }: { msg: Message, currentColors
   return (
     <div className="flex flex-col items-end max-w-[90%] md:max-w-[85%]">
       <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none shadow-md`}>
-        <p className="text-[14px] md:text-[15px] leading-relaxed whitespace-pre-wrap break-words">
+        {/* AJUSTE AQUÍ: leading-snug para reducir el interlineado en móvil */}
+        <p className="text-[14px] md:text-[15px] leading-snug md:leading-normal whitespace-pre-wrap break-words">
           {msg.text}
         </p>
       </div>
@@ -41,6 +42,10 @@ export const FloatingButtons = () => {
   
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  
+  // Estado para el botón de "bajar al último mensaje"
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   
   // Estados de micrófono
   const [isRecording, setIsRecording] = useState(false);
@@ -85,16 +90,33 @@ export const FloatingButtons = () => {
   const currentColors = palettes[theme];
   const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
-  // Lógica de Scroll
+  // Lógica de Scroll de la página principal
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 500);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Auto-scroll
-  useEffect(() => {
+  // Controlar cuándo mostrar la flecha para bajar en el chat
+  const handleChatScroll = () => {
+    if (!scrollAreaRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollAreaRef.current;
+    // Si el usuario sube más de 50px desde abajo, muestra la flecha
+    if (scrollHeight - scrollTop - clientHeight > 50) {
+      setShowScrollBottom(true);
+    } else {
+      setShowScrollBottom(false);
+    }
+  };
+
+  // Función para bajar al fondo
+  const scrollToBottomChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Auto-scroll al recibir o enviar mensaje
+  useEffect(() => {
+    scrollToBottomChat();
   }, [messages, isLoading]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -121,6 +143,15 @@ export const FloatingButtons = () => {
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       setInputText(prev => prev ? prev + ' ' + transcript : transcript);
+      
+      // Auto-ajustar altura del textarea al dictar
+      setTimeout(() => {
+        const textarea = document.getElementById('chatInput');
+        if (textarea) {
+          textarea.style.height = 'auto';
+          textarea.style.height = Math.min(textarea.scrollHeight, 100) + "px";
+        }
+      }, 50);
     };
     recognition.onerror = () => setIsRecording(false);
     recognition.onend = () => setIsRecording(false);
@@ -142,8 +173,13 @@ export const FloatingButtons = () => {
     setInputText('');
     setIsLoading(true);
 
+    // Resetear la altura del textarea
+    const textarea = document.getElementById('chatInput');
+    if (textarea) {
+      textarea.style.height = 'auto';
+    }
+
     try {
-      // AQUÍ SE CALCULA LA FECHA EXACTA DE VENEZUELA
       const fechaVE = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas' });
 
       // WEBHOOK N8N
@@ -153,7 +189,7 @@ export const FloatingButtons = () => {
         body: JSON.stringify({ 
           sessionId: 'visitante-web', 
           mensaje: userMsg.text,
-          fecha_actual: fechaVE // <-- Se envía la fecha y hora correctas
+          fecha_actual: fechaVE
         })
       });
 
@@ -246,61 +282,95 @@ export const FloatingButtons = () => {
             </div>
 
             {/* Área de Mensajes */}
-            <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${currentColors.msgAreaBg} [&::-webkit-scrollbar]:hidden transition-colors duration-300`}>
-              {messages.map((msg) => (
-                <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  {msg.sender === 'user' ? (
-                    <UserMessageBubble msg={msg} currentColors={currentColors} />
-                  ) : (
-                    <div className="flex flex-col gap-1 max-w-[90%]">
-                      <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none shadow-md overflow-hidden`}>
-                        <div 
-                          className={`leading-relaxed text-[13px] md:text-[14px] font-sans max-w-none [&_strong]:font-bold [&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4`}
-                          dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
-                        />
+            <div className="relative flex-1 min-h-0">
+              <div 
+                ref={scrollAreaRef}
+                onScroll={handleChatScroll}
+                className={`absolute inset-0 overflow-y-auto p-4 space-y-4 ${currentColors.msgAreaBg} [&::-webkit-scrollbar]:hidden transition-colors duration-300`}
+              >
+                {messages.map((msg) => (
+                  <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    {msg.sender === 'user' ? (
+                      <UserMessageBubble msg={msg} currentColors={currentColors} />
+                    ) : (
+                      <div className="flex flex-col gap-1 max-w-[90%]">
+                        <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none shadow-md overflow-hidden`}>
+                          {/* AJUSTE AQUÍ: Interlineado y margen de párrafo reducidos (leading-snug, mb-1.5) */}
+                          <div 
+                            className={`leading-snug md:leading-normal text-[13px] md:text-[14px] font-sans max-w-none [&_strong]:font-bold [&_p]:mb-1.5 md:[&_p]:mb-2 [&_ul]:list-disc [&_ul]:ml-4`}
+                            dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-              
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className={`${currentColors.botBubble} p-4 rounded-3xl rounded-tl-none shadow-md flex gap-1.5`}>
-                    <span className="w-2 h-2 bg-[#c5a059] rounded-full animate-bounce"></span>
-                    <span className="w-2 h-2 bg-[#c5a059] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="w-2 h-2 bg-[#c5a059] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+                    )}
                   </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
+                ))}
+                
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className={`${currentColors.botBubble} p-4 rounded-3xl rounded-tl-none shadow-md flex gap-1.5`}>
+                      <span className="w-2 h-2 bg-[#c5a059] rounded-full animate-bounce"></span>
+                      <span className="w-2 h-2 bg-[#c5a059] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                      <span className="w-2 h-2 bg-[#c5a059] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} className="h-1" />
+              </div>
+
+              {/* Botón Flotante para ir abajo (Tipo WhatsApp) */}
+              <AnimatePresence>
+                {showScrollBottom && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}
+                    onClick={scrollToBottomChat}
+                    className="absolute bottom-4 right-4 z-20 w-8 h-8 bg-[#1e2a40] border border-[#c5a059]/40 text-[#c5a059] rounded-full flex items-center justify-center shadow-lg hover:bg-[#2a303c] transition-colors"
+                  >
+                    <ArrowDown size={16} />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Input para escribir o hablar */}
-            <div className={`p-3 border-t ${currentColors.inputAreaBg} shrink-0 transition-colors duration-300`}>
-              <div className={`flex items-center gap-2 border rounded-full p-1 pr-1.5 transition-colors duration-300 ${currentColors.inputWrap}`}>
-                <input 
-                  type="text"
+            {/* Input Expandible para escribir o hablar */}
+            <div className={`p-3 border-t ${currentColors.inputAreaBg} shrink-0 transition-colors duration-300 z-10 bg-inherit`}>
+              <div className={`flex items-end gap-2 border rounded-[20px] p-1.5 pr-2 transition-colors duration-300 shadow-sm ${currentColors.inputWrap}`}>
+                <textarea 
+                  id="chatInput"
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onChange={(e) => {
+                    setInputText(e.target.value);
+                    e.target.style.height = "auto"; 
+                    // Máximo aproximado de 4 líneas (100px)
+                    e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
+                  }}
+                  onKeyDown={(e) => { 
+                    if (e.key === 'Enter' && !e.shiftKey) { 
+                      e.preventDefault(); 
+                      handleSendMessage(); 
+                    } 
+                  }}
                   placeholder={isRecording ? "Escuchando..." : "Escribe tu consulta aquí..."}
-                  className={`flex-1 bg-transparent text-[14px] px-4 py-2 outline-none ${currentColors.inputText} ${isRecording ? 'animate-pulse text-red-400' : ''}`}
+                  rows={1}
+                  className={`flex-1 bg-transparent text-[14px] px-3 py-2 outline-none resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden ${currentColors.inputText} ${isRecording ? 'animate-pulse text-red-400' : ''}`}
+                  style={{ minHeight: '40px', maxHeight: '100px', lineHeight: '20px' }}
                 />
                 
-                {isRecording ? (
-                  <button onClick={stopRecording} className="p-2.5 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all">
-                    <Square size={16} className="fill-current" />
-                  </button>
-                ) : inputText.trim() ? (
-                  <button onClick={handleSendMessage} disabled={isLoading} className="p-2.5 rounded-full bg-gradient-to-tr from-[#c5a059] to-[#e2c792] text-[#0a1526] hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] transition-all">
-                    <Send size={16} className="ml-0.5" />
-                  </button>
-                ) : (
-                  <button onClick={startRecording} disabled={isLoading} className="p-2.5 rounded-full bg-gradient-to-tr from-[#c5a059] to-[#e2c792] text-[#0a1526] hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] transition-all">
-                    <Mic size={16} />
-                  </button>
-                )}
+                <div className="flex-shrink-0 pb-0.5">
+                  {isRecording ? (
+                    <button onClick={stopRecording} className="p-2.5 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all">
+                      <Square size={16} className="fill-current" />
+                    </button>
+                  ) : inputText.trim() ? (
+                    <button onClick={handleSendMessage} disabled={isLoading} className="p-2.5 rounded-full bg-gradient-to-tr from-[#c5a059] to-[#e2c792] text-[#0a1526] hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] transition-all">
+                      <Send size={16} className="ml-0.5" />
+                    </button>
+                  ) : (
+                    <button onClick={startRecording} disabled={isLoading} className="p-2.5 rounded-full bg-gradient-to-tr from-[#c5a059] to-[#e2c792] text-[#0a1526] hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] transition-all">
+                      <Mic size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
