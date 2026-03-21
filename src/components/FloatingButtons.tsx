@@ -325,9 +325,9 @@ export const FloatingButtons = () => {
               </AnimatePresence>
             </div>
 
-{/* Input Expandible ACTUALIZADO */}
+            {/* Input Expandible ACTUALIZADO Y CENTRADO */}
             <div className={`p-3 border-t ${currentColors.inputAreaBg} shrink-0 transition-colors duration-300 z-10 bg-inherit`}>
-              <div className={`flex flex-row items-end gap-1 border rounded-[24px] p-1.5 pr-2 focus-within:border-[#c5a059] transition-all duration-300 shadow-2xl min-h-[48px] ${currentColors.inputWrap}`}>
+              <div className={`flex flex-row items-center gap-1 border rounded-[24px] p-1.5 pr-2 focus-within:border-[#c5a059] transition-all duration-300 shadow-2xl min-h-[48px] ${currentColors.inputWrap}`}>
                 
                 <div className="flex-1 flex flex-col justify-center">
                   {isRecording ? (
@@ -352,13 +352,13 @@ export const FloatingButtons = () => {
                       }}
                       placeholder="Escribe tu consulta aquí..."
                       rows={1}
-                      className={`w-full bg-transparent outline-none text-[14px] resize-none py-3 px-3 [&::-webkit-scrollbar]:hidden ${currentColors.inputText}`}
-                      style={{ minHeight: '44px', maxHeight: '100px', lineHeight: '20px' }}
+                      className={`w-full bg-transparent outline-none text-[14px] resize-none py-2 px-3 mt-1 [&::-webkit-scrollbar]:hidden ${currentColors.inputText}`}
+                      style={{ maxHeight: '100px', lineHeight: '20px' }}
                     />
                   )}
                 </div>
 
-                <div className="flex-shrink-0 pb-0.5 ml-1">
+                <div className="flex-shrink-0 ml-1">
                   {isRecording ? (
                     <button onClick={stopRecording} className="p-2.5 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95" title="Detener grabación">
                       <Square size={18} className="fill-current" />
