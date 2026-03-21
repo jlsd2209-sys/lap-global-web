@@ -17,7 +17,6 @@ const UserMessageBubble = ({ msg, currentColors }: { msg: Message, currentColors
   return (
     <div className="flex flex-col items-end max-w-[90%] md:max-w-[85%]">
       <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none shadow-md`}>
-        {/* AJUSTE AQUÍ: Tamaño e interlineado idéntico al mensaje del bot */}
         <p className="text-[13.2px] md:text-[14px] leading-snug md:leading-normal whitespace-pre-wrap break-words">
           {msg.text}
         </p>
@@ -65,7 +64,7 @@ export const FloatingButtons = () => {
     setTimeout(() => setToastMsg(null), 3000);
   };
 
-  // Paleta de colores
+  // Paleta de colores (ACTUALIZADA CON sendBtn y Sombras)
   const palettes = {
     dark: {
       windowBg: 'bg-[#151f32]',
@@ -73,8 +72,9 @@ export const FloatingButtons = () => {
       userBubble: 'bg-[#2a303c] text-gray-100 border border-gray-700',
       botBubble: 'bg-[#1e2a40] border-l-4 border-[#c5a059] text-gray-200',
       inputAreaBg: 'bg-[#0a1526] border-gray-800',
-      inputWrap: 'bg-[#151f32] border-gray-700 focus-within:border-[#c5a059]/50',
+      inputWrap: 'bg-[#151f32] border-gray-700',
       inputText: 'text-white placeholder-gray-500',
+      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20'
     },
     light: {
       windowBg: 'bg-[#fdfcf5]',
@@ -82,8 +82,9 @@ export const FloatingButtons = () => {
       userBubble: 'bg-[#151f32] text-white border-none',
       botBubble: 'bg-[#eee7d5] border-l-4 border-[#c5a059] text-[#2a303c]',
       inputAreaBg: 'bg-[#fdfcf5] border-[#c5a059]/30',
-      inputWrap: 'bg-white border-[#c5a059]/30 focus-within:border-[#c5a059]',
+      inputWrap: 'bg-white border-[#c5a059]/30',
       inputText: 'text-[#2a303c] placeholder-gray-400',
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
     }
   };
 
@@ -101,7 +102,6 @@ export const FloatingButtons = () => {
   const handleChatScroll = () => {
     if (!scrollAreaRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = scrollAreaRef.current;
-    // Si el usuario sube más de 50px desde abajo, muestra la flecha
     if (scrollHeight - scrollTop - clientHeight > 50) {
       setShowScrollBottom(true);
     } else {
@@ -109,12 +109,10 @@ export const FloatingButtons = () => {
     }
   };
 
-  // Función para bajar al fondo
   const scrollToBottomChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Auto-scroll al recibir o enviar mensaje
   useEffect(() => {
     scrollToBottomChat();
   }, [messages, isLoading]);
@@ -144,7 +142,6 @@ export const FloatingButtons = () => {
       const transcript = event.results[0][0].transcript;
       setInputText(prev => prev ? prev + ' ' + transcript : transcript);
       
-      // Auto-ajustar altura del textarea al dictar
       setTimeout(() => {
         const textarea = document.getElementById('chatInput');
         if (textarea) {
@@ -173,7 +170,6 @@ export const FloatingButtons = () => {
     setInputText('');
     setIsLoading(true);
 
-    // Resetear la altura del textarea
     const textarea = document.getElementById('chatInput');
     if (textarea) {
       textarea.style.height = 'auto';
@@ -237,7 +233,7 @@ export const FloatingButtons = () => {
             initial={{ opacity: 0, y: 20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.9 }} transition={{ duration: 0.3 }}
             className={`fixed bottom-24 right-4 md:right-8 z-50 w-[90vw] sm:w-[380px] h-[550px] max-h-[75vh] ${currentColors.windowBg} border border-[#c5a059]/40 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden transition-colors duration-300`}
           >
-            {/* Header del Chat Estilo Asistente */}
+            {/* Header del Chat */}
             <div className="relative p-4 border-b border-[#c5a059]/20 flex justify-between items-center shrink-0 overflow-hidden min-h-[75px]">
               <div className="absolute inset-0 z-0">
                 <img src="/fondo-servicios.jpg.png" alt="" className="w-full h-full object-cover" />
@@ -247,7 +243,6 @@ export const FloatingButtons = () => {
                 <Particles count={15} />
               </div>
 
-              {/* BLOQUE HOVER: Escudo y Texto en Mayúsculas */}
               <div 
                 className="flex items-center gap-3 relative z-10 cursor-pointer group"
                 onMouseEnter={() => setIsHeaderHovered(true)}
@@ -267,7 +262,6 @@ export const FloatingButtons = () => {
                 </div>
               </div>
               
-              {/* Botones del Header */}
               <div className="flex items-center gap-1 relative z-10">
                 <button onClick={handleClearChat} className="text-gray-300 hover:text-red-400 transition-colors p-1.5 rounded-full hover:bg-white/10" title="Limpiar historial">
                   <Trash2 size={18} />
@@ -317,7 +311,7 @@ export const FloatingButtons = () => {
                 <div ref={messagesEndRef} className="h-1" />
               </div>
 
-              {/* Botón Flotante para ir abajo (Tipo WhatsApp) */}
+              {/* Botón Flotante para ir abajo */}
               <AnimatePresence>
                 {showScrollBottom && (
                   <motion.button
@@ -331,42 +325,51 @@ export const FloatingButtons = () => {
               </AnimatePresence>
             </div>
 
-            {/* Input Expandible para escribir o hablar */}
+            {/* Input Expandible ACTUALIZADO */}
             <div className={`p-3 border-t ${currentColors.inputAreaBg} shrink-0 transition-colors duration-300 z-10 bg-inherit`}>
-              <div className={`flex items-end gap-2 border rounded-[20px] p-1.5 pr-2 transition-colors duration-300 shadow-sm ${currentColors.inputWrap}`}>
-                <textarea 
-                  id="chatInput"
-                  value={inputText}
-                  onChange={(e) => {
-                    setInputText(e.target.value);
-                    e.target.style.height = "auto"; 
-                    // Máximo aproximado de 4 líneas (100px)
-                    e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
-                  }}
-                  onKeyDown={(e) => { 
-                    if (e.key === 'Enter' && !e.shiftKey) { 
-                      e.preventDefault(); 
-                      handleSendMessage(); 
-                    } 
-                  }}
-                  placeholder={isRecording ? "Escuchando..." : "Escribe tu consulta aquí..."}
-                  rows={1}
-                  className={`flex-1 bg-transparent text-[14px] px-3 py-2 outline-none resize-none overflow-y-auto [&::-webkit-scrollbar]:hidden ${currentColors.inputText} ${isRecording ? 'animate-pulse text-red-400' : ''}`}
-                  style={{ minHeight: '40px', maxHeight: '100px', lineHeight: '20px' }}
-                />
+              <div className={`flex flex-row items-end gap-1 border rounded-[24px] p-1.5 focus-within:border-[#c5a059] transition-all duration-300 shadow-2xl min-h-[48px] ${currentColors.inputWrap}`}>
                 
-                <div className="flex-shrink-0 pb-0.5">
+                <div className="flex-1 flex flex-col justify-center min-h-[36px]">
                   {isRecording ? (
-                    <button onClick={stopRecording} className="p-2.5 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all">
-                      <Square size={16} className="fill-current" />
+                    <div className="flex items-center gap-3 text-red-500 animate-pulse px-2 h-full">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                      <span className="text-[14px] font-medium tracking-wide">Escuchando...</span>
+                    </div>
+                  ) : (
+                    <textarea 
+                      id="chatInput"
+                      value={inputText}
+                      onChange={(e) => {
+                        setInputText(e.target.value);
+                        e.target.style.height = "auto"; 
+                        e.target.style.height = Math.min(e.target.scrollHeight, 100) + "px";
+                      }}
+                      onKeyDown={(e) => { 
+                        if (e.key === 'Enter' && !e.shiftKey) { 
+                          e.preventDefault(); 
+                          handleSendMessage(); 
+                        } 
+                      }}
+                      placeholder="Escribe tu consulta aquí..."
+                      rows={1}
+                      className={`w-full bg-transparent outline-none text-[14px] resize-none py-2 px-3 [&::-webkit-scrollbar]:hidden ${currentColors.inputText}`}
+                      style={{ minHeight: '36px', maxHeight: '100px', lineHeight: '20px' }}
+                    />
+                  )}
+                </div>
+
+                <div className="flex-shrink-0 mb-0.5 ml-1">
+                  {isRecording ? (
+                    <button onClick={stopRecording} className="p-2.5 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95" title="Detener grabación">
+                      <Square size={18} className="fill-current" />
                     </button>
                   ) : inputText.trim() ? (
-                    <button onClick={handleSendMessage} disabled={isLoading} className="p-2.5 rounded-full bg-gradient-to-tr from-[#c5a059] to-[#e2c792] text-[#0a1526] hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] transition-all">
-                      <Send size={16} className="ml-0.5" />
+                    <button onClick={handleSendMessage} disabled={isLoading} className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95`} title="Enviar mensaje">
+                      <Send size={18} className="ml-0.5" />
                     </button>
                   ) : (
-                    <button onClick={startRecording} disabled={isLoading} className="p-2.5 rounded-full bg-gradient-to-tr from-[#c5a059] to-[#e2c792] text-[#0a1526] hover:shadow-[0_0_15px_rgba(197,160,89,0.4)] transition-all">
-                      <Mic size={16} />
+                    <button onClick={startRecording} disabled={isLoading} className={`${currentColors.sendBtn} p-2.5 rounded-full transition-all active:scale-95`} title="Grabar mensaje de voz">
+                      <Mic size={18} />
                     </button>
                   )}
                 </div>
