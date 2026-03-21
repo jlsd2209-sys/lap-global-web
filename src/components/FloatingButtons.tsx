@@ -327,11 +327,11 @@ export const FloatingButtons = () => {
 
 {/* Input Expandible ACTUALIZADO */}
             <div className={`p-3 border-t ${currentColors.inputAreaBg} shrink-0 transition-colors duration-300 z-10 bg-inherit`}>
-              <div className={`flex flex-row items-end gap-1 border rounded-[24px] p-1.5 focus-within:border-[#c5a059] transition-all duration-300 shadow-2xl min-h-[48px] ${currentColors.inputWrap}`}>
+              <div className={`flex flex-row items-end gap-1 border rounded-[24px] p-1.5 pr-2 focus-within:border-[#c5a059] transition-all duration-300 shadow-2xl min-h-[48px] ${currentColors.inputWrap}`}>
                 
                 <div className="flex-1 flex flex-col justify-center">
                   {isRecording ? (
-                    <div className="flex items-center gap-3 text-red-500 animate-pulse px-3 h-[40px]">
+                    <div className="flex items-center gap-3 text-red-500 animate-pulse px-3 py-3">
                       <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
                       <span className="text-[14px] font-medium tracking-wide">Escuchando...</span>
                     </div>
@@ -352,13 +352,13 @@ export const FloatingButtons = () => {
                       }}
                       placeholder="Escribe tu consulta aquí..."
                       rows={1}
-                      className={`w-full bg-transparent outline-none text-[14px] resize-none py-2.5 px-3 [&::-webkit-scrollbar]:hidden ${currentColors.inputText}`}
-                      style={{ minHeight: '40px', maxHeight: '100px', lineHeight: '20px' }}
+                      className={`w-full bg-transparent outline-none text-[14px] resize-none py-3 px-3 [&::-webkit-scrollbar]:hidden ${currentColors.inputText}`}
+                      style={{ minHeight: '44px', maxHeight: '100px', lineHeight: '20px' }}
                     />
                   )}
                 </div>
 
-                <div className="flex-shrink-0 mb-0.5 ml-1">
+                <div className="flex-shrink-0 pb-0.5 ml-1">
                   {isRecording ? (
                     <button onClick={stopRecording} className="p-2.5 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-95" title="Detener grabación">
                       <Square size={18} className="fill-current" />
