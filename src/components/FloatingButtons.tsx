@@ -64,7 +64,7 @@ export const FloatingButtons = () => {
     setTimeout(() => setToastMsg(null), 3000);
   };
 
-  // Paleta de colores (ACTUALIZADA CON sendBtn y Sombras)
+// Paleta de colores (ACTUALIZADA CON scrollBtn)
   const palettes = {
     dark: {
       windowBg: 'bg-[#151f32]',
@@ -74,7 +74,8 @@ export const FloatingButtons = () => {
       inputAreaBg: 'bg-[#0a1526] border-gray-800',
       inputWrap: 'bg-[#151f32] border-gray-700',
       inputText: 'text-white placeholder-gray-500',
-      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20'
+      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20',
+      scrollBtn: 'bg-[#151f32] text-[#c5a059] border border-[#c5a059]/50 hover:bg-[#1e2a40] shadow-xl'
     },
     light: {
       windowBg: 'bg-[#fdfcf5]',
@@ -84,7 +85,8 @@ export const FloatingButtons = () => {
       inputAreaBg: 'bg-[#fdfcf5] border-[#c5a059]/30',
       inputWrap: 'bg-white border-[#c5a059]/30',
       inputText: 'text-[#2a303c] placeholder-gray-400',
-      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]',
+      scrollBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827] shadow-lg'
     }
   };
 
@@ -317,7 +319,7 @@ export const FloatingButtons = () => {
                   <motion.button
                     initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}
                     onClick={scrollToBottomChat}
-                    className={`absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all ${currentColors.sendBtn}`}
+                    className={`absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full flex items-center justify-center transition-all ${currentColors.scrollBtn}`}
                   >
                     <ArrowDown size={16} />
                   </motion.button>
