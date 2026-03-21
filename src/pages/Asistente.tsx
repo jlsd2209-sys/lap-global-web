@@ -978,7 +978,7 @@ export default function AsistentePage() {
           
           <div ref={messagesEndRef} />
 
-          {/* Botón Flotante para ir abajo */}
+          {/* Botón Flotante para ir abajo (NUEVO) */}
           <AnimatePresence>
             {showScrollBottom && (
               <motion.button
