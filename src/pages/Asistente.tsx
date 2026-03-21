@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import logoShield from '@/assets/logo.png.png'; 
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
-import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share, Edit2, ChevronDown, ChevronUp } from 'lucide-react'; 
+import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share, Edit2, ChevronDown, ChevronUp, ArrowDown } from 'lucide-react'; 
 
 type Message = {
   id: string;
@@ -153,7 +153,7 @@ const UserMessageBubble = ({ msg, theme, currentColors, onEdit }: { msg: Message
   return (
     <div className="flex flex-col items-end max-w-[90%] md:max-w-[85%]">
       <div className={`${currentColors.userBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tr-none shadow-md`}>
-        <p className="text-[15px] md:text-[16px] leading-relaxed whitespace-pre-wrap break-words">
+        <p className="text-[15px] md:text-[16px] leading-snug md:leading-normal whitespace-pre-wrap break-words">
           {displayText}
         </p>
       </div>
@@ -281,6 +281,10 @@ export default function AsistentePage() {
     }
   });
 
+  // Estados para el botón de "bajar al último mensaje"
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (accessMode !== 'none') {
       const storageKey = `lap_history_${accessMode}_${username || 'guest'}`;
@@ -304,8 +308,23 @@ export default function AsistentePage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const currentMessages = chatsHistory[moduloActivo] || [];
 
-  useEffect(() => {
+  // Función para detectar scroll en el chat
+  const handleChatScroll = () => {
+    if (!scrollAreaRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollAreaRef.current;
+    if (scrollHeight - scrollTop - clientHeight > 50) {
+      setShowScrollBottom(true);
+    } else {
+      setShowScrollBottom(false);
+    }
+  };
+
+  const scrollToBottomChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottomChat();
   }, [currentMessages]);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -639,7 +658,8 @@ export default function AsistentePage() {
       userBubble: 'bg-[#2a303c] text-gray-100 border-gray-700',
       footerBG: 'bg-[#1e2a40]', 
       textArea: 'text-gray-100',
-      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20'
+      sendBtn: 'bg-[#c5a059]/10 text-[#c5a059] border border-[#c5a059]/30 hover:bg-[#c5a059]/20',
+      scrollBtn: 'bg-[#151f32] text-[#c5a059] border border-[#c5a059]/50 hover:bg-[#1e2a40] shadow-xl'
     },
     light: {
       appBG: 'bg-[#fdfcf5]', 
@@ -655,7 +675,8 @@ export default function AsistentePage() {
       userBubble: 'bg-[#151f32] text-white border-none',
       footerBG: 'bg-[#eee7d5]', 
       textArea: 'text-[#2a303c]',
-      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]'
+      sendBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827]',
+      scrollBtn: 'bg-[#0a1526] text-[#c5a059] border border-[#0a1526] hover:bg-[#111827] shadow-lg'
     }
   };
 
@@ -910,7 +931,11 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        <section className={`flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}>
+        <section 
+          className={`flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative ${currentColors.textArea}`}
+          ref={scrollAreaRef}
+          onScroll={handleChatScroll}
+        >
           
           <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
             {currentMessages.length === 0 && (
@@ -938,7 +963,7 @@ export default function AsistentePage() {
                   <div className="flex flex-col gap-1 max-w-[90%]">
                     <div className={`${currentColors.botBubble} p-3 md:p-4 px-4 md:px-5 rounded-3xl rounded-tl-none border-l-4 shadow-md overflow-hidden`}>
                       <div 
-                        className={`leading-relaxed bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:font-sans [&_*]:text-current [&_h3]:text-[18px] [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-[16px] [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:text-[15px] md:[&_p]:text-[16px] [&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul_ul]:list-[circle] [&_ul_ul]:mt-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol_ol]:list-[lower-alpha] [&_ol_ol]:mt-2 [&_li]:text-[15px] md:[&_li]:text-[16px] [&_li]:mb-1 [&_strong]:font-bold [&_li:has(h4)]:list-none [&_li_h4]:-ml-4 [&_li_h4]:block`}
+                        className={`leading-snug md:leading-normal bot-message-html-content max-w-none ${theme === 'dark' ? 'text-gray-200' : 'text-[#2a303c]'} [&_*]:font-sans [&_*]:text-current [&_h3]:text-[18px] [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-2 [&_h4]:text-[16px] [&_h4]:font-bold [&_h4]:mt-4 [&_h4]:mb-2 [&_p]:text-[15px] md:[&_p]:text-[16px] [&_p]:mb-1.5 md:[&_p]:mb-3 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_ul_ul]:list-[circle] [&_ul_ul]:mt-2 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ol_ol]:list-[lower-alpha] [&_ol_ol]:mt-2 [&_li]:text-[15px] md:[&_li]:text-[16px] [&_li]:mb-1 [&_strong]:font-bold [&_li:has(h4)]:list-none [&_li_h4]:-ml-4 [&_li_h4]:block`}
                         dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} 
                       />
                     </div>
@@ -952,6 +977,20 @@ export default function AsistentePage() {
           <div className="flex-1 min-h-[1px]"></div>
           
           <div ref={messagesEndRef} />
+
+          {/* Botón Flotante para ir abajo */}
+          <AnimatePresence>
+            {showScrollBottom && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}
+                onClick={scrollToBottomChat}
+                className={`fixed bottom-28 md:bottom-32 right-6 md:right-12 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentColors.scrollBtn}`}
+              >
+                <ArrowDown size={20} />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
         </section>
 
         {/* CONTENEDOR DEL TOAST FLOTANTE */}
