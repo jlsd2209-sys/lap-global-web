@@ -317,7 +317,7 @@ export const FloatingButtons = () => {
                   <motion.button
                     initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}
                     onClick={scrollToBottomChat}
-                    className="absolute bottom-4 right-4 z-20 w-8 h-8 bg-[#1e2a40] border border-[#c5a059]/40 text-[#c5a059] rounded-full flex items-center justify-center shadow-lg hover:bg-[#2a303c] transition-colors"
+                    className={`absolute bottom-4 right-4 z-20 w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all ${currentColors.sendBtn}`}
                   >
                     <ArrowDown size={16} />
                   </motion.button>
