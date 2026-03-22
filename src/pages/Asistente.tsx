@@ -3,6 +3,7 @@ import logoShield from '@/assets/logo.png.png';
 import { useSearchParams } from 'react-router-dom';
 import { Particles } from '@/components/Particles'; 
 import { Sun, Moon, Send, Menu, X, Lock, Eye, EyeOff, LogOut, User, Trash2, Copy, Check, ThumbsUp, ThumbsDown, Paperclip, FileText, Mic, Square, Share2, Volume2, VolumeX, Share, Edit2, ChevronDown, ChevronUp, ArrowDown } from 'lucide-react'; 
+import { motion, AnimatePresence } from 'framer-motion';
 
 type Message = {
   id: string;
@@ -281,12 +282,9 @@ export default function AsistentePage() {
     }
   });
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const currentMessages = chatsHistory[moduloActivo] || [];
-
-  // NUEVO: Estados y funciones para la flecha de bajar
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  // Estados para el botón de "bajar al último mensaje"
   const [showScrollBottom, setShowScrollBottom] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const handleChatScroll = () => {
     if (!scrollAreaRef.current) return;
@@ -321,6 +319,9 @@ export default function AsistentePage() {
       localStorage.setItem(storageKey, JSON.stringify(chatsHistory));
     }
   }, [chatsHistory, accessMode, username]);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const currentMessages = chatsHistory[moduloActivo] || [];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -642,7 +643,6 @@ export default function AsistentePage() {
 
   const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
-  // NUEVO: Agregada la clave scrollBtn a las paletas
   const palettes = {
     dark: {
       appBG: 'bg-[#151f32]',
@@ -931,11 +931,10 @@ export default function AsistentePage() {
           </div>
         </header>
 
-        {/* NUEVO: ref y onScroll añadidos a la section */}
         <section 
+          className={`flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative ${currentColors.textArea}`}
           ref={scrollAreaRef}
           onScroll={handleChatScroll}
-          className={`flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-none px-4 md:px-12 py-4 md:py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${currentColors.textArea}`}
         >
           
           <div className="flex flex-col space-y-6 w-full max-w-3xl mx-auto flex-shrink-0">
@@ -979,7 +978,7 @@ export default function AsistentePage() {
           
           <div ref={messagesEndRef} />
 
-          {/* NUEVO: Botón Flotante para ir abajo */}
+          {/* Botón Flotante para ir abajo (NUEVO) */}
           <AnimatePresence>
             {showScrollBottom && (
               <motion.button
