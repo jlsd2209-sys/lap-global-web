@@ -281,7 +281,7 @@ export default function AsistentePage() {
     }
   });
 
-  // NUEVO: Estados para el botón flotante de scroll
+  // NUEVO: Estados para el botón de "bajar al último mensaje"
   const [showScrollBottom, setShowScrollBottom] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -308,11 +308,7 @@ export default function AsistentePage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const currentMessages = chatsHistory[moduloActivo] || [];
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [currentMessages]);
-
-  // NUEVO: Función matemática para detectar si el usuario ha subido en el historial
+  // NUEVO: Función matemática para detectar scroll
   const handleChatScroll = () => {
     if (!scrollAreaRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = scrollAreaRef.current;
@@ -323,10 +319,13 @@ export default function AsistentePage() {
     }
   };
 
-  // NUEVO: Función para ejecutar la bajada del scroll
   const scrollToBottomChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [currentMessages]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -979,7 +978,7 @@ export default function AsistentePage() {
           
           <div ref={messagesEndRef} />
 
-          {/* Botón Flotante para ir abajo (NUEVO) */}
+          {/* Botón Flotante para ir abajo */}
           <AnimatePresence>
             {showScrollBottom && (
               <motion.button
@@ -1026,7 +1025,7 @@ export default function AsistentePage() {
                   ref={fileInputRef} 
                   className="hidden" 
                   onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                  accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
+                  accept=".pdf,.doc,.docx,.txt,.rtf,.csv,.xlsx,.jpg,.jpeg,.png,.webp,.mp3,.wav,.ogg,.m4a,.aac,.mp4,.mov,.avi,.mkv" 
                 />
                 <button 
                   onClick={() => {
