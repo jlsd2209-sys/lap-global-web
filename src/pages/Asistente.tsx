@@ -282,9 +282,12 @@ export default function AsistentePage() {
     }
   });
 
-  // Estados para el botón de "bajar al último mensaje"
-  const [showScrollBottom, setShowScrollBottom] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const currentMessages = chatsHistory[moduloActivo] || [];
+
+  // NUEVO: Estados y funciones para la flecha de bajar
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
 
   const handleChatScroll = () => {
     if (!scrollAreaRef.current) return;
@@ -319,9 +322,6 @@ export default function AsistentePage() {
       localStorage.setItem(storageKey, JSON.stringify(chatsHistory));
     }
   }, [chatsHistory, accessMode, username]);
-
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const currentMessages = chatsHistory[moduloActivo] || [];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -978,13 +978,13 @@ export default function AsistentePage() {
           
           <div ref={messagesEndRef} />
 
-          {/* Botón Flotante para ir abajo (NUEVO) */}
+          {/* Botón Flotante para ir abajo */}
           <AnimatePresence>
             {showScrollBottom && (
               <motion.button
                 initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}
                 onClick={scrollToBottomChat}
-                className={`fixed bottom-[120px] md:bottom-[100px] right-6 md:right-12 z-40 w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentColors.scrollBtn}`}
+                className={`fixed bottom-28 md:bottom-32 right-6 md:right-12 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentColors.scrollBtn}`}
               >
                 <ArrowDown size={20} />
               </motion.button>
