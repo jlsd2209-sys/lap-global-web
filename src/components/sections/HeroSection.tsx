@@ -42,8 +42,10 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8 }} 
-          /* Añadimos pb-2 para evitar que el texto degradado corte las letras "y", "g", etc. */
-          className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight pb-1"
+          /* CAMBIO 1: mb-6 -> mb-3 md:mb-6 (Compactamos el margen inferior solo en móvil)
+            CAMBIO 2: pb-2 -> pb-0 md:pb-2 (Eliminamos el padding inferior en móvil, mantenemos md:)
+          */
+          className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-3 md:mb-6 gradient-text-gold leading-tight pb-0 md:pb-1"
         >
           Innovación y Eficiencia Legal con IA 
         </motion.h1>
@@ -52,7 +54,8 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8, delay: 0.2 }} 
-          className="text-lg md:text-xl text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed"
+          /* Reducimos ligeramente el margen mb-10 a mb-8 md:mb-10 para móvil */
+          className="text-lg md:text-xl text-cream-light/90 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed"
         >
           Gestión legal automatizada mediante inteligencia artificial
         </motion.p>
