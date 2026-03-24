@@ -14,7 +14,7 @@ export const CTASection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-4 gradient-text-gold">
+            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold">
 
             Eficiencia Algorítmica con Criterio Jurídico
           </motion.h2>
@@ -24,7 +24,7 @@ export const CTASection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-cream-light/90 mb-6 leading-relaxed">Conoce nuestra infraestructura de gestión automatizada a través de la inteligencia artificial
+            className="text-lg md:text-xl text-cream-light/90 mb-6 leading-relaxed">Infraestructura de gestión automatizada a través de la inteligencia artificial
 
           </motion.p>
 
