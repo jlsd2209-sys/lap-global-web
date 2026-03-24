@@ -35,7 +35,7 @@ export const HeroSection = () => {
           <path d="M100,300 L150,320 L200,310 L250,330 L300,320 L350,300 L400,310 L450,300 L500,320 L550,310 L600,300 L650,320 L700,310 L750,300 L800,320 L850,310 L900,300 L950,320 L1000,310 L1050,300 L1100,320" stroke="hsl(var(--navy-medium))" strokeWidth="1" fill="none" />
         </svg>
       </div>
-
+      
       {/* Content */}
       <div className="container relative z-10 text-center max-w-5xl px-4">
         <motion.h1 
@@ -43,7 +43,7 @@ export const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8 }} 
           /* Aplicamos la clase gradient-text-gold para el efecto blanco -> dorado */
-          className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold mb-10 md:mb-16 gradient-text-gold leading-tight md:leading-none"
+          className="className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
         >
           Innovación y Eficiencia Legal con IA 
         </motion.h1>
@@ -52,7 +52,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8, delay: 0.2 }} 
-          className="text-base md:text-lg text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed md:leading-normal"
+          className="text-lg md:text-xl text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
           Gestión legal automatizada mediante inteligencia artificial
         </motion.p>
