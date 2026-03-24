@@ -14,7 +14,7 @@ export const CTASection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-5 gradient-text-gold">
+            className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-4 gradient-text-gold">
 
             Eficiencia Algorítmica con Criterio Jurídico
           </motion.h2>
