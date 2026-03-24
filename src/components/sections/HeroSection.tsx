@@ -43,7 +43,7 @@ export const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8 }} 
           /* Aplicamos la clase gradient-text-gold para el efecto blanco -> dorado */
-          className="className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
+          className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
         >
           Innovación y Eficiencia Legal con IA 
         </motion.h1>
