@@ -57,8 +57,7 @@ export const Footer = () => {
               </div>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
-              Innovación legal con inteligencia artificial. 
-              Transformando la práctica del derecho con tecnología de vanguardia.
+              Ingeniería Jurídica de Vanguardia. Automatización Avanzada y Validación Profesional. Auditamos procesos documentales masivos con precisión algorítmica y criterio legal.              
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
