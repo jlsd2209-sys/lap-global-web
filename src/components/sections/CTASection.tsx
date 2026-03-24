@@ -45,7 +45,7 @@ export const CTASection = () => {
               }}>
 
               <MessageCircle size={24} />
-              Contactar Ahora
+              Solicitar consulta
             </a>
           </motion.div>
 
