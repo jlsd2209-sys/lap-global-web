@@ -37,13 +37,13 @@ export const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="container relative z-10 text-center max-w-4xl px-4">
+      <div className="container relative z-10 text-center max-w-5xl px-4">
         <motion.h1 
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8 }} 
           /* Aplicamos la clase gradient-text-gold para el efecto blanco -> dorado */
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
+          className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
         >
           Innovación y Eficiencia Legal con IA 
         </motion.h1>
