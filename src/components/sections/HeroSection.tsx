@@ -55,7 +55,7 @@ export const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8, delay: 0.2 }} 
           /* CAMBIO AQUÍ: Cambiamos md:text-xl por md:text-2xl */
-          className="text-lg md:text-2xl text-cream-light/90 mb-8 md:mb-10 max-w-3xl mx-auto leading-relaxed"
+          className="text-lg md:text-1xl text-cream-light/90 mb-8 md:mb-10 max-w-3xl mx-auto leading-relaxed"
         >
           Gestión legal automatizada mediante inteligencia artificial
         </motion.p>
