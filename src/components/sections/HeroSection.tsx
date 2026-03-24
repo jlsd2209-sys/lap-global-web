@@ -49,13 +49,13 @@ export const HeroSection = () => {
         >
           Innovación y Eficiencia Legal con IA 
         </motion.h1>
-        
+                     
         <motion.p 
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8, delay: 0.2 }} 
-          /* Reducimos ligeramente el margen mb-10 a mb-8 md:mb-10 para móvil */
-          className="text-lg md:text-xl text-cream-light/90 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed"
+          /* CAMBIO AQUÍ: Cambiamos md:text-xl por md:text-2xl */
+          className="text-lg md:text-2xl text-cream-light/90 mb-8 md:mb-10 max-w-3xl mx-auto leading-relaxed"
         >
           Gestión legal automatizada mediante inteligencia artificial
         </motion.p>
