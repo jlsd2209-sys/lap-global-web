@@ -16,7 +16,7 @@ export const CTASection = () => {
             viewport={{ once: true }}
             className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold">
 
-            Eficiencia Algorítmica con Criterio Jurídico
+            Automatización Avanzada y Validación Profesional
           </motion.h2>
 
           <motion.p
