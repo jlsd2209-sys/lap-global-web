@@ -54,7 +54,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }} 
           className="text-lg md:text-xl text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
-          Automatización legal de última generación para clientes en Venezuela y Argentina
+          Automatización legal de última generación al servicio de clientes en Venezuela y Argentina
         </motion.p>
 
         <motion.div 
