@@ -16,7 +16,7 @@ export const CTASection = () => {
             viewport={{ once: true }}
             className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold">
    
-            Eficiencia en la Práctica Legal con IA
+            Innovación y Eficiencia Legal con IA
           </motion.h2>
 
           <motion.p
@@ -24,7 +24,7 @@ export const CTASection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-cream-light/90 mb-6 leading-relaxed">Infraestructura de gestión automatizada mediante inteligencia artificial
+            className="text-lg md:text-xl text-cream-light/90 mb-6 leading-relaxed">Gestión legal automatizada mediante inteligencia artificial
 
           </motion.p>
 
