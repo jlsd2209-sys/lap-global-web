@@ -57,7 +57,7 @@ export const Footer = () => {
               </div>
             </a>
             <p className="text-cream-light/80 leading-relaxed mb-6">
-              Ingeniería Jurídica de Vanguardia. Automatización Avanzada y Validación Profesional. Auditamos procesos documentales masivos con precisión algorítmica y criterio legal.              
+              Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
