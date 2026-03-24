@@ -45,7 +45,7 @@ export const HeroSection = () => {
           /* Aplicamos la clase gradient-text-gold para el efecto blanco -> dorado */
           className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
         >
-          Inteligencia Artificial al Servicio del Derecho 
+          Innovación y Eficiencia Legal con IA 
         </motion.h1>
 
         <motion.p 
@@ -54,7 +54,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }} 
           className="text-lg md:text-xl text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
-          Automatización legal de última generación al servicio de clientes en Venezuela y Argentina
+          Gestión legal automatizada mediante inteligencia artificial
         </motion.p>
 
         <motion.div 
