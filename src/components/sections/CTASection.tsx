@@ -16,7 +16,7 @@ export const CTASection = () => {
             viewport={{ once: true }}
             className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold">
 
-            Ingeniería Jurídica: Automatización Avanzada y Validación Profesional
+            Eficiencia Algorítmica con Criterio Jurídico
           </motion.h2>
 
           <motion.p
