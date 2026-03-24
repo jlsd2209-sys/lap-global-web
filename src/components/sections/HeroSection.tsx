@@ -43,16 +43,16 @@ export const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8 }} 
           /* Aplicamos la clase gradient-text-gold para el efecto blanco -> dorado */
-          className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold mb-6 gradient-text-gold leading-tight"
+          className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-serif font-bold mb-10 md:mb-16 gradient-text-gold leading-tight md:leading-none"
         >
           Innovación y Eficiencia Legal con IA 
         </motion.h1>
-
+        
         <motion.p 
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.8, delay: 0.2 }} 
-          className="text-lg md:text-xl text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed"
+          className="text-base md:text-lg text-cream-light/90 mb-10 max-w-2xl mx-auto leading-relaxed md:leading-normal"
         >
           Gestión legal automatizada mediante inteligencia artificial
         </motion.p>
