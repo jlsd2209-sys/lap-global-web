@@ -16,7 +16,7 @@ export const CTASection = () => {
             viewport={{ once: true }}
             className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold">
 
-            Transforma tu Práctica Legal con IA
+            Ingeniería Jurídica: Automatización Avanzada y Validación Profesional
           </motion.h2>
 
           <motion.p
@@ -24,8 +24,7 @@ export const CTASection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl text-cream-light/90 mb-6 leading-relaxed">Agenda una consulta y descubre cómo la inteligencia artificial puede optimizar tus procesos
-
+            className="text-lg md:text-xl text-cream-light/90 mb-6 leading-relaxed">Agenda una consulta para conocer nuestra infraestructura de gestión automatizada a través de la inteligencia artificial
 
           </motion.p>
 
