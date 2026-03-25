@@ -60,7 +60,7 @@ export const Footer = () => {
             </a>
             
             {/* Como ahora la columna es más ancha, el max-w-[480px] sí podrá hacer su trabajo y estirar el texto */}
-            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[480px]">
+            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[350px]">
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
             
