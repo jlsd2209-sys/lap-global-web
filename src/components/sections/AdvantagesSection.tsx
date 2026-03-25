@@ -34,15 +34,15 @@ const advantages = [{
 export const AdvantagesSection = () => {
   return (
     <section id="nosotros" className="py-14 bg-gradient-to-b from-navy-dark to-charcoal pt-[40px] pb-[40px]">
-      <div className="container mx-auto px-4 md:px-8">
+      <div className="container mx-auto px-4 md:px-8">     
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           whileInView={{ opacity: 1, y: 0 }} 
           viewport={{ once: true }} 
           className="text-center mb-10"
         >
-          {/* Hemos limpiado las clases. Solo el h2 necesita el gradient-text-gold */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold pb-2">
+          {/* Hemos reducido dramáticamente el tamaño de la fuente para que sea un sub-título */}
+          <h2 className="text-xl md:text-2xl lg:text-2xl font-serif font-bold mb-6 gradient-text-gold pb-2">
             ¿Por qué Unidad de Asuntos Transnacionales & IA?
           </h2>
         </motion.div>
