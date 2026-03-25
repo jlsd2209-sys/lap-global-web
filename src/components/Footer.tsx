@@ -56,10 +56,10 @@ export const Footer = () => {
                 </span>
               </div>
             </a>
-            <p className="text-cream-light/80 leading-relaxed mb-6">
+            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px]">
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 ml-[60px]">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
