@@ -35,13 +35,14 @@ export const Footer = () => {
   return (
     <footer className="bg-charcoal-dark py-8 border-t border-gold/20 pt-[15px] pb-[15px]">
       <div className="container pb-0 pt-0">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+        {/* AJUSTE CLAVE AQUÍ: Cambiamos md:grid-cols-3 por md:grid-cols-4 para reestructurar el ancho */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
           
-          <div className="flex flex-col items-start">
+          {/* Le decimos a esta primera columna que ocupe el espacio de 2 (md:col-span-2), es decir, el 50% del footer */}
+          <div className="flex flex-col items-start md:col-span-2">
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              /* AJUSTE 1: Cambiado mb-2 a mb-0.5 (4px) para acercarlo aún más al párrafo */
               className="flex items-center gap-3 font-serif text-xl font-bold mb-1 group"
             >
               {/* EL MISMO CONTENEDOR EXACTO QUE EL ASISTENTE */}
@@ -58,9 +59,8 @@ export const Footer = () => {
               </div>
             </a>
             
-            {/* AJUSTE 2: Cambiado max-w-[330px] a max-w-[480px] para que se extienda y alinee con el título de arriba */
-            /* ml-[60px] se mantiene para la alineación izquierda con el texto del título */}
-            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[800px]">
+            {/* Como ahora la columna es más ancha, el max-w-[480px] sí podrá hacer su trabajo y estirar el texto */}
+            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[480px]">
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
             
