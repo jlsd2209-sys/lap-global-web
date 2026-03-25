@@ -41,10 +41,9 @@ export const AdvantagesSection = () => {
           viewport={{ once: true }} 
           className="text-center mb-10"
         >
-          <h2 className="text-3xl md:text-4xl font-serif font-bold">
-            <span className="gradient-text-gold inline-block">
-              ¿Unidad de Asuntos Transnacionales & IA?
-            </span>
+          {/* Hemos limpiado las clases. Solo el h2 necesita el gradient-text-gold */}
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-6 gradient-text-gold pb-2">
+            ¿Por qué Unidad de Asuntos Transnacionales & IA?
           </h2>
         </motion.div>
 
