@@ -35,17 +35,14 @@ export const Footer = () => {
   return (
     <footer className="bg-charcoal-dark py-8 border-t border-gold/20 pt-[15px] pb-[15px]">
       <div className="container pb-0 pt-0">
-        {/* AJUSTE CLAVE AQUÍ: Cambiamos md:grid-cols-3 por md:grid-cols-4 para reestructurar el ancho */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
           
-          {/* Le decimos a esta primera columna que ocupe el espacio de 2 (md:col-span-2), es decir, el 50% del footer */}
           <div className="flex flex-col items-start md:col-span-2">
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
               className="flex items-center gap-3 font-serif text-xl font-bold mb-1 group"
             >
-              {/* EL MISMO CONTENEDOR EXACTO QUE EL ASISTENTE */}
               <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
                 <img src={logoShield} alt="Logo" className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(197,160,89,0.3)]" />
               </div>
@@ -59,7 +56,6 @@ export const Footer = () => {
               </div>
             </a>
             
-            {/* Como ahora la columna es más ancha, el max-w-[480px] sí podrá hacer su trabajo y estirar el texto */}
             <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[350px]">
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
@@ -80,7 +76,8 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-start md:mx-auto">
+          {/* AJUSTE: Quitamos "md:mx-auto" de este div para que la columna se mueva hacia la izquierda */}
+          <div className="flex flex-col items-start">
             <h3 className="text-lg font-serif mb-6 relative group inline-block cursor-default">
               <span className="absolute inset-0 gradient-text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Navegación
