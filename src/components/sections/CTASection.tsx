@@ -25,7 +25,6 @@ export const CTASection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
             className="text-lg md:text-xl text-cream-light/90 mb-6 leading-relaxed">Gestión legal automatizada mediante inteligencia artificial
-
           </motion.p>
 
           <motion.div
@@ -35,17 +34,15 @@ export const CTASection = () => {
             transition={{ delay: 0.2 }}
             className="mb-8">
 
+            {/* ESTILO DEL BOTÓN ACTUALIZADO PARA COINCIDIR CON EL HERO */}
             <a
               href="https://wa.me/5491126770449?text=Hola,%20quiero%20una%20consulta%20sobre%20servicios%20de%20IA%20legal"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-bold text-lg rounded-full transition-all hover:shadow-2xl hover:shadow-gold/50 hover:scale-105"
-              style={{
-                animation: 'pulse-glow 1.5s ease-in-out infinite'
-              }}>
-
-              <MessageCircle size={24} />
-              Solicitar consulta
+              className="button-pulse inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold to-gold-bright text-navy-dark font-semibold rounded-full transition-all hover:shadow-xl hover:shadow-gold/40"
+            >
+              <MessageCircle size={20} />
+              Solicitar Consulta
             </a>
           </motion.div>
 
@@ -71,6 +68,6 @@ export const CTASection = () => {
           </motion.div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 };
