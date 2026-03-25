@@ -41,7 +41,8 @@ export const Footer = () => {
             <a
               href="#home"
               onClick={(e) => handleNavClick(e, '#home')}
-              className="flex items-center gap-3 font-serif text-xl font-bold mb-4 group"
+              /* AJUSTE 1: mb-2 en lugar de mb-4 para acercarlo al párrafo */
+              className="flex items-center gap-3 font-serif text-xl font-bold mb-2 group"
             >
               {/* EL MISMO CONTENEDOR EXACTO QUE EL ASISTENTE */}
               <div className="relative w-12 h-12 flex-shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
@@ -56,9 +57,12 @@ export const Footer = () => {
                 </span>
               </div>
             </a>
-            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px]">
+            
+            {/* AJUSTE 2: Añadido max-w-[330px] para que el texto salte de línea al final del título */}
+            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[330px]">
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
+            
             <div className="flex gap-4 ml-[60px]">
               {socialLinks.map((social) => (
                 <a
