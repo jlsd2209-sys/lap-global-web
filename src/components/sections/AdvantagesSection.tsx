@@ -43,7 +43,7 @@ export const AdvantagesSection = () => {
         >
           <h2 className="text-5xl md:text-4xl font-serif font-bold">
             <span className="gradient-text-gold inline-block">
-              ¿Por Qué la Unidad de IA & Asuntos Transnacionales?
+              ¿Por Qué la Unidad de Asuntos Transnacionales & IA?
             </span>
           </h2>
         </motion.div>
