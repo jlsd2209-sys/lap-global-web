@@ -41,9 +41,9 @@ export const AdvantagesSection = () => {
           viewport={{ once: true }} 
           className="text-center mb-10"
         >
-          <h2 className="text-3xl md:text-4xl font-serif font-bold">
+          <h2 className="text-5xl md:text-4xl font-serif font-bold">
             <span className="gradient-text-gold inline-block">
-              ¿Unidad de Asuntos Transnacionales & IA?
+              ¿Por Qué la Unidad de IA & Asuntos Transnacionales?
             </span>
           </h2>
         </motion.div>
