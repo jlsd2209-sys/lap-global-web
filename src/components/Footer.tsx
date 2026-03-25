@@ -60,7 +60,7 @@ export const Footer = () => {
             
             {/* AJUSTE 2: Cambiado max-w-[330px] a max-w-[480px] para que se extienda y alinee con el título de arriba */
             /* ml-[60px] se mantiene para la alineación izquierda con el texto del título */}
-            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[650px]">
+            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[800px]">
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
             
