@@ -60,7 +60,7 @@ export const Footer = () => {
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
             
-            <div className="flex gap-4 ml-[60px]">
+            <div className="flex gap-4 ml-0 md:ml-[60px]">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
