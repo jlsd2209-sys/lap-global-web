@@ -56,7 +56,7 @@ export const Footer = () => {
               </div>
             </a>
             
-            <p className="text-cream-light/80 leading-relaxed mb-6 ml-[60px] max-w-[350px]">
+            <p className="text-cream-light/80 leading-relaxed mb-6 ml-0 md:ml-[60px] max-w-[350px]">
               Ingeniería Jurídica de Vanguardia. Automatización avanzada combinada con precisión algorítmica y estricto criterio legal.              
             </p>
             
